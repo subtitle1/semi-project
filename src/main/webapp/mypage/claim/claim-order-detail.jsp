@@ -133,52 +133,53 @@
 %>
 					
 				</div>
-			<div class="order-list">
-			<p>주문자 정보</p>
-				<div class="order-list-box p-3">
-					<div class="row mb-3 mt-3 order-font">
-						<div class="col-2">
-							<span style="font-weight: bold;">이름</span>
+				<div class="order-list">
+				<p>주문자 정보</p>
+					<div class="order-list-box p-3">
+						<div class="row mb-3 mt-3 order-font">
+							<div class="col-2">
+								<span style="font-weight: bold;">이름</span>
+							</div>
+							<div class="col">
+								<span><%=member.getName() %></span>
+							</div>
 						</div>
-						<div class="col">
-							<span><%=member.getName() %></span>
+						<div class="row mb-3 order-font">
+							<div class="col-2">
+								<span style="font-weight: bold;">휴대폰 번호</span>
+							</div>
+							<div class="col">
+								<span><%=member.getTel() %></span>
+							</div>
 						</div>
-					</div>
-					<div class="row mb-3 order-font">
-						<div class="col-2">
-							<span style="font-weight: bold;">휴대폰 번호</span>
+						<div class="row mb-3 order-font">
+							<div class="col-2">
+								<span style="font-weight: bold;">이메일 주소</span>
+							</div>
+							<div class="col">
+								<span><%=member.getEmail() %></span>
+							</div>
 						</div>
-						<div class="col">
-							<span><%=member.getTel() %></span>
-						</div>
-					</div>
-					<div class="row mb-3 order-font">
-						<div class="col-2">
-							<span style="font-weight: bold;">이메일 주소</span>
-						</div>
-						<div class="col">
-							<span><%=member.getEmail() %></span>
-						</div>
-					</div>
-					<div class="row mb-3 order-font">
-						<div class="col-2">
-							<span style="font-weight: bold;">배송 주소</span>
-						</div>
-						<div class="col">
-							<span><%=member.getAddress() %></span>
+						<div class="row mb-3 order-font">
+							<div class="col-2">
+								<span style="font-weight: bold;">배송 주소</span>
+							</div>
+							<div class="col">
+								<span><%=member.getAddress() %></span>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="order-list">
-				<p>결제 정보</p>
-				<div class="order-list-box p-3">
-					<div class="row">
-						<div class="col-2">
-							<span style="margin-left:5px;">총 결제금액</span>
-						</div>
-						<div class="col text-end">
-							<span style="margin-right:5px; color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
+				<div class="order-list">
+					<p>결제 정보</p>
+					<div class="order-list-box p-3">
+						<div class="row">
+							<div class="col-2">
+								<span style="margin-left:5px;">총 결제금액</span>
+							</div>
+							<div class="col text-end">
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
+							</div>
 						</div>
 					</div>
 				</div>
