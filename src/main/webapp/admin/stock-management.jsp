@@ -77,7 +77,7 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(1, 
 %>	
 			<tr>
 			
-				<td><img src = "/abcMart-app/resources/images/products/<%=productDetail.getPhoto() %> " width="60" height="60"></td>		
+				<td><img src = "/semi-project/resources/images/products/<%=productDetail.getPhoto() %> " width="60" height="60"></td>		
 				<td><%=productDetail.getProductNo() %></td>		
 				<td><a href="member-detail.jsp?no=<%=productDetail.getProductNo()%>"><%=productDetail.getName() %></td>
 				<td><%=productDetail.getSize() %></td>
