@@ -14,7 +14,6 @@ public class Product {
 	private String brand;
 	private String gender;
 	private Date createdDate;
-	private List<Stock> stockList;
 	
 	public Product() {}
 
@@ -90,13 +89,7 @@ public class Product {
 		this.createdDate = createdDate;
 	}
 
-	public List<Stock> getStockList() {
-		return stockList;
-	}
-
-	public void setStockList(List<Stock> stockList) {
-		this.stockList = stockList;
-	}
+	
 	
 
 }

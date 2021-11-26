@@ -5,8 +5,8 @@ import java.util.Date;
 public class QnA {
 
 	private int no;
-	private Product product;
-	private Member member;
+	private int productNo;
+	private int memberNo;
 	private String title;
 	private String questionContent;
 	private String answerContent;
@@ -24,20 +24,22 @@ public class QnA {
 		this.no = no;
 	}
 
-	public Product getProduct() {
-		return product;
+
+
+	public int getProductNo() {
+		return productNo;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProductNo(int productNo) {
+		this.productNo = productNo;
 	}
 
-	public Member getMember() {
-		return member;
+	public int getMemberNo() {
+		return memberNo;
 	}
 
-	public void setMember(Member member) {
-		this.member = member;
+	public void setMemberNo(int memberNo) {
+		this.memberNo = memberNo;
 	}
 
 	public String getTitle() {

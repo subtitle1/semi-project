@@ -2,27 +2,32 @@ package vo;
 
 public class OrderItem {
 
-	private Order order;
-	private Stock stock;
+	private int orderNo;
+	private int stockNo;
 	private int amount;
 	
 	public OrderItem() {}
 
-	public Order getOrder() {
-		return order;
+	
+	public int getOrderNo() {
+		return orderNo;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
+
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
 	}
 
-	public Stock getStock() {
-		return stock;
+
+	public int getStockNo() {
+		return stockNo;
 	}
 
-	public void setStock(Stock stock) {
-		this.stock = stock;
+
+	public void setStockNo(int stockNo) {
+		this.stockNo = stockNo;
 	}
+
 
 	public int getAmount() {
 		return amount;

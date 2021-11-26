@@ -2,6 +2,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
+/*가격표*/
+.dp {
+   font-family:'Montserrat', Noto Sans KR; font-weight:700; color:black; 
+   font-size:22px;color:red; 
+   }
+
+.p {
+   font-family:'Montserrat', Noto Sans KR; color:gray; font-wieght:500; font-size:18px; 
+   text-decoration:line-through;
+   }
+
 /* common */
 h1, p, span, a{font-family:'Noto Sans KR'; font-weight:400;}
 .text-head1{font-family: "Montserrat", "Noto Sans KR", sans-serif; text-align:center; font-size:32px; font-weight:700;}
