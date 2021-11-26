@@ -17,7 +17,7 @@
     <div class="container mt-3">
       <div class="row mt-3">
         <div class="col-8 footer-font">
-          <img src="/abcMart-app/resources/images/logo-sm.png" class="mb-3">
+          <img src="/semi-project/resources/images/logo-sm.png" class="mb-3">
           <p><strong>(주)에이비씨마트 코리아</strong> | 대표이사 : 이기호 | 주소 : 서울특별시 중구 을지로 100, B동 21층 (을지로 2가, 파인에비뉴) <br>
 			 사업자등록번호 : 201-81-76174 | 통신판매업신고 : 제 2015-서울중구-1036호 <br>
 			 개인정보보호 책임자 : 박영수 | 이메일 : abcmartcs@abcmartkorea.com
@@ -38,9 +38,9 @@
         <div class="col-2 box">
           <h6 class="mt-2 weight">SOCIAL</h6>
           <p>
-            <a href="https://www.facebook.com/abcmartkorea?track=W0044"><img src="/abcMart-app/resources/images/facebook.png"></a>
-            <a href="https://blog.naver.com/PostList.nhn?blogId=abcmart_korea&track=W0045"><img src="/abcMart-app/resources/images/blog.png"></a>
-            <a href="https://www.instagram.com/abcmartkr/?hl=ko&track=W0047"><img src="/abcMart-app/resources/images/insta.png"></a>
+            <a href="https://www.facebook.com/abcmartkorea?track=W0044"><img src="/semi-project/resources/images/facebook.png"></a>
+            <a href="https://blog.naver.com/PostList.nhn?blogId=abcmart_korea&track=W0045"><img src="/semi-project/resources/images/blog.png"></a>
+            <a href="https://www.instagram.com/abcmartkr/?hl=ko&track=W0047"><img src="/semi-project/resources/images/insta.png"></a>
          </p>
         </div>
       </div>

@@ -84,7 +84,7 @@ List<Product> productList = productDao.selectAllProducts(1, 10);
 %>	
 			<tr>
 			
-				<td><img src = "/abcMart-app/resources/images/products/<%=product.getPhoto() %> " width="60" height="60"></td>		
+				<td><img src = "/semi-project/resources/images/products/<%=product.getPhoto() %> " width="60" height="60"></td>		
 				<td><%=product.getNo() %></td>		
 				<td><a href="member-detail.jsp?no=<%=product.getNo()%>"><%=product.getName() %></td>
 				<td><%=product.getCategory() %></td>
