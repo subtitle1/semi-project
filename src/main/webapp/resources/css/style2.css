@@ -16,6 +16,11 @@ body { padding: 50px;}
 	width: 580px; 
 	height: 580px;
 	 }
+	 
+.product_admin_detail .img > img { 
+	width: 300px; 
+	height: 300px;
+	 }	 
 .product_view .img li:after { content: ""; display: block; clear: both;}
 .product_view .img li { float: left; padding: 10px 10px 0 0;}
 .product_view .img li.on img { border-color:#0a56a9;}
