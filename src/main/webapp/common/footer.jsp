@@ -7,7 +7,7 @@
           <div class="col-6">
             <span class="footer-title">통합고객센터</span>
           </div>
-          <div class="col-6 justify-content-between">
+          <div class="col-6 text-end">
           	<span class="cs-number">1588-9667</span>
           	<span class="cs-time">월~금 09:00 ~ 12:00 / 13:00 ~ 20:00 토, 일 10:00 ~ 14:00 (공휴일 휴무)</span>
           </div>
