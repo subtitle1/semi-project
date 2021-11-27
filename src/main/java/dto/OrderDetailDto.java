@@ -17,21 +17,41 @@ public class OrderDetailDto {
 	private Stock stock;
 	private int amount;
 	private int productNo;
+	private int productDetailNo;
+	private String productName;
 	private String category;
 	private String name;
 	private int price;
 	private int disPrice;
+	private int size;
 	private String photo;
 	private String brand;
 	private String gender;
 	private Date createdDate;
 	
-	
+	public int getProductDetailNo() {
+		return productDetailNo;
+	}
+	public void setProductDetailNo(int productDetailNo) {
+		this.productDetailNo = productDetailNo;
+	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
+	}
 	public int getOrderNo() {
 		return orderNo;
 	}
 	public void setOrderNo(int orderNo) {
 		this.orderNo = orderNo;
+	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	public Member getMember() {
 		return member;

@@ -22,8 +22,6 @@ public class ProductDao {
 	}
 	
 	
-	
-	
 	public List<ProductDetailDto> selectAllProductDetail(int begin, int end) throws SQLException{
 		String sql = "select product_no, product_name, product_img, product_price, "
 				+ "product_disprice, product_brand, "
@@ -60,7 +58,7 @@ public class ProductDao {
 			productDetail.setCategory(rs.getString("product_category"));
 			productDetail.setGender(rs.getString("product_gender"));
 			productDetail.setCreatedDate(rs.getDate("product_created_date"));
-			productDetail.setProductDetailNo(rs.getInt("product_detail_no"));
+			productDetail.setProductStockNo(rs.getInt("product_detail_no"));
 			productDetail.setProductNo(rs.getInt("product_no"));
 			productDetail.setSize(rs.getInt("product_size"));
 			productDetail.setStock(rs.getInt("product_stock"));

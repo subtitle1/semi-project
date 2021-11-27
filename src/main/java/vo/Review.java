@@ -5,11 +5,12 @@ import java.util.Date;
 public class Review {
 
 	private int no;
-	private Product product;
-	private Member member;
+	private int productNo;
+	private int memberNo;
 	private String content;
 	private int likeCount;
 	private Date reviewDate;
+	private String deleted;
 	
 	public Review() {}
 
@@ -21,20 +22,22 @@ public class Review {
 		this.no = no;
 	}
 
-	public Product getProduct() {
-		return product;
+	
+
+	public int getProductNo() {
+		return productNo;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProductNo(int productNo) {
+		this.productNo = productNo;
 	}
 
-	public Member getMember() {
-		return member;
+	public int getMemberNo() {
+		return memberNo;
 	}
 
-	public void setMember(Member member) {
-		this.member = member;
+	public void setMemberNo(int memberNo) {
+		this.memberNo = memberNo;
 	}
 
 	public String getContent() {
@@ -59,6 +62,14 @@ public class Review {
 
 	public void setReviewDate(Date reviewDate) {
 		this.reviewDate = reviewDate;
+	}
+
+	public String getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
 	}
 	
 	

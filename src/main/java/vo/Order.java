@@ -15,7 +15,6 @@ public class Order {
 	private String cancelStatus;
 	private Date canceledDate;
 	private String reviewStatus;
-	private List<OrderItem> items = new ArrayList<>();
 	
 	public Order() {}
 
@@ -91,20 +90,8 @@ public class Order {
 		this.reviewStatus = reviewStatus;
 	}
 
-	public List<OrderItem> getItems() {
-		return items;
-	}
+	
 
-	public void setItems(List<OrderItem> items) {
-		this.items = items;
-	}
-
-	@Override
-	public String toString() {
-		return "Order [no=" + no + ", member=" + member + ", status=" + status + ", orderDate=" + orderDate
-				+ ", totalPrice=" + totalPrice + ", cancelReason=" + cancelReason + ", cancelStatus=" + cancelStatus
-				+ ", canceledDate=" + canceledDate + ", reviewStatus=" + reviewStatus + ", items=" + items + "]";
-	}
 	
 	
 	
