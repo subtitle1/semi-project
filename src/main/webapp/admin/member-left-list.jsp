@@ -42,12 +42,12 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 		<div class="col-2 p-0 aside">
 			<span class="aside-title">관리자 페이지</span>
 			<ul class="nav flex-column p-0">
-				<li class=""><a href="" class="nav-link p-0">회원목록 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">전체 상품 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">신규 상품 등록</a></li>
-				<li class=""><a href="" class="nav-link p-0">재고 관리</a></li>
-				<li class=""><a href="stock-management.jsp" class="nav-link p-0">주문 관리</a></li>
+					<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
+				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
+				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
+				<li class=""><a href="register-product.jsp" class="nav-link p-0">신규 상품 등록</a></li>
+				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
+				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
 			</ul>
 		</div>	
 		<div class="col-9">
