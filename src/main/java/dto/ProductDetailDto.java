@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ProductDetailDto {
 
-	private int productDetailNo;
+	private int productStockNo;
 	private int productNo;
 	private String category;
 	private String name;
@@ -19,12 +19,12 @@ public class ProductDetailDto {
 	
 	public ProductDetailDto() {}
 
-	public int getProductDetailNo() {
-		return productDetailNo;
+	public int getProductStockNo() {
+		return productStockNo;
 	}
 
-	public void setProductDetailNo(int productDetailNo) {
-		this.productDetailNo = productDetailNo;
+	public void setProductStockNo(int productDetailNo) {
+		this.productStockNo = productDetailNo;
 	}
 
 	public int getProductNo() {

@@ -1,3 +1,5 @@
+<%@page import="dto.QnADetailDto"%>
+<%@page import="dao.QnaDao"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.MemberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -15,11 +17,10 @@
 <%@ include file="../common/navbar.jsp" %>
 
 <% 
+QnaDao qnaDao = QnaDao.getInstance();
 
-MemberDao memberDao = MemberDao.getInstance();
+List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
 
-List<Member> memberList = memberDao.selectAllMembers(1, 10);
-List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 
 %>
 <div class="container">    
@@ -42,49 +43,49 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 		<div class="col-2 p-0 aside">
 			<span class="aside-title">관리자 페이지</span>
 			<ul class="nav flex-column p-0">
-				<li class=""><a href="" class="nav-link p-0">회원목록 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">전체 상품 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">신규 상품 등록</a></li>
-				<li class=""><a href="" class="nav-link p-0">재고 관리</a></li>
-				<li class=""><a href="" class="nav-link p-0">주문 관리</a></li>
+				<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
+				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
+				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
+				<li class=""><a href="register-product.jsp" class="nav-link p-0">신규 상품 등록</a></li>
+				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
+				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
 			</ul>
 		</div>	
 		<div class="col-9">
 		<h4>QnA 목록</h4>
 		<table class="table table-hover">
 		<colgroup>
-			<col width="5%">
-			<col width="7%">
 			<col width="10%">
 			<col width="10%">
 			<col width="10%">
-			<col width="5%">
+			<col width="15%">
+			<col width="25%">
 			<col width="10%">
+			<col width="20%">
 		</colgroup>
 		<thead>
 			<tr>
-				<th>번호</th>
-				<th>이름</th>
-				<th>연락처</th>
-				<th>이메일</th>
-				<th>주소</th>
-				<th>포인트</th>
-				<th>가입일</th>
+				<th>제품이미지</th>
+				<th>제품</th>
+				<th>아이디</th>
+				<th>제목</th>
+				<th>내용</th>
+				<th>답변여부</th>
+				<th>작성일</th>
 			</tr>
 		</thead>
 		<tbody>
 			<% 
-	for (Member member : memberList) {
+	for (QnADetailDto qnaDetail : qnaDetailList) {
 %>	
 			<tr>
-				<td><%=member.getNo() %></td>		
-				<td><a href="member-detail.jsp?no=<%=member.getNo()%>"><%=member.getName() %></td>
-				<td><%=member.getTel() %></td>
-				<td><%=member.getEmail() %></td>
-				<td><%=member.getAddress() %></td>
-				<td><%=member.getPct() %></td>
-				<td><%=member.getRegisteredDate() %></td>
+				<td><img src = "/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %> " width="60" height="60"></td>	
+				<td><%=qnaDetail.getProductName() %></td>
+				<td><%=qnaDetail.getMemberId() %></td>
+				<td><%=qnaDetail.getTitle() %></td>
+				<td><%=qnaDetail.getQuestionContent() %></td>
+				<td><%=qnaDetail.getQuestionAnswered() %></td>
+				<td><%=qnaDetail.getQuestionDate() %></td>
 			</tr>
 <% 
 	}

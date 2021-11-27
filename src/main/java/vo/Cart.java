@@ -3,8 +3,8 @@ package vo;
 public class Cart {
 
 	private int no;
-	private Member member;
-	private Stock stock;
+	private int memberNo;
+	private int stockNo;
 	private int amount;
 	
 	public Cart() {}
@@ -17,20 +17,20 @@ public class Cart {
 		this.no = no;
 	}
 
-	public Member getMember() {
-		return member;
+	public int getMemberNo() {
+		return memberNo;
 	}
 
-	public void setMember(Member member) {
-		this.member = member;
+	public void setMemberNo(int memberNo) {
+		this.memberNo = memberNo;
 	}
 
-	public Stock getStock() {
-		return stock;
+	public int getStockNo() {
+		return stockNo;
 	}
 
-	public void setStock(Stock stock) {
-		this.stock = stock;
+	public void setStockNo(int stockNo) {
+		this.stockNo = stockNo;
 	}
 
 	public int getAmount() {
