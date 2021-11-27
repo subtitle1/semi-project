@@ -243,27 +243,34 @@ public class ProductDao {
 	}
 	
 	
+
 	/**
-	 * 신상품(최신순서) 상품정보를 반환한다.
-	 * @return products 신상품순 상품정보.
+	 * 세일 상품 정보를 반환한다.
+	 * @param begin	제품수량
+	 * @param end 제품수량
+	 * @return products 모든상품정보
 	 * @throws SQLException
 	 */
-	public List<Product> selectNewProducts() throws SQLException {
+	public List<Product> selectProductsOnSale(int begin, int end) throws SQLException{
 		List<Product> products = new ArrayList<>();
 		
 		String sql = "select product_no, product_name, product_img, product_price, "
-		 + "product_disprice, product_brand, product_category, product_created_date, "
-		 + "product_gender "
-		 + "from (select row_number() over (order by product_created_date desc) rn, "
-		 + "		product_no, product_name, product_img, product_price, "
-		 + "       product_disprice, product_brand, product_category, product_created_date, "
-		 + "		product_gender "
-		 + "      from tb_products ) "
-		 + "where rn >= 1 and rn <= 10 "
-		 + "order by product_created_date desc ";
+				 + "product_disprice, product_brand, "
+				 + "product_category, product_created_date, product_gender "
+		   + "from (select row_number() over (order by product_created_date desc) rn, "
+		   + "             product_no, product_name, product_img, product_price,  "
+		   + "             product_disprice, product_brand, "
+		   + "			   product_category, product_created_date, product_gender "
+		   + "      from tb_products"
+		   + "		where  product_disprice is not null) "
+		   + "where rn >= ? and rn <= ? "
+		   + "order by product_created_date desc ";
 		
+	
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, begin);
+		pstmt.setInt(2, end);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
@@ -288,44 +295,7 @@ public class ProductDao {
 		return products;
 	}
 	
-	/**
-	 * 세일상품 상품정보를 반환한다.
-	 * @return products 세일상품정보.
-	 * @throws SQLException
-	 */
-	public List<Product> selectProductsOnSale() throws SQLException {
-		List<Product> products = new ArrayList<>();
-		
-		String sql = "select product_no, product_name, product_img, product_price, "
-				+ "product_disprice, product_brand, "
-				+ "product_category, product_created_date, product_gender "
-			   + "from tb_products "
-			   + "where product_disprice is not null ";
-		Connection connection = getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
-		ResultSet rs = pstmt.executeQuery();
-		
-		while (rs.next()) {
-			Product product = new Product();
-			product.setNo(rs.getInt("product_no"));
-			product.setName(rs.getString("product_name"));
-			product.setPhoto(rs.getString("product_img"));
-			product.setName(rs.getString("product_name"));
-			product.setPrice(rs.getInt("product_price"));
-			product.setDisPrice(rs.getInt("product_disprice"));
-			product.setBrand(rs.getString("product_brand"));
-			product.setCategory(rs.getString("product_category"));
-			product.setGender(rs.getString("product_gender"));
-			product.setCreatedDate(rs.getDate("product_created_date"));
-		
-			products.add(product);
-		}
-		rs.close();
-		pstmt.close();
-		connection.close();
-		
-		return products;
-	}
+
 	
 	
 	/**
