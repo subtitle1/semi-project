@@ -31,8 +31,8 @@
 	// 아이디에 해당하는 사용자 정보가 존재하지 않으면, 사용자 인증이 실패한다.
 	// 클라이언트에게 로그인 정보를 입력하는 loginform.jsp를 재요청하는 응답을 보낸다.
 	// 재요청 URL에 사용자인증 실패원인을 포함시킨다.
-	if (id == null) {	
-		response.sendRedirect("loginform.jsp?error=notfound-id");
+	if (member == null) {	
+		response.sendRedirect("loginform.jsp?error=notfound-member");
 		return;
 	}
 	// 비빌번호 비교를 위해서 로그인폼에서 제출한 비밀번호를 암호화한다.

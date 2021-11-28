@@ -38,7 +38,7 @@
 				<strong>로그인 실패!!</strong> 비밀번호는 필수입력값입니다.
 			</div>
 <%
-	} else if ("notfound-user".equals(error)) {			// login.jsp에서 사용자 인증처리를 할 때 id에 해당하는 회원정보가 검색되지 않았다.
+	} else if ("notfound-member".equals(error)) {			// login.jsp에서 사용자 인증처리를 할 때 id에 해당하는 회원정보가 검색되지 않았다.
 %>
 			<div class="alert alert-danger">
 				<strong>로그인 실패!!</strong> 회원정보가 존재하지 않습니다.
