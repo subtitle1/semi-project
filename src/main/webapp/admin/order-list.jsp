@@ -49,6 +49,8 @@ List<Product> productList = productDao.selectAllProducts(1, 10);
 				<li class=""><a href="register-product.jsp" class="nav-link p-0">신규 상품 등록</a></li>
 				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
 				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
+				<li class=""><a href="qna-list.jsp" class="nav-link p-0">QnA 목록</a></li>
+				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>
 			</ul>
 		</div>	
 		<div class="col-9">
