@@ -56,6 +56,12 @@
 				<strong>로그인 필수!!</strong> 로그인이 필요한 페이지를 요청하였습니다.
 			</div>
 <%
+	} else if ("deleted-user".equals(error)) {
+%>
+			<div class="alert alert-danger">
+				탈퇴한 회원은 로그인할 수 없습니다. <br> 서비스 이용을 원하시면, 다시 회원가입을 진행해 주세요.
+			</div>
+<%
 	}
 %>
 				<form method="post" action="login.jsp">

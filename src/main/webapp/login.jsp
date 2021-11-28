@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	// login.jsp 에서 입력한 폼입력값을 조회한다.
+// login.jsp 에서 입력한 폼입력값을 조회한다.
 	String id = request.getParameter("id");
 	String pwd = request.getParameter("pwd");
 	
@@ -46,6 +46,14 @@
 		return;
 	}
 	
+	// 회원탈퇴를 진행한 경우 사용자 인증이 실패한다.
+	// 클라이언트에게 로그인 정보를 입력하는 loginform.jsp를 재요청하는 응답을 보낸다.
+	// 재요청 URL에 사용자인증 실패원인을 포함시킨다.
+	if ("Y".equals(member.getDeleted())) {
+		response.sendRedirect("loginform.jsp?error=deleted-user");
+		return;
+	}
+
 	// 사용자 정보가 존재하고, 비밀번호가 일치하면 사용자 인증이 완료되었다.
 	// 사용자 인증이 완료되면, 사용자정보를 로그인을 요청한 클라이언트의 전용 HttpSession객체에 속성으로 저장한다.
 	// 로그인을 요청한 클라이언트 전용의 HttpSession객체에 사용자정보를 속성으로 저장하면, JSP를 요청할 때마다 HttpSession에서 사용자정보를 조회할 수 있다.
@@ -53,7 +61,7 @@
 	// 모든 JSP 페이지에서 JSP 페이지를 요청한 클라이언트에 대한 정보를 클라이언트 전용 HttpSession객체에서 조회할 수 있기 때문이다.
 	// 이 프로젝트에서는 사용자 인증이 완료되면 "LOGIN_USER_INFO"라는 이름으로 사용자정보를 HttpSession객체에 저장했다.
 	session.setAttribute("LOGIN_USER_INFO", member);
-	
+
 	// 클라이언트에 index.jsp를 재요청하는 URL을 응답으로 보낸다.
 	// 클라이언트가 index.jsp를 요청하면 그 클라이언트 전용의 HttpSession객체에 인증된 사용자 정보가 존재하기 때문에 
 	// 내비게이션에 인증된 사용자명과 로그아웃 링크가 표시된다.
