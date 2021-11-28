@@ -27,12 +27,18 @@ a{text-decoration:none; color:black;}
 	// 요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
 //	String pageNo = request.getParameter("pageNo");
 
-	// 게시글 정보 관련 기능을 제공하는 BoardDao객체를 획득한다.
+	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
 	
+	String category = request.getParameter("category");
+
+
+
+	//카테고리별 제품획득
+	List<Product> categoryList = productDao.selectProductsByCategory(category);
 
 	
-	List<Product> productList = productDao.selectAllProducts(1, 8);
+	
 	
 	// 페이징 처리 필요한 값을 계산하는 Paginatition객체를 생성한다.
 //	Pagination pagination = new Pagination(pageNo, totalRecords);
@@ -45,16 +51,19 @@ a{text-decoration:none; color:black;}
 			<a href="main.jsp"><strong>HOME</strong></a>
 			<img alt="" src="resources/images/home.png" style="margin:5px; width:20px;">
 			<select class= "border-0 text-center" onchange= "if(this.value) location.href=(this.value);" >
-				<option value="main.jsp">BRAND</option>
-				<option value="main.jsp">SNEAKERS</option>
-				<option value="main.jsp">SPORTS</option>
-				<option value="main.jsp">SANDALS</option>
-				<option value="main.jsp">LOAFERS</option>
+				<option value="" style="background:lightgray;border:0;padding:15px" ><%=category %></option>
+				<option value="brand.jsp">BRAND</option>
+				<option value="list.jsp?category=SNEAKERS">SNEAKERS</option>
+				<option value="list.jsp?category=SPORTS">SPORTS</option>
+				<option value="list.jsp?category=SANDALS">SANDALS</option>
+				<option value="list.jsp?category=LOAFERS">LOAFERS</option>
 			</select>
 	</div>
+
     <div class="title mb-5 p-3 ">
-    	BRAND
+    	<%=category%>
     </div>
+  
    	<nav class="navbar navbar-expand-lg navbar-ligth ">
 	<div class="container">
 		<div class="collapse navbar-collapse " id="navbar-1">
@@ -90,11 +99,11 @@ a{text-decoration:none; color:black;}
 <hr>
 <div class="row row-cols-4 g-3 mb-5 mx-auto">
 <%
- for(Product product : productList) {
+ for(Product product : categoryList) {
 %>
 	<div class="col-3">
     	<div class="card h-100 border-white rounded-0">
-	 		<a href="detail.jsp?">
+	 		<a href="detail.jsp?no=<%=product.getNo() %>">
       			<img src="resources/images/products/<%=product.getPhoto() %>" class="card-img-top" alt="...">
       <div class="card-body">
         <h6 class="card-title"><strong><%=product.getBrand() %></strong></h6>

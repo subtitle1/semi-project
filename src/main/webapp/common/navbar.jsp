@@ -44,7 +44,7 @@
 			</div>
 			<div class="col search-box">
 				<form>
-	     		 	<input class="form-control" type="search" placeholder="호킨슨 아기 상어 겨울 부츠" aria-label="Search">
+	     		 	<input class="form-control" type="search" placeholder="아디다스 오젤리아" aria-label="Search">
 	      			<button class="btn btn-outline-success btn-sm" type="submit"></button>
 	    		</form>				
 			</div>
@@ -85,11 +85,12 @@
 	<div class="container">
 		<div class="collapse navbar-collapse" id="navbar-1">
 			<ul class="navbar-nav">
-				<li class="nav-item"><a href="/semi-project/mypage-main.jsp" class="nav-link active" >BRAND</a></li>
-				<li class="nav-item"><a href="/semi-project/cart.jsp" class="nav-link " >SNEAKERS</a></li>
-				<li class="nav-item"><a href="/semi-project/cart.jsp" class="nav-link ">SPORTS</a></li>
-				<li class="nav-item"><a href="/semi-project/cart.jsp" class="nav-link ">SANDALS</a></li>
-				<li class="nav-item"><a href="/semi-project/cart.jsp" class="nav-link ">LOAFERS</a></li>
+				<li class="nav-item"><a href="/semi-project/brand.jsp" class="nav-link active" >BRAND</a></li>
+				<li class="nav-item"><a href="/semi-project/list.jsp?category=SNEAKERS" class="nav-link " >SNEAKERS</a></li>
+				<li class="nav-item"><a href="/semi-project/list.jsp?category=SPORTS" class="nav-link ">SPORTS</a></li>
+				<li class="nav-item"><a href="/semi-project/list.jsp?category=SANDALS" class="nav-link ">SANDALS</a></li>
+				<li class="nav-item"><a href="/semi-project/list.jsp?category=LOAFERS" class="nav-link ">LOAFERS</a></li>
+				<li class="nav-item"><a href="/semi-project/sale.jsp" class="nav-link ">SALE</a></li>
 			</ul>
 		</div>
 	</div>
