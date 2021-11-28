@@ -11,12 +11,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
     <link rel="stylesheet" href="/semi-project/resources/css/style.css" />
-    <title></title>
+    <title>주문/배송현황 조회</title>
 </head>
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
-	int memberNo = 3;
+	int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
 	
@@ -46,9 +46,13 @@
 				<li class=""><a href="" class="nav-link p-0">마이페이지</a></li>
 				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
 				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
-				<li class=""><a href="" class="nav-link p-0">주문상품 조회</a></li>
+				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
 				<li class=""><a href="" class="nav-link p-0">주문 취소</a></li>
-				<li class=""><a href="" class="nav-link p-0">회원 탈퇴</a></li>
+				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
+			</ul>
+			<ul class="nav flex-column p-0">
+				<li class=""><a href="../shopping-note/my-review.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">나의 상품후기</a></li>
+				<li class=""><a href="../shopping-note/my-qna.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">상품 Q&A</a></li>
 			</ul>
 		</div>
 		<!-- //aside 끝 -->
@@ -77,7 +81,7 @@
 <%
 	int count = orderDao.selectOrderCount(memberNo, "주문완료"); 
 %>
-							<span class="count" id="standByCount"><%=count %></span>
+							<span class="count" id="standByCount"><%=count%></span>
 							주문완료
 						</div>
 						<div class="col">
@@ -85,7 +89,7 @@
 	count = orderDao.selectOrderCount(memberNo, "상품준비중");   
 %>
 							<span class="count" id="completeCount"><%=count %></span>
-							결제완료
+							상품준비중
 						</div>
 						<div class="col">
 <%
@@ -103,8 +107,8 @@
 	List<Order> orders = orderDao.selectAllOrdersByMemberNo(memberNo);
 	if (orders.isEmpty()) {
 %>
-			<div class="order-list-box">
-				<p class="text-center">주문 내역이 존재하지 않습니다.</p>
+			<div class="order-list-box p-5">
+				<p class="text-center order-font">주문 내역이 존재하지 않습니다.</p>
 			</div>
 <% 
 	} else {
