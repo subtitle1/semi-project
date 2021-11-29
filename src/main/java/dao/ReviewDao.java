@@ -291,13 +291,14 @@ public class ReviewDao {
 		 * @throws SQLException
 		 */
 		public List<ReviewDetailDto> selectReviewDetailByMemberNo(int no) throws SQLException {
-			String sql = "select R.review_no, R.review_content, M.member_no, M.Member_id,  "
-					+ "       R.review_like_count, R.review_deleted, P.product_no "
-					+ "		 R.review_date, P.product_name, P.product_img "
-					+ "		from tb_reviews R, tb_Members M, tb_products P "
-					+ "		where R.member_no = M.member_no "
-					+ "		and R.product_no = P.product_no "
-					+ "and R.member_no = ? ";
+			String sql = "select R.review_no, R.review_content, M.member_no, M.Member_id, "
+		               + "R.review_like_count, R.review_deleted, P.product_no, "
+		               + "R.review_date, P.product_name, P.product_img "
+		               + "from tb_reviews R, tb_Members M, tb_products P "
+		               + "where R.member_no = M.member_no "
+		               + "and R.product_no = P.product_no "
+		               + "and R.member_no = ? ";
+			
 			
 			List<ReviewDetailDto> reviewList = new ArrayList<>();
 			

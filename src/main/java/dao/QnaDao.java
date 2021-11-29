@@ -25,7 +25,7 @@ public class QnaDao {
 	}
 	
 	
-	public QnADetailDto selectQnAByQnANo(int QnANo)  throws SQLException {
+	public QnADetailDto selectQnADetailByQnANo(int QnANo)  throws SQLException {
 		String sql = "q.question_no, q.product_no, q.member_no, q.question_title, "
 				+ "q.question_content, q.question_date, "
 				+ "q.question_answered, q.answer_content, q.answer_date, "
@@ -121,19 +121,18 @@ public class QnaDao {
 	
 	public List<QnADetailDto> selectQnAListByMemberNo(int begin, int end, int memberNo) throws SQLException{
 		String sql = "select question_no, product_no, member_no, question_title, question_content, "
-				+ "question_date, question_answered, answer_content, "
-				+ "answer_date, member_name, member_id, product_name, product_img "
-				+ "from (select row_number() over (order by q.question_date desc) rn, q.question_no, "
-				+ "q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
-				+ "q.question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
-				+ "p.product_name, p.product_img "
-				+ "from tb_qna q, tb_members m, tb_products p "
-				+ "where q.member_no = m.member_no "
-				+ "and p.product_no = q.product_no) "
-				+ "where rn >= ? and rn <= ? "
-				+ "and where member_no = ? "
-				+ "	order by question_date desc ";
-					
+	            + "question_date, question_answered, answer_content, "
+	            + "answer_date, member_name, member_id, product_name, product_img "
+	            + "    from (select row_number() over (order by q.question_date desc) rn, q.question_no, "
+	            + "    q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
+	            + "    q. question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
+	            + "    p.product_name, p.product_img "
+	            + "    from tb_qna q, tb_members m, tb_products p "
+	            + "    where q.member_no = m.member_no "
+	            + "    and p.product_no = q.product_no) "
+	            + "where rn >= ? and rn <= ? "
+	            + "and member_no = ? "
+	            + "order by question_date desc ";
 		
 		List<QnADetailDto> qnADetailList = new ArrayList<>();
 		
@@ -251,6 +250,40 @@ public class QnaDao {
 	}
 	
 	
+	public QnA selectQnAByQnANo(int QnANo)  throws SQLException {
+		String sql = "select question_no, product_no, member_no, question_title, "
+				+ "question_content, question_date, "
+				+ "question_answered, answer_content, answer_date "
+				+ "from tb_qna "
+				+ "where question_no = ? ";
+		
+		QnA qnA = null;
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, QnANo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		if(rs.next()) {
+			qnA = new QnA();
+			qnA.setProductNo(rs.getInt("product_no"));
+			qnA.setMemberNo(rs.getInt("member_no"));
+			qnA.setNo(rs.getInt("question_no"));
+			qnA.setTitle(rs.getString("question_title"));
+			qnA.setQuestionContent(rs.getString("question_content"));
+			qnA.setAnswerContent(rs.getString("answer_content"));
+			qnA.setQuestionAnswered(rs.getString("question_answered"));
+			qnA.setQuestionDate(rs.getDate("question_date"));
+			qnA.setAnswerDate(rs.getDate("answer_date"));
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return qnA;
+		}
+	
+	
 	public void updateQnA(QnA qnA) throws SQLException {
 		String sql = "update tb_qna "
 				   + "set "
@@ -258,7 +291,7 @@ public class QnaDao {
 				   + "	question_content = ?,"
 				   + "	answer_content = ?, "
 				   + "	question_answered = ?, "
-				   + "	answer_date = ?, "
+				   + "	answer_date = ? "
 				   + "where question_no = ? ";
 		
 		Connection connection = getConnection();
