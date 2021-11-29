@@ -38,7 +38,7 @@
 				<strong>로그인 실패!!</strong> 비밀번호는 필수입력값입니다.
 			</div>
 <%
-	} else if ("notfound-user".equals(error)) {			// login.jsp에서 사용자 인증처리를 할 때 id에 해당하는 회원정보가 검색되지 않았다.
+	} else if ("notfound-member".equals(error)) {			// login.jsp에서 사용자 인증처리를 할 때 id에 해당하는 회원정보가 검색되지 않았다.
 %>
 			<div class="alert alert-danger">
 				<strong>로그인 실패!!</strong> 회원정보가 존재하지 않습니다.
@@ -54,6 +54,12 @@
 %>
 			<div class="alert alert-danger">
 				<strong>로그인 필수!!</strong> 로그인이 필요한 페이지를 요청하였습니다.
+			</div>
+<%
+	} else if ("deleted-user".equals(error)) {
+%>
+			<div class="alert alert-danger">
+				탈퇴한 회원은 로그인할 수 없습니다. <br> 서비스 이용을 원하시면, 다시 회원가입을 진행해 주세요.
 			</div>
 <%
 	}
