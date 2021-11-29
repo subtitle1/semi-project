@@ -73,7 +73,7 @@
 			<div class="row">
 				<div class="col">
 					<p class="text-head2 mt-5">회원 탈퇴</p>
-					<form method="post" action="leave.jsp">
+					<form method="post" action="confirmleaveform.jsp">
 						<div class="register-box">
 							<div class="pwd-box">
 								<label class="form-label" for="user-password">비밀번호<span>*</span></label>
@@ -89,14 +89,14 @@
 	}
 %>
 						</div>
-							<div class="btn-box text-center">
-								<button type="submit" class="btn btn-lg btn-dark">확인</button>
-							</div>
-						</form>
-					</div>
+						<div class="btn-box text-center">
+							<button type="submit" class="btn btn-lg btn-dark">확인</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
+	</div>
 </div>
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

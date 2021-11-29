@@ -38,6 +38,8 @@ public class StockDao {
 				stock.setProductNo(rs.getInt("product_no"));
 				stock.setSize(rs.getInt("product_size"));
 				stock.setStock(rs.getInt("product_stock"));
+				
+				stockList.add(stock);
 			}
 			
 			rs.close();
@@ -46,6 +48,53 @@ public class StockDao {
 			
 			return stockList;
 		}
+	
+	/**
+	 * productNo와 size로 product_detail_no를 반환한다
+	 * @param no
+	 * @param size
+	 * @return
+	 * @throws SQLException
+	 */
+	public int selectStockNoByProductNoAndSize(int no, int size) throws SQLException {
+		int stockNo = 0;
+		
+		String sql = "select product_detail_no "
+				   + "from tb_product_stocks "
+				   + "where product_no = ? and product_size = ? ";
+		
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setInt(2, size);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) { 
+				stockNo = rs.getInt("product_detail_no");
+			}
+			
+			rs.close();
+			pstmt.close();
+			connection.close();
+		
+		return stockNo;
+	}
+	
+	public void updateStock(Stock stock) throws SQLException {
+		String sql = "update tb_product_stocks "
+				   + "set "
+				   + "	product_stock = ? "
+				   + "where product_detail_no = ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, stock.getStock());
+		pstmt.setInt(2, stock.getNo());
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
 			
 	public int selectStockbyProductNoAndSize(int no, int size) throws SQLException{
 		 int amount = 0;

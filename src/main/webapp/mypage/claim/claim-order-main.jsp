@@ -125,7 +125,6 @@
 							<span style="font-weight: bold;"><%=order.getOrderDate() %></span>
 						</div>
 						<div class="col text-end mt-2">
-							<span style="font-weight: bold;">주문상태</span>
 							<span style="font-weight: bold;"><%=order.getStatus() %></span>
 						</div>
 						<div class="col-3 text-end mt-2">

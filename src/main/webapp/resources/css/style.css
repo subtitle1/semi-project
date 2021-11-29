@@ -429,7 +429,6 @@ footer {margin-top:50px; font-family:"Montserrat"; font-size:13px;}
 .order-list p {font-family:'Montserrat', Noto Sans KR, sans-serif; font-weight:500; font-size:22px;}
 .order-list-box {padding:10px 0 10px; border-top:2px solid #000; border-bottom:1px solid #b5b5b5;}
 .order-img {float: left; width:80px; height:80px;}
-.middle-box {height:100px;}
 .order-font span {font-family:"Montserrat";}
 
 /*가격표*/
@@ -444,6 +443,7 @@ footer {margin-top:50px; font-family:"Montserrat"; font-size:13px;}
 	}
 
 /* Q&A, Review 메뉴 */
+.inquiry-box {padding:10px 0 10px; border-top:2px solid #000;}
 .accordion-collapse {
     border: 0;
 }
@@ -485,3 +485,9 @@ footer {margin-top:50px; font-family:"Montserrat"; font-size:13px;}
     transform: translate(-5px, -4px);
     transform: rotate(0deg);
 }
+
+/* 탈퇴 */
+.leave-box {height:150px; background-color: #ebebeb; font-family:Noto Sans KR; font-size: 14px; color: #727272; border: 1px solid #b5b5b5;}
+
+/* 주문 완료 */
+.order-box {height:130px; background-color: #ebebeb; font-family:Noto Sans KR; font-size: 14px; color: #727272; border: 1px solid #b5b5b5;}

@@ -1,3 +1,6 @@
+<%@page import="dto.ReviewDetailDto"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.ReviewDao"%>
 <%@page import="dao.MemberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -69,56 +72,72 @@
 			</div>
 			<div class="order-list">
 			<p>상품 Q&A</p>
-				<div class="order-list-box">
+				<div class="inquiry-box">
 					<div class="row">
-						<!-- 작성된 큐앤에이가 없으면 -->
+<%
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByMemberNo(member.getNo());
+	if (reviewDetails.isEmpty()) {
+%>
 						<div class="p-5">
 							<p class="text-center order-font">작성된 상품 후기가 없습니다.</p>
 						</div>
-						<!-- 있으면 -->
+<%
+	} else {
+		
+%>
 						<div class="col mt-2">
-							<span style="margin-left:5px;">총 1건의 상품 후기가 있습니다.</span>
+							<span style="margin-left:5px;">총 <%=reviewDetails.size() %>건의 상품 후기가 있습니다.</span>
 						</div>
 					</div>
 					<hr>
+	<% 
+			for (ReviewDetailDto detail : reviewDetails) {
+	%>
 					<div class="row">
 			            <div>
 			                <div class="accordion accordion-flush" id="faqlist">
 			                    <div class="accordion-item">
 			                   	    <div class="row p-2">
 										<div class="col-3">
-											<img class="order-img me-2" src="../../resources/images/products/운동화1_크림블루.jpg">
+											<img class="order-img me-2" src="../../resources/images/products/<%=detail.getPhoto()%>">
 											<div>
 												<div>
-													<span>브랜드</span>
+													<span><strong>상품명</strong></span>
 												</div>
 												<div>
-													<span>상품명</span>
+													<span><%=detail.getProductName() %></span>
 												</div>
 											</div>
 										</div>
 										<div class="col mt-4 text-end">
-											<span>타이틀</span>
+											<span>review</span>
 										</div>
 										<div class="col mt-4 text-end">
-											<span style="font-weight: bold;">등록일</span>
+											<span style="font-weight: bold;"><%=detail.getReviewDate() %></span>
 										</div>
 										<div class="col mt-3 text-end">
-										<h2 class="accordion-header">
-				                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1">
+										<h2 class="accordion-header" id="faq-heading-<%=detail.getReviewNo()%>">
+				                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-<%=detail.getReviewNo()%>">
 				                            </button>
 			                        	</h2>
 										</div>
 									</div>
-			                        <div id="faq-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+			                        <div id="faq-content-<%=detail.getReviewNo()%>" class="accordion-collapse collapse" data-bs-parent="#faqlist">
 			                            <div class="accordion-body">
-			                                <strong>review : </strong>리뷰컨텐트
+			                                <strong>review : </strong><%=detail.getContent() %>
 			                            </div>
 			                        </div>
 			                    </div>
 			                </div>
 			            </div>
 		        	</div>
+		        	<hr>
+				
+<%
+		}
+	}
+%>
 				</div>
 			</div>
 		</div>
