@@ -38,6 +38,8 @@ public class StockDao {
 				stock.setProductNo(rs.getInt("product_no"));
 				stock.setSize(rs.getInt("product_size"));
 				stock.setStock(rs.getInt("product_stock"));
+				
+				stockList.add(stock);
 			}
 			
 			rs.close();

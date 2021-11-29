@@ -57,11 +57,12 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(1, 
 		<h4>재고 관리</h4>
 		<table class="table table-hover">
 		<colgroup>
+			<col width="15%">
+			<col width="10%">
 			<col width="20%">
-			<col width="20%">
-			<col width="20%">
-			<col width="20%">
-			<col width="20%">
+			<col width="15%">
+			<col width="25%">
+			<col width="10%">
 		</colgroup>
 		<thead>
 			<tr>
@@ -69,21 +70,38 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(1, 
 				<th>번호</th>
 				<th>이름</th>
 				<th>사이즈</th>
-				<th>재고</th>
+				<th>재고관리</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
+		
 			<% 
 	for (ProductDetailDto productDetail : productDetailList) {
 %>	
 			<tr>
-			
 				<td><img src = "/semi-project/resources/images/products/<%=productDetail.getPhoto() %> " width="60" height="60"></td>		
 				<td><%=productDetail.getProductNo() %></td>		
-				<td><a href="member-detail.jsp?no=<%=productDetail.getProductNo()%>"><%=productDetail.getName() %></td>
+				<td><a href="product-detail.jsp?no=<%=productDetail.getProductNo()%>"><%=productDetail.getName() %></td>
 				<td><%=productDetail.getSize() %></td>
-				<td><%=productDetail.getStock() %></td>
-			</tr>
+				<td>
+        		 <div class="row">
+           			 <div class="col">
+              			 <button style="margin-right:10px; background-color:rgb(255, 71, 111); border:1px solid rgb(255, 71, 111);" class="btn btn-danger btn-sm"
+               						onclick="minus('stock-<%=productDetail.getProductStockNo()%>')">-10
+               			 </button>
+              		 	 <input style="width:50px; text-align:center;" type="text" name="stock"
+                					  id="stock-<%=productDetail.getProductStockNo()%>"
+                					  value=<%=productDetail.getStock()%>>
+             		  	 <button style="margin-left:10px; background-color:rgb(255, 71, 111); border:1px solid rgb(255, 71, 111); " class="btn btn-danger btn-sm"
+                 				 onclick="plus('stock-<%=productDetail.getProductStockNo()%>')">+10
+                  	 	 </button>
+            		</div>
+ 			    </td>
+      			<td>
+         			<button class="btn btn-sm" style="color:white; background-color: rgb(57, 209, 146);" type="submit" onclick='alert("저장완료")'>저장</button>
+     			</td>
+			</tr>			
 <% 
 	}
 %>			
@@ -95,5 +113,32 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(1, 
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function plus(id) {
+    var count = Number(document.getElementById(id).value);
+    if(count < 1000) {
+        count+=10;
+     }
+    document.getElementById(id).value = count;
+ }
+ 
+function save(id) {
+	
+	
+}
+
+
+ 
+ function minus(id) {
+    var count = Number(document.getElementById(id).value);
+    if(count > 10) {
+  	  count-= 10;
+    } else {
+       count;
+    }
+    document.getElementById(id).value = count;
+ }
+   
+</script>
 </body>
 </html>

@@ -12,6 +12,12 @@
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
    <link rel="stylesheet" href="../resources/css/style.css" />
     <title></title>
+<style>
+#complete {color: white;  padding: 4px 8px; border: 1px solid black; background-color : rgb(57, 209, 146); }
+#answer {color: white;  padding: 4px 8px; border: 1px solid black; background-color : rgb(126, 181, 245); }
+
+</style>
+
 </head>
 <body>
 <%@ include file="../common/navbar.jsp" %>
@@ -24,7 +30,7 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
 
 %>
 <div class="container">    
-<div class="row">
+	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
@@ -53,49 +59,103 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
 				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>	</ul>
 		</div>	
 		<div class="col-9">
-		<h4>QnA 목록</h4>
-		<table class="table table-hover">
-		<colgroup>
-			<col width="10%">
-			<col width="10%">
-			<col width="10%">
-			<col width="15%">
-			<col width="25%">
-			<col width="10%">
-			<col width="20%">
-		</colgroup>
-		<thead>
-			<tr>
-				<th>제품이미지</th>
-				<th>제품</th>
-				<th>아이디</th>
-				<th>제목</th>
-				<th>내용</th>
-				<th>답변여부</th>
-				<th>작성일</th>
-			</tr>
-		</thead>
-		<tbody>
-			<% 
+			<h4>QnA 목록</h4>
+			
+			<div class="qna-list">
+				<div class="order-list-box">
+					<div class="row">
+						<div class="col mt-2">
+							<span style="margin-left:5px;">총 큐엔에이 카운트건의 상품 후기가 있습니다.</span>
+						</div>
+					</div>
+					<hr>
+<% 
 	for (QnADetailDto qnaDetail : qnaDetailList) {
-%>	
-			<tr>
-				<td><img src = "/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %> " width="60" height="60"></td>	
-				<td><%=qnaDetail.getProductName() %></td>
-				<td><%=qnaDetail.getMemberId() %></td>
-				<td><%=qnaDetail.getTitle() %></td>
-				<td><%=qnaDetail.getQuestionContent() %></td>
-				<td><%=qnaDetail.getQuestionAnswered() %></td>
-				<td><%=qnaDetail.getQuestionDate() %></td>
-			</tr>
+%>						
+					<div class="row">
+			            <div class="col">
+			                 <div class="row p-2">
+								<div class="col-3">
+									<img class="order-img me-2" src="/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %>">
+									<div>
+										<div>
+											<span><%=qnaDetail.getProductName() %></span>
+										</div>
+									</div>
+								</div>
+								<div class="col-3 mt-1">
+									<span>id: <%=qnaDetail.getMemberId() %></span>
+								</div>
+								<div class="col-3 mt-1">
+									<span>제목: <%=qnaDetail.getTitle() %></span>
+								</div>
+								<div class="col-3 mt-1">
+									<span><%=qnaDetail.getQuestionDate() %></span>
+								</div>
+								<div class="col-9 mt-1">
+									<span>내용: <%=qnaDetail.getQuestionContent() %></span>
+								</div>
+							</div>
+						</div>
+					</div>
+<% if (qnaDetail.getQuestionAnswered().equals("Y")) { %>					
+					<div class="row">
+						<div class="col mt-1 accordion accordion-flush" id="faqlist">
+	                    	<div class="accordion-item">
+								<h2 class="accordion-header" id="faq-heading-<%=qnaDetail.getQnANo()%>">
+		                    		<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-<%=qnaDetail.getQnANo()%>">
+		                        		<small id="complete">답변완료</small>
+		                    		</button>
+	                     		</h2>
+							</div>
+	                       	<div id="faq-content-<%=qnaDetail.getQnANo()%>" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+	                        	<div class="accordion-body">
+									<div class="text-muted text-end mb-3"><small><%=qnaDetail.getAnswerDate() %></small></div>
+									<hr>
+									<div class="text-left"><%=qnaDetail.getAnswerContent() %></div>
+								</div>
+							</div>		
+						</div>	
+					</div>			
+								
+<% 
+	} else {
+%>			               		
+					<div class="row">
+						<div class="col mt-1 accordion accordion-flush" id="faqlist">
+	                    	<div class="accordion-item">
+								<h2 class="accordion-header" id="faq-heading-<%=qnaDetail.getQnANo()%>">
+		                    		<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-<%=qnaDetail.getQnANo()%>">
+		                        		<small id="answer">답변하기</small>
+		                    		</button>
+	                     		</h2>
+							</div>
+	                       	<div id="faq-content-<%=qnaDetail.getQnANo()%>" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+								<div class="accordion-body">          
+			                		<form class="well row g-3" method="post" action="qna-answer.jsp">
+			                			<input type="hidden" name="qnANo" value="<%=qnaDetail.getQnANo()%>"/>
+	   			 						<div class="col-10">
+	   			 							<textarea class="form-control" aria-label="With textarea" name="content"></textarea> 
+	   			 						</div>
+	   			 						<div class="text-right col-2">
+											<button class="btn btn-primary btn-sm" type="submit">등록</button>
+										</div>
+	  			 					</form>
+	     			 			</div>
+	     			 			</div>
+				      	</div>
+			       	</div>	
 <% 
 	}
-%>			
-		</tbody>
-	</table>
+%>	         	       			 						
+
+<% 
+}
+%>	       
+				</div>
+			</div>
 		</div>
-		
-</div>	
+	</div>	
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
