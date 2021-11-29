@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.Criteria;
 import dto.ProductDetailDto;
 import vo.Product;
 
@@ -407,6 +408,54 @@ public class ProductDao {
 			product.setGender(rs.getString("product_gender"));
 			product.setCreatedDate(rs.getDate("product_created_date"));
 		
+			products.add(product);
+		}
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return products;
+	}
+	
+	public List<Product> selectProductsByOption(Criteria c) throws SQLException{
+		List<Product> products =  new ArrayList<>();
+
+		String sql = "select * "
+				   + "from tb_products "
+				   + "where product_category = ? ";
+		if (c.getBrand()!= null) {
+			  sql += "and product_brand =  '"+ c.getBrand() +"' ";
+		}		   
+		if (c.getGender()!= null) {
+			  sql += "and product_gender =  '"+ c.getGender() +"' ";
+		}		   
+		if (c.getSort()!= null ) {
+			if ("new".equals(c.getSort())) {
+				sql += "order by product_no desc ";
+			} else if ("low".equals(c.getSort())) {
+				sql += "order by product_price asc ";
+			} else if ("high".equals(c.getSort())) {
+				sql += "order by product_price desc ";				
+			}			
+		} else {		   
+			  sql += "order by product_no desc ";
+		}
+		
+		System.out.println(sql);
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setString(1, c.getCategory());
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next()) {
+			Product product = new Product();
+			
+			product.setPhoto(rs.getString("product_img"));
+			product.setBrand(rs.getString("product_brand"));
+			product.setName(rs.getString("product_name"));
+			product.setPrice(rs.getInt("product_price"));
+			product.setDisPrice(rs.getInt("product_disprice"));
+			
 			products.add(product);
 		}
 		rs.close();
