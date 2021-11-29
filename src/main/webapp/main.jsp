@@ -38,22 +38,34 @@ List<Product> newProductList = productDao.selectAllProducts(1, 8);
 			<h1 class="mb-3">HOT DEAL</h1>
 			<div>기간한정 특가할인!</div>				
 			<div  class="mb-3" >지금 특별한 가격을 만나보세요!</div>
-			<a href="" class="mt-5"><ins><strong>more</strong></ins></a>				
+			<a href="sale.jsp" class="mt-5"><ins><strong>more</strong></ins></a>				
 		</div>
 <%
 	for(Product product : saleProductList){
 %>
 		<div class="col-3">
-			<a href="detail.jsp">
+			<a href="detail.jsp?no=<%=product.getNo()%>">
 				<img src="resources/images/products/<%=product.getPhoto() %>" class="img1" alt="">
 				<div class="row mt-3 mb-3 p-2">
 					<div class="col">
 						<h5><strong><%=product.getBrand() %></strong></h5>
 						<span class="mb-5"><%=product.getName() %></span>
+<%
+	if(product.getDisPrice() > 0){
+%>						  
 						  <div class="mt-3">
 					        <span class="col card-text p-2 p"><%=product.getPrice() %> 원</span>
 					        <span class="col card-text  p-2 dp"><%=product.getDisPrice() %> 원</span>
 		    		   	  </div>
+<%
+	} else {
+%>
+						 <div class= "mt-3 text-end">
+						 	<span class="col card-text p-2 dp"><%=product.getPrice() %> 원</span>
+						 </div>
+<%		
+	}
+%>
 					 </div>
 				</div>
 			</a>
@@ -68,26 +80,36 @@ List<Product> newProductList = productDao.selectAllProducts(1, 8);
 	 -->
 	<div class="row p-5 mt-5 mb-5 text-center">
 		<h1>NEW ARRIVALS</h1>
-		<div class="text-end" ><a href=""><ins><strong>more</strong></ins></a></div>	
 	</div>
      <div class="row mb-5 mt-5" style="margin: 0 20px 0px">
 <%
 for(Product product : newProductList){
 %>	
 		<div class="col-3">
-			<a href="detail.jsp">
+			<a href="detail.jsp?no=<%=product.getNo() %>">
 			<img src="resources/images/products/<%=product.getPhoto()%>" class="img1" alt="">
-			<div class="row mt-1 mb-1 p-1">
+			<div class="row mt-3 mb-3 p-2">
 				<div class="col">
 					<h5>
 						<strong><%=product.getBrand()%></strong>
 					</h5>
 					<span class="mb-5"><%=product.getName()%></span>
+<%
+	if(product.getDisPrice() > 0){
+%>	
 					<div class="mt-3">
-						<span class="col card-text p-2 p"><%=product.getPrice()%>
-							원</span> <span class="col card-text  p-2 dp"><%=product.getDisPrice()%>
-							원</span>
+						<span class="col card-text p-2 p"><%=product.getPrice()%> 원</span> 
+						<span class="col card-text  p-2 dp"><%=product.getDisPrice()%> 원</span>
 					</div>
+<%
+	} else {
+%>
+						 <div class= "mt-3 text-end">
+						 	<span class="col card-text p-2 dp"><%=product.getPrice() %> 원</span>
+						 </div>
+<%		
+	}
+%>					
 				</div>
 			</div>
 			</a>
