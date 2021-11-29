@@ -3,7 +3,7 @@ package dto;
 public class CartDetailDto {
 
 	private int no;					// 장바구니 번호
-	private int quantity;			// 장바구니 수량
+	private int amount;				// 장바구니 수량
 	private int memberNo;			// 회원 번호
 	private int productNo;			// 상품 번호
 	private String productName;		// 상품 이름
@@ -24,12 +24,12 @@ public class CartDetailDto {
 		this.no = no;
 	}
 
-	public int getQuantity() {
-		return quantity;
+	public int getAmount() {
+		return amount;
 	}
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 
 	public int getMemberNo() {

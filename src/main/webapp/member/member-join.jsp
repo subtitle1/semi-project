@@ -6,7 +6,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="/abcMart-app/resources/css/style.css" />
+	<link rel="stylesheet" href="/semi-project/resources/css/style.css" />
 	<title></title>
 </head>
 <body>
@@ -49,10 +49,6 @@
 					<div>
 						<label class="form-label" for="user-name">이름<span>*</span></label>
 						<input type="text" class="form-control" name="name" id="user-name" placeholder="이름을 입력해주세요." />
-					</div>
-					<div>
-						<label class="form-label" for="user-birth">생년월일<span>*</span></label>
-						<input type="text" class="form-control" name="birth" id="user-birth" placeholder="생년월일을 입력해주세요." />
 					</div>
 					<div>
 						<label class="form-label" for="user-id">아이디<span>*</span></label>

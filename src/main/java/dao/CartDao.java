@@ -14,6 +14,12 @@ import vo.Cart;
 
 public class CartDao {
 	
+	private static CartDao self = new CartDao();
+	private CartDao() {}
+	public static CartDao getInstance() {
+		return self;
+	}
+	
 	/**
 	 * 장바구니 버튼을 클릭시 장바구니 정보를 DB에 저장한다.
 	 * @param cart 장바구니 정보
@@ -38,30 +44,34 @@ public class CartDao {
 		
 	}
 	
+	
 	/**
-	 * 장바구니 정보를 반환한다.
-	 * @param no 장바구니 번호
+	 * 회원 번호를 통해 장바구니 정보를 반환한다.
+	 * @param no 회원 번호
 	 * @return 해당 장바구니 정보
 	 * @throws SQLException
 	 */
-	public List<CartDetailDto> selectCartList(int no) throws SQLException {
-		List<CartDetailDto> carts = new ArrayList<>();
+	public List<CartDetailDto> selectCartList(int memberNo) throws SQLException {
 		
-		String sql = "select C.cart_no, C.product_amount, "
-				   + "P.product_no, P.product_name, P.product_img, P.product_brand, P.product_price, P.product_discount_price, "
-				   + "S.product_size "
-				   + "from tb_carts C, tb_products P, tb_product_stocks S "
-				   + "where C.product_detail_no = S.product_detail_no and P.product_no = S.product_no ";
+		String sql = "select C.cart_no, C.product_amount, C.member_no, "
+				   + "P.product_no, P.product_name, P.product_img, P.product_brand, P.product_price, P.product_disprice, "
+				   + "S.product_size, S.product_stock "
+				   + "from tb_carts C, tb_products P, tb_product_stocks S, tb_members M "
+				   + "where C.product_detail_no = S.product_detail_no and P.product_no = S.product_no and C.member_no = M.member_no "
+				   + "and C.member_no = ? ";
+		
+		List<CartDetailDto> carts = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, memberNo);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
 			CartDetailDto cartDetail = new CartDetailDto();
 			
 			cartDetail.setNo(rs.getInt("cart_no"));
-			cartDetail.setQuantity(rs.getInt("cart_quantity"));
+			cartDetail.setAmount(rs.getInt("product_amount"));
 			cartDetail.setMemberNo(rs.getInt("member_no"));
 			cartDetail.setProductNo(rs.getInt("product_no"));
 			cartDetail.setProductName(rs.getString("product_name"));
@@ -70,6 +80,7 @@ public class CartDao {
 			cartDetail.setProductPrice(rs.getInt("product_price"));
 			cartDetail.setProductDisprice(rs.getInt("product_disprice"));
 			cartDetail.setProductSize(rs.getInt("product_size"));
+			cartDetail.setProductStock(rs.getInt("product_stock"));
 			
 			carts.add(cartDetail);
 		}
