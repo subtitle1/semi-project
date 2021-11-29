@@ -5,7 +5,6 @@
 <%
 	//registerform.jsp에서 제출한 폼입력값을 조회한다.	
 	String name = request.getParameter("name");
-	String birth = request.getParameter("birth");
 	String id = request.getParameter("id");
 	String pwd = request.getParameter("pwd");
 	String againPwd = request.getParameter("againPwd");
