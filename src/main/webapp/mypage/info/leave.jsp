@@ -7,7 +7,7 @@
 	Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");
 	String pwd = request.getParameter("pwd");
 	
-	MemberDao memberDao = MemberDao.getInstance();;
+	MemberDao memberDao = MemberDao.getInstance();
 
 	String secretPwd = DigestUtils.sha256Hex(pwd);
 	
@@ -16,5 +16,5 @@
 		return;
 	}
 	
-	memberDao.deleteMember(loginUserInfo.getNo());
+	response.sendRedirect("confirmleave.jsp");
 %>	

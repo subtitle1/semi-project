@@ -125,11 +125,34 @@
 								</div>
 							</div>
 						</div>
+<%
+	if (orderDetail.getDisPrice() > 0) {
+%>						<div class="col mt-3">
+							<div class="text-center">
+								<span  style="text-decoration:line-through;"><%=orderDetail.getPrice() %>원</span>
+							</div>
+							<div class="text-center">
+								<span style="color: red; font-weight: bold; font-size: 17px;"><%=orderDetail.getDisPrice() %>원</span>
+							</div>
+						</div>
+<%
+	} else {
+%>
 						<div class="col mt-4 text-end">
 							<span><%=orderDetail.getPrice() %>원</span>
 						</div>
+<%		
+	}
+%>
 						<div class="col mt-4 text-end">
 							<span style="font-weight: bold;"><%=order.getStatus() %></span>
+						</div>
+						<!-- 
+							리뷰 작성 상태가 Y면 버튼 상태 disabled로 만들기 
+							N이면 reviewform으로 이동
+						-->
+						<div class="col mt-3 text-end mt-1">
+							<button type="button" class="btn btn-dark btn-sm">리뷰 작성</button>
 						</div>
 					</div>
 <%
