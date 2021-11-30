@@ -66,7 +66,7 @@ public class OrderDao {
 		List<OrderDetailDto> orderDetails = new ArrayList<>();
 		
 		String sql = "select p.product_no, p.product_img, p.product_name, p.product_price, "
-				   + "p.product_disprice, p.product_brand, i.product_amount, s.product_size, s.product_detail_no "
+				   + "p.product_disprice, p.product_brand, i.product_amount, s.product_size, s.product_detail_no, s.product_stock "
 				   + "from tb_products p, tb_order_item i, tb_product_stocks s "
 				   + "where i.product_detail_no = s.product_detail_no "
 				   + "and s.product_no = p.product_no "
@@ -89,6 +89,7 @@ public class OrderDao {
 	    	orderDetail.setAmount(rs.getInt("product_amount"));
 	    	orderDetail.setSize(rs.getInt("product_size"));
 	    	orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
+	    	orderDetail.setProductStock(rs.getInt("product_stock"));
 	    	
 	    	orderDetails.add(orderDetail);
 	    }

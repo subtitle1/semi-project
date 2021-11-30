@@ -28,7 +28,7 @@
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
+				<li class="crumb home"><a href="/semi-project/main.jsp" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">마이페이지</li>
 				<li class="crumb">마이페이지</li>
 				<li class="crumb">마이페이지</li>

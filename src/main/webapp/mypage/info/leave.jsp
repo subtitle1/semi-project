@@ -16,5 +16,5 @@
 		return;
 	}
 	
-	response.sendRedirect("confirmleave.jsp");
+	response.sendRedirect("confirmleaveform.jsp");
 %>	

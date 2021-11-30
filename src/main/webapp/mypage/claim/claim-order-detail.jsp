@@ -19,7 +19,6 @@
 <%@ include file="/common/navbar.jsp" %>
 <div class="container">    
 <%
-
 	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 
 	int memberNo = loginUserInfo.getNo();
@@ -32,10 +31,10 @@
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
+				<li class="crumb home"><a href="/semi-project/main.jsp" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">마이페이지</li>
-				<li class="crumb">마이페이지</li>
-				<li class="crumb">마이페이지</li>
+				<li class="crumb">쇼핑내역</li>
+				<li class="crumb">주문/배송현황 조회</li>
 			</ul>
 		</div>
 	</div>
@@ -90,7 +89,7 @@
 						<span><%=order.getStatus() %></span>
 					</div>
 					<div class="col text-end mt-1">
-						<button type="button" class=" btn-dark btn-sm">전체주문취소</button>
+						<a style="text-decoration: none; color:white;" href="claim-cancel-request.jsp?orderNo=<%=order.getNo() %>"><button type="button" class=" btn-dark btn-sm" >주문취소</button></a>
 					</div>
 				</div>
 			</div>
@@ -152,7 +151,7 @@
 							N이면 reviewform으로 이동
 						-->
 						<div class="col mt-3 text-end mt-1">
-							<button type="button" class="btn btn-dark btn-sm">리뷰 작성</button>
+							<button type="button" class="btn btn-dark btn-sm"><a>리뷰 작성</a></button>
 						</div>
 					</div>
 <%

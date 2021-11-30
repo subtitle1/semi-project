@@ -26,10 +26,10 @@
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
+				<li class="crumb home"><a href="/semi-project/main.jsp" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">마이페이지</li>
-				<li class="crumb">마이페이지</li>
-				<li class="crumb">마이페이지</li>
+				<li class="crumb">쇼핑내역</li>
+				<li class="crumb">주문/배송현황 조회</li>
 			</ul>
 		</div>
 	</div>
@@ -114,7 +114,7 @@
 	} else {
 		for (Order order : orders) {
 %>
-				<div class="order-list-box">
+				<div class="order-list-box mb-3">
 					<div class="row mb-1">
 						<div class="col-2 mt-2">
 							<span style="font-weight: bold;">주문번호</span>
@@ -136,11 +136,11 @@
 						</div>
 					</div>
 				</div>
-			</div>
 <%
 		}
 	}
 %>
+			</div>
 		</div>
 	</div>
 </div>

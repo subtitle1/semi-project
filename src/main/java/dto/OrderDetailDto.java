@@ -14,7 +14,6 @@ public class OrderDetailDto {
 	private Date orderDate;
 	private int totalPrice;
 	private String reviewStatus;
-	private Stock stock;
 	private int amount;
 	private int productNo;
 	private int productDetailNo;
@@ -24,11 +23,18 @@ public class OrderDetailDto {
 	private int price;
 	private int disPrice;
 	private int size;
+	private int productStock;
 	private String photo;
 	private String brand;
 	private String gender;
 	private Date createdDate;
 	
+	public int getProductStock() {
+		return productStock;
+	}
+	public void setProductStock(int productStock) {
+		this.productStock = productStock;
+	}
 	public int getProductDetailNo() {
 		return productDetailNo;
 	}
@@ -82,12 +88,6 @@ public class OrderDetailDto {
 	}
 	public void setReviewStatus(String reviewStatus) {
 		this.reviewStatus = reviewStatus;
-	}
-	public Stock getStock() {
-		return stock;
-	}
-	public void setStock(Stock stock) {
-		this.stock = stock;
 	}
 	public int getAmount() {
 		return amount;

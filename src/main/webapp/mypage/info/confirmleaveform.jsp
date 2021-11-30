@@ -71,7 +71,7 @@
 			<div class="row">
 				<div class="col">
 					<p class="text-head2 mt-5">회원 탈퇴</p>
-					<form method="post" action="confirmleave.jsp">
+					<form method="get" action="confirmleave.jsp">
 						<div class="register-box">
 							<span>정말로 탈퇴하시겠습니까?</span>
 						</div>
