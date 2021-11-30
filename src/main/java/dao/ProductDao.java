@@ -449,7 +449,8 @@ public class ProductDao {
 		
 		while(rs.next()) {
 			Product product = new Product();
-			
+
+			product.setNo(rs.getInt("product_no"));
 			product.setPhoto(rs.getString("product_img"));
 			product.setBrand(rs.getString("product_brand"));
 			product.setName(rs.getString("product_name"));

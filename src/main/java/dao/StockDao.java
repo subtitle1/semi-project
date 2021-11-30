@@ -48,6 +48,31 @@ public class StockDao {
 			
 			return stockList;
 		}
+	public Stock selectStockByProductDetailNo(int productDetailNo) throws SQLException {
+		String sql = "select product_no, product_detail_no, "
+	 			+ "product_size, product_stock "
+			   + "from tb_product_stocks "
+			   + "where product_detail_no = ? ";
+		Stock stock = null;
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, productDetailNo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		if (rs.next()) {
+			stock = new Stock();
+			stock.setNo(rs.getInt("product_detail_no"));
+			stock.setProductNo(rs.getInt("product_no"));
+			stock.setSize(rs.getInt("product_size"));
+			stock.setStock(rs.getInt("product_stock"));
+		}
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return stock;
+	}
+	
 	
 	/**
 	 * productNo와 size로 product_detail_no를 반환한다

@@ -13,14 +13,14 @@
    <link rel="stylesheet" href="../resources/css/style.css" />
     <title></title>
 <style>
-#complete {color: white;  padding: 4px 8px; border: 1px solid black; background-color : rgb(57, 209, 146); }
-#answer {color: white;  padding: 4px 8px; border: 1px solid black; background-color : rgb(126, 181, 245); }
+#complete {color: white;  padding: 4px 8px;  border:none; background-color : rgb(57, 209, 146); }
+#answer {color: white;  padding: 4px 8px; border:none; background-color : rgb(126, 181, 245); }
 
 </style>
 
 </head>
 <body>
-<%@ include file="../common/navbar.jsp" %>
+<%@ include file="admin-common.jsp" %>
 
 <% 
 QnaDao qnaDao = QnaDao.getInstance();
@@ -52,7 +52,7 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
 			<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
 				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
-				<li class=""><a href="register-product.jsp" class="nav-link p-0">신규 상품 등록</a></li>
+				<li class=""><a href="registerform.jsp" class="nav-link p-0">신규 상품 등록</a></li>
 				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
 				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
 				<li class=""><a href="qna-list.jsp" class="nav-link p-0">QnA 목록</a></li>

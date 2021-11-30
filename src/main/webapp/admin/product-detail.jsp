@@ -13,7 +13,7 @@
     <title></title>
 </head>
 <body>
-<%@ include file="../common/navbar.jsp" %>
+<%@ include file="admin-common.jsp" %>
 
 
 <%
@@ -46,7 +46,7 @@ Product product = productDao.selectProductbyNo(no);
 				<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
 				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
-				<li class=""><a href="register-product.jsp" class="nav-link p-0">신규 상품 등록</a></li>
+				<li class=""><a href="registerform.jsp" class="nav-link p-0">신규 상품 등록</a></li>
 				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
 				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
 				<li class=""><a href="qna-list.jsp" class="nav-link p-0">QnA 목록</a></li>
@@ -58,12 +58,13 @@ Product product = productDao.selectProductbyNo(no);
 		 
 <div class="product_admin_detail mt-5 mb-5 col-9">
 		<div class="row">
- 		<div class="img col-4">
-			<img src="/semi-project/resources/images/products/<%=product.getPhoto() %>">
+ 		<div class="col-4">
+			<img src="/semi-project/resources/images/products/<%=product.getPhoto() %>" width="300" height="300">
 		</div>
-		<h2><%=product.getName() %> by <%=product.getBrand() %></h2>
-	
-		<table class="col-4" style="border-top: 2px solid #000">
+		<div class="col-4">
+		<h4><%=product.getName() %></h4>
+		<h5>by <%=product.getBrand() %></h5>
+		<table style="border-top: 2px solid #000">
 			<tbody>
 			<tr>
 				<th>판매가</th>
@@ -84,6 +85,7 @@ Product product = productDao.selectProductbyNo(no);
 			</tbody>
 		</table>	
 		</div>	
+		</div>
 </div>
 </div>
 </div>

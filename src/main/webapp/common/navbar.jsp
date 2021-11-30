@@ -20,12 +20,18 @@
 				<li class="nav-item"><a href="/semi-project/loginform.jsp" class="nav-link " >로그인</a></li>
 				<li class="nav-item"><a href="/semi-project/member/member-join.jsp" class="nav-link ">회원가입</a></li>
 <%
+	} else if ("admin".equals(loginUserInfo.getId())) {
+%>
+				<li class="nav-item"><a href="/semi-project/admin/member-list.jsp" class="nav-link ">관리자페이지</a></li>
+				<li class="nav-item"><a href="/semi-project/logout.jsp" class="nav-link ">로그아웃</a></li>
+<%
 	} else {
 %>
 				<li class="nav-item"><a href="/semi-project/logout.jsp" class="nav-link ">로그아웃</a></li>
 <%
 	}
 %>
+		
 			</ul>
 		</div>
 	</div>

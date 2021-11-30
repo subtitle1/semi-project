@@ -155,7 +155,7 @@ public class ReviewDao {
 					   + "       review_like_count, review_deleted, review_date, product_name, product_img "
 					   + "from (select row_number() over (order by R.review_no desc)rn, "
 					   + "				R.review_no, R.product_no, R.review_content, R.review_like_count, R.review_date, "
-					   + "				R.review_delete, M.member_no, M.member_id, M.member_name, P.product_name, P.product_img "
+					   + "				R.review_deleted, M.member_no, M.member_id, M.member_name, P.product_name, P.product_img "
 					   + "		from tb_reviews R, tb_Members M, tb_products P "
 					   + "		where R.member_no = M.member_no "
 					   + "		and R.product_no = P.product_no) "
