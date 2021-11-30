@@ -12,7 +12,7 @@
     <title></title>
 </head>
 <body>
-<%@ include file="../common/navbar.jsp" %>
+<%@ include file="admin-common.jsp" %>
 
 <% 
 
@@ -28,7 +28,7 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">관리자페이지</li>
-				<li class="crumb">관리자페이지</li>
+				<li class="crumb">이용 회원 목록</li>
 			</ul>
 		</div>
 	</div>
@@ -45,7 +45,7 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 			<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
 				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
-				<li class=""><a href="register-product.jsp" class="nav-link p-0">신규 상품 등록</a></li>
+				<li class=""><a href="registerform.jsp" class="nav-link p-0">신규 상품 등록</a></li>
 				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
 				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
 				<li class=""><a href="qna-list.jsp" class="nav-link p-0">QnA 목록</a></li>
