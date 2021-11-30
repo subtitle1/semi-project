@@ -21,6 +21,30 @@ public class CartDao {
 	}
 	
 	/**
+	 * 동일한 상품 수량이 업데이트를 진행한다. 
+	 * @param cart
+	 * @throws SQLException
+	 */
+	public void updateCartAmount(Cart cart) throws SQLException {
+		
+		String sql = "update tb_carts "
+				   + "set "
+				   + "	product_amount = ? "
+				   + "where "
+				   + "	product_detail_no = ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, cart.getAmount());
+		pstmt.setInt(2, cart.getStockNo());
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
+	
+	/**
 	 * 장바구니 버튼을 클릭시 장바구니 정보를 DB에 저장한다.
 	 * @param cart 장바구니 정보
 	 * @throws SQLException
@@ -43,7 +67,6 @@ public class CartDao {
 		connection.close();
 		
 	}
-	
 	
 	/**
 	 * 회원 번호를 통해 장바구니 정보를 반환한다.
