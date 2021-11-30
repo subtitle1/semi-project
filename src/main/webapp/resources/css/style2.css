@@ -38,7 +38,109 @@ body { padding: 50px;}
 .product_view table .length a:nth-of-type(2) { bottom:0; background: url("../images/ico_down.png") no-repeat center; border-top:1px solid #c6c6c6;}
 .product_view table select { width:35%; border:1px solid #c6c6c6; box-sizing: border-box;  background: url("../images/ico_select.png") no-repeat right 11px center;appearance:none; -webkit-appearance:none; -moz-appearance:none;}
 .product_view table select::-ms-expand { display: none;}
-.product_view .btns { padding: 30px 0px ;}
-.product_view .btns > a { display: inline-block; width: 50px; height: 30px;border-radius: 2px; font-size: 16px; color:#fff; line-height: 60px; text-align: center;}
-.product_view .btns > a.btn1 { width: 250px; height:60px;background: #666666;}
-.product_view .btns > a.btn2 { width: 250px; height:60px;background: #111111;}
+
+
+button.cart {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  margin: 35px 0 0;
+  padding: 0px 25px;
+  
+  text-align: center;
+  text-decoration: none;
+  
+  border: none;
+  
+  display: inline-block;
+  width: 270px;
+  height: 60px;
+  
+  cursor: pointer;
+  	
+ background: #666666;
+ color: white;
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+button.buy {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  margin: 35px 0 0;
+  padding: 0px 25px;
+
+  text-align: center;
+  text-decoration: none;
+  
+  border: none;
+  
+  display: inline-block;
+  width: 270px;
+  height: 60px;
+  
+  cursor: pointer;
+  	
+ background: #111111;
+ color: white;
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+}
+button.buy {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  margin: 35px 0 0;
+  padding: 0px 25px;
+
+  text-align: center;
+  text-decoration: none;
+  
+  border: none;
+  
+  display: inline-block;
+  width: 270px;
+  height: 60px;
+  
+  cursor: pointer;
+  	
+ background: #111111;
+ color: white;
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+button.review {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  margin: 0;
+  padding: 0px 25px;
+
+  text-align: center;
+  text-decoration: none;
+  
+  border: none;
+  
+  display: inline-block;
+  width: 270px;
+  height: 60px;
+  
+  cursor: pointer;
+  	
+ background: #111111;
+ color: white;
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+

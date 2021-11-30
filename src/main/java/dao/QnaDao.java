@@ -68,18 +68,18 @@ public class QnaDao {
 	
 	public List<QnADetailDto> selectQnAListByProductNo(int begin, int end, int productNo) throws SQLException{
 		String sql = "select question_no, product_no, member_no, question_title, question_content, "
-				+ "question_date, question_answered, answer_content, "
-				+ "answer_date, member_name, member_id, product_name, product_img "
-				+ "from (select row_number() over (order by q.question_date desc) rn, q.question_no, "
-				+ "q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
-				+ "q.question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
-				+ "p.product_name, p.product_img "
-				+ "from tb_qna q, tb_members m, tb_products p "
-				+ "where q.member_no = m.member_no "
-				+ "and p.product_no = q.product_no) "
-				+ "where rn >= ? and rn <= ? "
-				+ "and where product_no = ? "
-				+ "	order by question_date desc ";
+	            + "question_date, question_answered, answer_content, "
+	            + "answer_date, member_name, member_id, product_name, product_img "
+	            + "    from (select row_number() over (order by q.question_date desc) rn, q.question_no, "
+	            + "    q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
+	            + "    q. question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
+	            + "    p.product_name, p.product_img "
+	            + "    from tb_qna q, tb_members m, tb_products p "
+	            + "    where q.member_no = m.member_no "
+	            + "    and p.product_no = q.product_no) "
+	            + "where rn >= ? and rn <= ? "
+	            + "and product_no = ? "
+	            + "order by question_date desc ";
 					
 		
 		List<QnADetailDto> qnADetailList = new ArrayList<>();

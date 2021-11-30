@@ -199,16 +199,16 @@ public class ReviewDao {
 		 * @return 리뷰 정보
 		 * @throws SQLException
 		 */
-		public ReviewDetailDto selectReviewDetailByReviewNo(int no) throws SQLException {
+		public List<ReviewDetailDto> selectReviewDetailByReviewNo(int no) throws SQLException {
 			String sql = "select R.review_no, R.review_content, M.member_no, M.Member_id,  "
-					   + "       R.review_like_count, R.review_deleted, P.product_no "
+					   + "       R.review_like_count, R.review_deleted, P.product_no, "
 					   + "		 R.review_date, P.product_name, P.product_img "
-					   + "		from tb_reviews R, tb_Members M, tb_products P "
-					   + "		where R.member_no = M.member_no "
+					   + "from tb_reviews R, tb_Members M, tb_products P "
+					   + "where R.member_no = M.member_no "
 					   + "		and R.product_no = P.product_no "
-					   + "and R.review_no = ? ";
+					   + "		and R.review_no = ? ";
 			
-			ReviewDetailDto reviewDetailDto = null;
+			List<ReviewDetailDto> reviewList = new ArrayList<>();
 			
 			Connection connection = getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -216,7 +216,7 @@ public class ReviewDao {
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				
-				reviewDetailDto = new ReviewDetailDto();
+				ReviewDetailDto reviewDetailDto = new ReviewDetailDto();
 				
 				
 				reviewDetailDto.setReviewNo(rs.getInt("review_no"));
@@ -230,12 +230,13 @@ public class ReviewDao {
 				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
 				reviewDetailDto.setId(rs.getString("member_id"));
 				
+				reviewList.add(reviewDetailDto);
 			}
 			rs.close();
 			pstmt.close();
 			connection.close();
 			
-			return reviewDetailDto;
+			return reviewList;
 		}
 		
 		/**
@@ -246,12 +247,12 @@ public class ReviewDao {
 		 */
 		public List<ReviewDetailDto> selectReviewDetailByProductNo(int no) throws SQLException {
 			String sql = "select R.review_no, R.review_content, M.member_no, M.Member_id,  "
-					+ "       R.review_like_count, R.review_deleted, P.product_no "
-					+ "		 R.review_date, P.product_name, P.product_img "
-					+ "		from tb_reviews R, tb_Members M, tb_products P "
-					+ "		where R.member_no = M.member_no "
-					+ "		and R.product_no = P.product_no "
-					+ "and R.product_no = ? ";
+					+ "          R.review_like_count, R.review_deleted, P.product_no, "
+					+ "		     R.review_date, P.product_name, P.product_img "
+					+ "	  from tb_reviews R, tb_Members M, tb_products P "
+					+ "	  where R.member_no = M.member_no "
+					+ "		    and R.product_no = P.product_no "
+					+ "         and R.product_no = ? ";
 			
 			List<ReviewDetailDto> reviewList = new ArrayList<>();
 			

@@ -1,3 +1,4 @@
+<%@page import="dto.Criteria"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Product"%>
 <%@page import="dao.ProductDao"%>
@@ -30,8 +31,25 @@ a{text-decoration:none; color:black;}
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
 
+	// select할 속성 요청.
+	String brand = request.getParameter("brand");
+	String gender = request.getParameter("gender");
+	String sort = request.getParameter("sort");
+	
+	Criteria c = new Criteria();
 
-	List<Product> productList = productDao.selectProductsOnSale(1, 60);
+	if( brand != null && !brand.isEmpty()){
+		c.setBrand (brand);
+	} 
+	if(gender != null && !gender.isEmpty()){
+		c.setGender(gender);
+	} 
+	if(sort != null && !sort.isEmpty()) {
+		c.setSort(sort);
+	}
+
+
+	List<Product> productList = productDao.selectProductsOnSaleByOption(c);
 
 
 	
@@ -49,33 +67,34 @@ a{text-decoration:none; color:black;}
     </div>
    	<nav class="navbar navbar-expand-lg navbar-ligth ">
 	<div class="container">
-		<div class="collapse navbar-collapse " id="navbar-1">
-			<ul class="navbar-nav" >
-				<li class="nav-item" >
-					<select class=" border-0 text-center mx-3" onchange="searchProducts()">
-						<option value="">브랜드 전체</option>
-						<option>아디다스</option>
-						<option>퓨마</option>
-						<option>휠라</option>
-					</select>
-				</li>	
-				<li class="nav-item " >
-					<select class="border-0 text-center" onchange="searchProducts()">
-						<option>남녀공용</option>
-						<option>남자</option>
-						<option>여자</option>
-					</select>
-				</li>	
-				<li class="nav-item " >
-					<select class="border-0  text-center" onchange="searchProducts()">
-						<option>신상품순</option>
-						<option>낮은가격순</option>
-						<option>높은가격순</option>
-						<option>베스트상품순</option>
-					</select>
-				</li>
-			</ul>
-		</div>
+		<form id="search-form" action="sale.jsp" method="get">
+			<div class="collapse navbar-collapse " id="navbar-1">
+				<ul class="navbar-nav" >
+					<li class="nav-item" >
+						<select name="brand" class=" border-0 text-center mx-3 hover" onchange="searchProducts()">
+							<option value="">브랜드 전체</option>
+							<option value="아디다스" <%="아디다스".equals(brand) ? "selected" : "" %>>아디다스</option>
+							<option value="아키클래식" <%="아키클래식".equals(brand) ? "selected" : "" %>>아키클래식</option>
+							<option value="리복" <%="리복".equals(brand) ? "selected" : "" %>>리복</option>
+						</select>
+					</li>	
+					<li class="nav-item " >
+						<select name="gender" class="border-0 text-center hover" onchange="searchProducts()">
+							<option value="">남녀공용</option>
+							<option value="M" <%="M".equals(gender) ? "selected" : "" %>>남자</option>
+							<option value="F" <%="F".equals(gender) ? "selected" : "" %>>여자</option>
+						</select>
+					</li>	
+					<li class="nav-item " >
+						<select name="sort" class="border-0  text-center" onchange="searchProducts()">
+							<option value="new" <%="new".equals(sort) ? "selected" : "" %>>신상품순</option>
+							<option value="low" <%="low".equals(sort) ? "selected" : "" %>>낮은가격순</option>
+							<option value="high" <%="high".equals(sort) ? "selected" : "" %>>높은가격순</option>
+						</select>
+					</li>
+				</ul>
+			</div>
+		</form>
 	</div>
 </nav>
 <hr>
@@ -117,5 +136,11 @@ a{text-decoration:none; color:black;}
 </div>
 <%@ include file ="common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	function searchProducts(){
+		var form = document.getElementById("search-form");
+		form.submit();
+	}
+</script>
 </body>
 </html>
