@@ -69,6 +69,40 @@ public class CartDao {
 	}
 	
 	/**
+	 * 장바구니 목록을 불러온다.
+	 * @return 해당 장바구니 정보
+	 * @throws SQLException
+	 */
+	public List<Cart> selectAllCartList() throws SQLException {
+		
+		String sql = "select cart_no, member_no, product_detail_no, product_amount "
+				   + "from tb_carts ";
+		
+		List<Cart> carts = new ArrayList<>();
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			Cart cartDetail = new Cart();
+			
+			cartDetail.setNo(rs.getInt("cart_no"));
+			cartDetail.setStockNo(rs.getInt("product_detail_no"));;
+			cartDetail.setAmount(rs.getInt("product_amount"));
+			cartDetail.setMemberNo(rs.getInt("member_no"));
+			
+			carts.add(cartDetail);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return carts;
+	}
+	
+	/**
 	 * 회원 번호를 통해 장바구니 정보를 반환한다.
 	 * @param no 회원 번호
 	 * @return 해당 장바구니 정보
