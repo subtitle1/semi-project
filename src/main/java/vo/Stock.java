@@ -41,6 +41,11 @@ public class Stock {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
+
+	@Override
+	public String toString() {
+		return "Stock [no=" + no + ", productNo=" + productNo + ", size=" + size + ", stock=" + stock + "]";
+	}
 	
 	
 }

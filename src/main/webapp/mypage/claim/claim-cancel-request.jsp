@@ -25,7 +25,7 @@
 	Member member = memberDao.selectMemberByNo(memberNo);
 	
 	OrderDao orderDao = OrderDao.getInstance();
-	Order order = orderDao.selectOrderDetailByOrderNo(orderNo);
+	Order order = orderDao.selectOrderByOrderNo(orderNo);
 %>
 	<div class="row">
 		<div class="col breadcrumb">
@@ -114,7 +114,7 @@
 	for (OrderDetailDto orderDetail : orderDetails) {
 %>
 								<tr>
-									<td><input type="checkbox" name="productNo" value="<%=orderDetail.getProductNo()%>"></td>
+									<td><input type="checkbox" name="stockNo" value="<%=orderDetail.getProductDetailNo()%>"></td>
 									<td>
 										<div class="row">
 											<div class="col">
@@ -264,7 +264,7 @@
 	function toggle() {
 		var checkAll = document.querySelector("#ck-all");
 		var checkedStatus = checkAll.checked;
-		var checkboxes = document.querySelectorAll("#product-list tbody input[name=productNo]");
+		var checkboxes = document.querySelectorAll("#product-list tbody input[name=stockNo]");
 		
 		for (var i = 0; i < checkboxes.length; i++) {
 			var checkbox = checkboxes[i];
@@ -274,7 +274,7 @@
 	
 	function cancelOrder() {
 		var form = document.getElementById("list-form");
-		var checkboxes = document.querySelectorAll("#product-list tbody input[name=productNo]");
+		var checkboxes = document.querySelectorAll("#product-list tbody input[name=stockNo]");
 		var isExist = false;
 		for (var i = 0; i < checkboxes.length; i++) {
 			var checkbox = checkboxes[i];

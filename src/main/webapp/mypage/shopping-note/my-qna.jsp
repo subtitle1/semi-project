@@ -1,3 +1,4 @@
+<%@page import="vo.Pagination"%>
 <%@page import="dao.QnaDao"%>
 <%@page import="dto.QnADetailDto"%>
 <%@page import="java.util.List"%>
@@ -87,8 +88,13 @@
 					<div class="inquiry-box">
 						<div class="row">
 <%
+
+	String pageNo = request.getParameter("pageNo");	
 	QnaDao qnaDao = QnaDao.getInstance();
-	List<QnADetailDto> qnaDetails = qnaDao.selectQnAListByMemberNo(1, 20, member.getNo());
+	int totalRecords = qnaDao.selectQnACountByMemberNo(member.getNo());
+	Pagination pagination = new Pagination(pageNo, totalRecords);
+	
+	List<QnADetailDto> qnaDetails = qnaDao.selectQnAListByMemberNo(pagination.getBegin(), pagination.getEnd(), member.getNo());
 	if (qnaDetails.isEmpty()) {
 %>
 							<div class="p-5">
@@ -98,7 +104,7 @@
 	} else {
 %>
 							<div class="col mt-2">
-								<span style="margin-left: 5px;">총 <%=qnaDetails.size()%>건의
+								<span style="margin-left: 5px;">총 <%=totalRecords%>건의
 									상담내역이 있습니다.
 								</span>
 							</div>
@@ -185,6 +191,30 @@
 %>
 					</div> <!-- inquiry-box -->
 			</div> <!-- orderList -->
+			<div class="row mb-3">
+				<div class="col-6 offset-3">
+					<nav>
+						<ul class="pagination justify-content-center">
+							<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>"><a class="page-link" href="my-qna.jsp?pageNo=<%=pagination.getPrevPage()%>" >이전</a></li>
+<%
+	if (totalRecords == 0) {
+%>
+							<li class="page-item <%=pagination.getPageNo() == 1 ? "active" : "" %>"><a class="page-link" href="my-qna.jsp?pageNo=1">1</a></li>
+<% 
+	} else {
+		for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+%>					
+							<li class="page-item <%=pagination.getPageNo() == num ? "active" : "" %>"><a class="page-link" href="my-qna.jsp?pageNo=<%=num%>"><%=num %></a></li>
+<%
+		}
+	}
+%>					
+
+							<li class="page-item <%=!pagination.isExistNext() ? "disabled" :"" %>"><a class="page-link" href="my-qna.jsp?pageNo=<%=pagination.getNextPage()%>" >다음</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
 		</div> <!-- offset-md-1 col-9 p-0 -->
 	</div> <!-- //mypage -->
 </div>	<!-- //container -->

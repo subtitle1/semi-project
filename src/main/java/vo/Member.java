@@ -105,6 +105,13 @@ public class Member {
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
 	}
+
+	@Override
+	public String toString() {
+		return "Member [no=" + no + ", name=" + name + ", id=" + id + ", pwd=" + pwd + ", email=" + email + ", tel="
+				+ tel + ", address=" + address + ", pct=" + pct + ", registeredDate=" + registeredDate
+				+ ", deletedDate=" + deletedDate + ", deleted=" + deleted + "]";
+	}
 	
 	
 }

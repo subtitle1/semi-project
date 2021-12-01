@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.CancelProductDto;
 import dto.Criteria;
 import dto.ProductDetailDto;
 import vo.Product;
@@ -22,7 +23,42 @@ public class ProductDao {
 		return self;
 	}
 	
-	
+	public CancelProductDto selectProductDetailByOrderNoAndStockNo(int orderNo, int stockNo) throws SQLException {
+		String sql = "select p.product_no, p.product_name, p.product_price, "
+				+ "       p.product_disprice, i.product_amount, s.product_size, s.product_detail_no, s.product_stock "
+				+ "from tb_products p, tb_order_item i, tb_product_stocks s "
+				+ "where i.product_detail_no = s.product_detail_no "
+				+ "and s.product_no = p.product_no "
+				+ "and i.order_no = ? "
+				+ "and i.product_detail_no = ? ";
+		
+		CancelProductDto canceledProduct = null;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, orderNo);
+		pstmt.setInt(2, stockNo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		if (rs.next()) {
+			canceledProduct = new CancelProductDto();
+			canceledProduct.setProductNo(rs.getInt("product_no"));
+			canceledProduct.setProductName(rs.getString("product_name"));
+			canceledProduct.setPrice(rs.getInt("product_price"));
+			canceledProduct.setDisprice(rs.getInt("product_disprice"));
+			canceledProduct.setAmount(rs.getInt("product_amount"));
+			canceledProduct.setSize(rs.getInt("product_size"));
+			canceledProduct.setProductDetailNo(rs.getInt("product_detail_no"));
+			canceledProduct.setStock(rs.getInt("product_stock"));
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return canceledProduct;
+		
+	}
 	public List<ProductDetailDto> selectAllProductDetail(int begin, int end) throws SQLException{
 		String sql = "select product_no, product_name, product_img, product_price, "
 				+ "product_disprice, product_brand, "
@@ -88,6 +124,7 @@ public class ProductDao {
 				+ "product_category, product_created_date, product_gender "
 			   + "from tb_products "
 			   + "where product_no = ? ";
+		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);	
 		pstmt.setInt(1, no);
@@ -104,9 +141,8 @@ public class ProductDao {
 			product.setCategory(rs.getString("product_category"));
 			product.setGender(rs.getString("product_gender"));
 			product.setCreatedDate(rs.getDate("product_created_date"));
-			
-		
 		}
+		
 		rs.close();
 		pstmt.close();
 		connection.close();
