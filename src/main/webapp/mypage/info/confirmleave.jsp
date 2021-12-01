@@ -7,6 +7,6 @@
 	MemberDao memberDao = MemberDao.getInstance();
 	
 	memberDao.deleteMember(loginUserInfo.getNo());
-	
+	session.invalidate();
 	response.sendRedirect("../../main.jsp?user=deleted");
 %>

@@ -29,8 +29,15 @@ ProductDao productDao = ProductDao.getInstance();
 List<Product> saleProductList = productDao.selectProductsOnSale(1, 3);
 List<Product> newProductList = productDao.selectAllProducts(1, 8);
 
+	String user = request.getParameter("user");
+	if ("deleted".equals(user)) {
 %>
-
+<script type="text/javascript">
+	alert("탈퇴가 완료되었습니다.");
+</script>
+<%
+	}
+%>
 	<!-- 
 		세일상품목록
 		3개만 출력.

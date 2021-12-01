@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
     <link rel="stylesheet" href="/semi-project/resources/css/style.css" />
-    <title>상품 후기</title>
+    <title>상품 리뷰</title>
 </head>
 <body>
 <%@ include file="/common/navbar.jsp" %>
@@ -71,7 +71,7 @@
 				</div>
 			</div>
 			<div class="order-list">
-			<p>상품 Q&A</p>
+			<p>상품 후기</p>
 				<div class="inquiry-box">
 					<div class="row">
 <%
@@ -143,8 +143,7 @@
 		</div>
 	</div>
 </div>
-<%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
+<%@ include file="/common/footer.jsp" %>
 </body>
 </html>

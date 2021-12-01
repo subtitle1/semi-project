@@ -17,8 +17,6 @@
 <%
 	MemberDao memberDao = MemberDao.getInstance();
 	Member member = memberDao.selectMemberByNo(loginUserInfo.getNo());
-	
-	String error = request.getParameter("error");
 %>
 	<div class="row">
 		<div class="col breadcrumb">
@@ -73,13 +71,14 @@
 			<div class="row">
 				<div class="col">
 					<p class="text-head2 mt-5">회원 탈퇴</p>
-					<form method="post" action="confirmleaveform.jsp">
+					<form method="post" action="leave.jsp">
 						<div class="register-box">
 							<div class="pwd-box">
 								<label class="form-label" for="user-password">비밀번호<span>*</span></label>
 								<input class="form-control" type="password" name="pwd" id="user-pwd" placeholder="비밀번호를 입력해주세요." />
 							</div>
 <%
+	String error = request.getParameter("error");
 	if ("mismatch-pwd".equals(error)) {
 %>
 	<script type="text/javascript">

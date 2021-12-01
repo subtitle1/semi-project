@@ -187,7 +187,6 @@
 			</div> <!-- orderList -->
 		</div> <!-- offset-md-1 col-9 p-0 -->
 	</div> <!-- //mypage -->
-		
 </div>	<!-- //container -->
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -491,3 +491,18 @@ footer {margin-top:50px; font-family:"Montserrat"; font-size:13px;}
 
 /* 주문 완료 */
 .order-box {height:130px; background-color: #ebebeb; font-family:Noto Sans KR; font-size: 14px; color: #727272; border: 1px solid #b5b5b5;}
+
+/* 주문 취소 */
+.cancel-font span { 
+	color: #000;
+    font-family: Noto Sans KR;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.cancel-box {font-family: Noto Sans KR; width:80%; border:1px solid #c6c6c6; box-sizing: border-box;}
+.cancel-list {margin-top:55px; padding:5px 0 5px;}
+.cancel-list p {font-family:'Montserrat', Noto Sans KR, sans-serif; font-weight:500; font-size:22px;}
+.cancel-list-box {padding:10px 0 10px; border-top:2px solid #000;}
+#product-list tbody{border-top:1px solid #d5d5d5;}
+#product-list tr{height:120px; vertical-align:middle;}
