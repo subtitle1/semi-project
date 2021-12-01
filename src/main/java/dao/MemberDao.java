@@ -72,8 +72,6 @@ public class MemberDao {
 		return memberList;
 	}
 	
-	
-	
 	/**
 	 * 탈퇴한 회원들을 제외하고 조회
 	 * @param begin
@@ -226,6 +224,27 @@ public class MemberDao {
 		return member;
 	}
 	
+	/**
+	 * 회원 번호가 일치하는 회원의 비밀번호를 변경한다.
+	 * @param no
+	 * @throws SQLException
+	 */
+	public void updateMemberByPassword(String pwd, int no) throws SQLException {
+		String sql = "update tb_members "
+				   + "set	"
+				   + "	member_pwd = ? "
+				   + "where member_no = ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setString(1, pwd);
+		pstmt.setInt(2, no);
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
 	
 	/**
 	 * 수정된 정보가 포함된 회원정보를 테이블에 반영한다.
@@ -235,7 +254,6 @@ public class MemberDao {
 	public void updateMember(Member member) throws SQLException {
 		String sql = "update tb_members "
 				   + "set "
-				   + " member_pwd = ?, "
 				   + " member_tel = ?, "
 				   + " member_email = ?, "
 				   + " member_address = ? "
@@ -243,11 +261,10 @@ public class MemberDao {
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setString(1, member.getPwd());
-		pstmt.setString(2, member.getTel());
-		pstmt.setString(3, member.getEmail());
-		pstmt.setString(4, member.getAddress());
-		pstmt.setInt(5, member.getNo());
+		pstmt.setString(1, member.getTel());
+		pstmt.setString(2, member.getEmail());
+		pstmt.setString(3, member.getAddress());
+		pstmt.setInt(4, member.getNo());
 		
 		pstmt.executeUpdate();
 		
