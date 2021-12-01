@@ -27,11 +27,6 @@
 	<%@ include file="common/navbar.jsp"%>
 	<div class="container">
 		<%
-		//요청파라미터에서 pageNo값을 조회한다.
-		// 요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
-		//	String pageNo = request.getParameter("pageNo");
-
-		// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 
 		int no = Integer.parseInt(request.getParameter("no"));
 
@@ -140,7 +135,7 @@
 						<div class="accordion accordion-flush" id="faqlist">
 							<div class="accordion-item">
 								<div class="row ">
-									<div class="col-3">
+									<div class="col-6">
 										<img class="order-img me-2"
 											src="resources/images/products/<%=detail.getPhoto()%>">
 										<div class="mt-4">
@@ -149,13 +144,13 @@
 											</div>
 										</div>
 									</div>
-									<div class="col mt-4 text-end">
-										<span><%=detail.getId()%></span>
+									<div class="col-3 mt-4 text-end">
+										<span><strong><%=detail.getId()%></strong> 님</span>
 									</div>
-									<div class="col mt-4 text-end">
+									<div class="col-2 mt-4 text-end">
 										<span style="font-weight: bold;"><%=detail.getReviewDate()%></span>
 									</div>
-									<div class="col mt-4  text-end">
+									<div class="col-1 mt-4  text-end">
 										<h2 class="accordion-header"
 											id="faq-heading-<%=detail.getReviewNo()%>">
 											<button class="accordion-button collapsed" type="button"
@@ -181,8 +176,8 @@
 				%>
 			</div>
 			<div class="mt-3 text-end">
-				<button class="review"
-					onclick="location.href='mypage-reviewForm.jsp';">리뷰등록</button>
+				<button class="review" type="button"
+					onclick="goReview(<%=no %>)">리뷰쓰기</button>
 			</div>
 		</div> 	<!-- 리뷰리스트 -->
 		
@@ -219,37 +214,32 @@
 									<div class="col-3">
 										<img class="order-img me-2"
 											src="resources/images/products/<%=detail.getPhoto()%>">
-										<div>
-											<div>
-												<span><strong>상품명</strong></span>
+											<div class="mt-1 p-3">
+												<span><strong><%=detail.getProductName()%></strong></span>
 											</div>
-											<div>
-												<span><%=detail.getProductName()%></span>
-											</div>
-										</div>
 									</div>
-									<div class="col mt-4 text-end">
+									<div class="col-5 mt-4 text-end">
 										<span><%=detail.getTitle()%></span>
 									</div>
-									<div class="col mt-4 text-end">
+									<div class="col-2 mt-4 text-end">
 										<span style="font-weight: bold;"><%=detail.getQuestionDate()%></span>
 									</div>
 									<%
 				if ("N".equals(detail.getQuestionAnswered())) {
 			%>
-									<div class="col mt-4 text-end">
+									<div class="col-1 mt-4 text-end">
 										<span style="font-weight: bold;">미답변</span>
 									</div>
 									<%
 				} else {
 			%>
-									<div class="col mt-4 text-end">
+									<div class="col-1 mt-4 text-end">
 										<span style="font-weight: bold;">답변완료</span>
 									</div>
 									<%
 				}
 			%>
-									<div class="col mt-3 text-end">
+									<div class="col-1 mt-3 text-end">
 										<h2 class="accordion-header"
 											id="faq-heading-<%=detail.getQnANo()%>">
 											<button class="accordion-button collapsed" type="button"
@@ -292,14 +282,19 @@
 		</div>
 		<!-- qnaList -->
 <%
+	// Q&A 등록폼
 	if(loginUserInfo != null) {
 %>		
-		<div class="mt-3 mb-3">
-			<form class="border p-4 bg-light" method="get" action="qna.jsp">
-				<input type="hidden" name="no" value="<%=no%>">
+		<div class="mt-3 mb-3" id="qna">
+			<form class="border p-4 bg-light" method="post" action="insertQna.jsp">
+				<input type="hidden" name="productNo" value="<%=no%>">
+				<div class="mb-3">
+					<label class="form-label mb-3" for="title"><strong>상품 Q&A 제목</strong></label>
+					<input type="text" class="form-control" name="title" id="title" maxlength="30">
+				</div>
 				<div class="mb-2">
-					<label class="form-label mb-3" for="qna"><strong>상품 Q&A 등록</strong></label>
-					<input type="text" class="form-control" name="qna" id="qna">
+					<label class="form-label mb-3" for="content"><strong>상품 Q&A 내용</strong></label>
+    				<textarea class="form-control" name="content" id="content" rows="3" maxlength=""></textarea>
 				</div>
 				<div class="mt-3  text-end">
 					<button type="submit" class="btn btn-dark">등록</button>
@@ -336,14 +331,18 @@
 
 		function goCart() {
 			var form = document.getElementById("product-form");
-			form.setAttribute("action", "add.jsp");
+			form.setAttribute("action", "/semi-project/mypage/add.jsp");
 			form.submit();
 		}
 
 		function goOrder() {
 			var form = document.getElementById("product-form");
-			form.setAttribute("action", "orderForm.jsp");
+			form.setAttribute("action", "/semi-project/mypage/shopping-note/completeorder.jsp");
 			form.submit();
+		}
+		function goReview(no){
+			location.href="/semi-project/mypage/shopping-note/my-review-form.jsp?productNo="+no;
+			
 		}
 	</script>
 </body>
