@@ -70,7 +70,7 @@
 						<input class="form-control" type="text" name="id" id="user-id" placeholder="아이디를 입력해주세요." />
 					</div>
 					<div class="pwd-box">
-						<label class="form-label" for="user-password"></label>
+						<label class="form-label" for="user-pwd"></label>
 						<input class="form-control" type="password" name="pwd" id="user-pwd" placeholder="비밀번호를 입력해주세요." />
 					</div>
 					<div class="submit-box">
