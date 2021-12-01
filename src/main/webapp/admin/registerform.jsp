@@ -54,11 +54,24 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 		</div>	
 		<div class="col-9">
 		<h4>신규 상품 등록</h4>
-			<form method="post" action="register.jsp">
+			<!-- 파일을 업로드 하는 폼 - method는 반드시 post로 지정한다.
+			- enctype을 multipart/form-data로 지정한다.
+			 *enctype는 폼 입력값을 어떤 형식으로 서버로 전달할지 지정하는 속성이다. 
+			 *enctype을 지정하지 않으면 application/x-www-form-urlencoded가 기본값이다.
+			 		- 폼 입력값이 서버로 전달되는 형식:name=아이폰13&maker=애플
+			 		- 첨부파일을 서버로 전달할 수 없다.
+			 
+			 enctype="multipart/form-data"
+			 		- 폼에 첨부파일 입력요소가 있을 때만 사용한다.
+			 		- 첨부파일을 서버로 전달할 수 있다.
+			 		- 서버로 전달되는 형식이 위의 형식과 다름.
+			 -->
+			<form method="post" action="register.jsp" enctype="multipart/form-data">
 				<div class="register-box">
 					<div>
 					<label class="form-label" for="product-category">카테고리<span>*</span></label>
 					<select name="category" id="product-category">
+						 <option selected disabled>==선택==</option>
 						 <option value="SNEAKERS">SNEAKERS</option>
 						 <option value="SPORTS">SPORTS</option>
 						 <option value="SANDALS">SANDALS</option>
@@ -68,6 +81,7 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 					<div>
 					<label class="form-label" for="product-brand">브랜드<span>*</span></label>
 					<select name="brand" id="product-brand">
+						<option selected disabled>==선택==</option>
 						 <option value="아디다스">아디다스</option>
 						 <option value="아키클래식">아키클래식</option>
 						 <option value="리복">리복</option>
@@ -76,10 +90,18 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
   					<div>
 					<label class="form-label" for="product-gender">성별<span>*</span></label>
 					<select name="gender" id="product-gender">
+						<option selected disabled>==선택==</option>
 						 <option value="F">여성용</option>
 						 <option value="M">남성용</option>
   					</select>
   					</div>
+  					<!-- 파일업로드 -->
+  					<div>
+						<label class="form-label" for="product-img">상품이미지<span>*</span></label>
+						<input type="file" class="form-control" name="photo" id="product-img">
+					</div>
+  					
+  					
 					<div>
 						<label class="form-label" for="product-name">상품이름<span>*</span></label>
 						<input type="text" class="form-control" name="name" id="product-name">
@@ -87,11 +109,11 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 					<div class="row">
 						<div class="col-6">
 							<label class="form-label" for="product-price">가격<span>*</span></label>
-							<input type="password" class="form-control" name="price" id="product-price">
+							<input type="text" class="form-control" name="price" id="product-price">
 						</div>
 						<div class="col-6">
 							<label class="form-label" for="product-disprice">할인가격<span>*</span></label>
-							<input type="password" class="form-control" name="disprice" id="product-disprice">
+							<input type="text" class="form-control" name="disPrice" id="product-disprice">
 						</div>
 					</div>
 					<div class="row">

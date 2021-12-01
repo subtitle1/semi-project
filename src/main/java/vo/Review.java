@@ -5,7 +5,7 @@ import java.util.Date;
 public class Review {
 
 	private int no;
-	private int productNo;
+	private int stockNo; //product_detail_no
 	private int memberNo;
 	private String content;
 	private int likeCount;
@@ -22,14 +22,12 @@ public class Review {
 		this.no = no;
 	}
 
-	
-
-	public int getProductNo() {
-		return productNo;
+	public int getStockNo() {
+		return stockNo;
 	}
 
-	public void setProductNo(int productNo) {
-		this.productNo = productNo;
+	public void setStockNo(int stockNo) {
+		this.stockNo = stockNo;
 	}
 
 	public int getMemberNo() {
@@ -71,6 +69,7 @@ public class Review {
 	public void setDeleted(String deleted) {
 		this.deleted = deleted;
 	}
-	
+
+
 	
 }

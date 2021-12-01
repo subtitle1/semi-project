@@ -22,6 +22,56 @@ public class ProductDao {
 		return self;
 	}
 	
+
+	public int selectTotalProductsCount() throws SQLException {
+		String sql = "select count(*) cnt "
+				   + "from tb_products";
+		
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return totalRecords;
+	}
+	
+	
+	/**
+	 * 프로덕트 객체를 db에 입력하는 메소드
+	 * @param product
+	 * @throws SQLException
+	 */
+	public void insertProduct(Product product) throws SQLException {
+		String sql = "insert into tb_products "
+				+ "(product_no, product_category, product_name, "
+				+ "product_img, product_brand, product_price, "
+				+ "product_disprice, product_gender ) "
+				+ "values(?, ?, ?, ?, ?, ?, ?, ?) ";
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, product.getNo());
+		pstmt.setString(2, product.getCategory());
+		pstmt.setString(3, product.getName());
+		pstmt.setString(4, product.getPhoto());
+		pstmt.setString(5, product.getBrand());
+		pstmt.setInt(6, product.getPrice());
+		pstmt.setInt(7, product.getDisPrice());
+		pstmt.setString(8, product.getGender());
+	
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
+	
+	
 	
 	public List<ProductDetailDto> selectAllProductDetail(int begin, int end) throws SQLException{
 		String sql = "select product_no, product_name, product_img, product_price, "
@@ -372,5 +422,24 @@ public class ProductDao {
 		return products;
 	}
 
+	public int getProductNo() throws SQLException {
+		String sql = "select product_no.nextval seq from dual";
+		
+		int productNo = 0;
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		
+		productNo = rs.getInt("seq");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return productNo;
+	}
+	
 }
 

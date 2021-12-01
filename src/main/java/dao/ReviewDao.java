@@ -34,13 +34,14 @@ public class ReviewDao {
 		 * @throws SQLException
 		 */
 		public void insertReview(Review review) throws SQLException {
-	    	String sql = "insert into tb_reviews (review_no, member_no, review_content, product_no) "
-	    			   + "values (review_no_seq.nextval, ?, ?) ";
+	    	String sql = "insert into tb_reviews (review_no, member_no, review_content, product_detail_no) "
+	    			   + "values (review_no_seq.nextval, ?, ?, ? ) ";
 	    	
 	    	Connection connection = getConnection();
 	    	PreparedStatement pstmt = connection.prepareStatement(sql);
 	    	pstmt.setInt(1, review.getMemberNo());
 	    	pstmt.setString(2, review.getContent());
+	    	pstmt.setInt(3, review.getStockNo());
 	    	
 	    	pstmt.executeUpdate();
 	    	
@@ -117,32 +118,7 @@ public class ReviewDao {
 			return totalRecords;
 		}
 
-		/**
-		 * 테이블에 저장된 리뷰정보의 갯수를 반환한다.
-		 * @return 리뷰 정보 갯수
-		 * @throws SQLException
-		 */
-		public int selectTotalReviewCountByProductNo(int no) throws SQLException {
-			String sql = "select count(*) cnt "
-					+ "from tb_reviews "
-					+ "where product_no = ? ";
-			
-			int totalRecords = 0;
-			
-			Connection connection = getConnection();
-			PreparedStatement pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, no);
-			ResultSet rs = pstmt.executeQuery();
-			
-			rs.next();
-			totalRecords = rs.getInt("cnt");
-			rs.close();
-			pstmt.close();
-			connection.close();
-			
-			return totalRecords;
-		}
-		
+	
 		/**
 		 * 지정된 범위에 속하는 리뷰 정보를 반환한다.
 		 * @param begin 시작 순번번호
@@ -151,16 +127,21 @@ public class ReviewDao {
 		 * @throws SQLException
 		 */
 		public List<ReviewDetailDto> getReviewList(int begin, int end) throws SQLException {
-			String sql = "select review_no, product_no, member_no, member_id, member_name, review_content, "
-					   + "       review_like_count, review_deleted, review_date, product_name, product_img "
-					   + "from (select row_number() over (order by R.review_no desc)rn, "
-					   + "				R.review_no, R.product_no, R.review_content, R.review_like_count, R.review_date, "
-					   + "				R.review_deleted, M.member_no, M.member_id, M.member_name, P.product_name, P.product_img "
-					   + "		from tb_reviews R, tb_Members M, tb_products P "
-					   + "		where R.member_no = M.member_no "
-					   + "		and R.product_no = P.product_no) "
-					   + "where rn >= ? and rn <= ? "
-					   + "order by review_no desc ";
+			String sql = "SELECT REVIEW_NO, PRODUCT_NO, PRODUCT_DETAIL_NO, PRODUCT_SIZE, PRODUCT_BRAND, "
+					   + "MEMBER_NO, MEMBER_ID, MEMBER_NAME, REVIEW_CONTENT, "
+					   + "       REVIEW_LIKE_COUNT, REVIEW_DELETED, REVIEW_DATE, PRODUCT_NAME, PRODUCT_IMG "
+					   + "FROM (SELECT ROW_NUMBER() OVER (ORDER BY R.REVIEW_NO DESC)RN, "
+					   + "				R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
+					   + "				R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
+					   + "				M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
+					   + "				P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
+					   + "				S.PRODUCT_SIZE "
+					   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
+					   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
+					   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
+					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO) "
+					   + "WHERE RN >= ? AND RN <= ? "
+					   + "ORDER BY REVIEW_NO DESC ";
 			
 			List<ReviewDetailDto> reviewList = new ArrayList<>();
 			
@@ -170,21 +151,28 @@ public class ReviewDao {
 			pstmt.setInt(2, end);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				ReviewDetailDto review = new ReviewDetailDto();
+				ReviewDetailDto reviewDetailDto = new ReviewDetailDto();
 
-				review.setReviewNo(rs.getInt("review_no"));
-				review.setProductNo(rs.getInt("product_no"));
-				review.setMemberNo(rs.getInt("member_no"));
-				review.setId(rs.getString("member_id"));
-				review.setName(rs.getString("member_name"));
-				review.setContent(rs.getString("review_content"));
-				review.setLikeCount(rs.getInt("review_like_count"));
-				review.setDeleted(rs.getString("review_deleted"));
-				review.setReviewDate(rs.getDate("review_date"));
-				review.setProductName(rs.getString("product_name"));
-				review.setPhoto(rs.getString("product_img"));
+				reviewDetailDto.setReviewNo(rs.getInt("review_no"));
 				
-				reviewList.add(review);
+				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
+				reviewDetailDto.setId(rs.getString("member_id"));
+				reviewDetailDto.setName(rs.getString("member_name"));
+				
+				reviewDetailDto.setStockNo(rs.getInt("product_detail_no"));
+				reviewDetailDto.setSize(rs.getInt("product_size"));
+				
+				reviewDetailDto.setProductNo(rs.getInt("product_no"));
+				reviewDetailDto.setProductName(rs.getString("product_name"));
+				reviewDetailDto.setPhoto(rs.getString("product_img"));
+				reviewDetailDto.setBrand(rs.getString("product_brand"));
+				
+				reviewDetailDto.setContent(rs.getString("review_content"));
+				reviewDetailDto.setLikeCount(rs.getInt("review_like_count"));
+				reviewDetailDto.setDeleted(rs.getString("review_deleted"));
+				reviewDetailDto.setReviewDate(rs.getDate("review_date"));
+				
+				reviewList.add(reviewDetailDto);
 			}
 			rs.close();
 			pstmt.close();
@@ -199,44 +187,53 @@ public class ReviewDao {
 		 * @return 리뷰 정보
 		 * @throws SQLException
 		 */
-		public List<ReviewDetailDto> selectReviewDetailByReviewNo(int no) throws SQLException {
-			String sql = "select R.review_no, R.review_content, M.member_no, M.Member_id,  "
-					   + "       R.review_like_count, R.review_deleted, P.product_no, "
-					   + "		 R.review_date, P.product_name, P.product_img "
-					   + "from tb_reviews R, tb_Members M, tb_products P "
-					   + "where R.member_no = M.member_no "
-					   + "		and R.product_no = P.product_no "
-					   + "		and R.review_no = ? ";
+		public ReviewDetailDto selectReviewDetailByProductDetailNoAndMemberNo(int stockNo, int memberNo) throws SQLException {
+			String sql = "SELECT R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
+					   + "		R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
+					   + "		M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
+					   + "		P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
+					   + "		S.PRODUCT_SIZE "
+					   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
+					   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
+					   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
+					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO "
+					   + "		AND S.PRODUCT_DETAIL_NO = ? "
+					   + "		AND M.MEMBER_NO = ? ";
+					    
 			
-			List<ReviewDetailDto> reviewList = new ArrayList<>();
+			ReviewDetailDto reviewDetailDto = null;
 			
 			Connection connection = getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, no);
+			pstmt.setInt(1, stockNo);
+			pstmt.setInt(2, memberNo);
 			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				
-				ReviewDetailDto reviewDetailDto = new ReviewDetailDto();
-				
-				
+			if (rs.next()) {
+				reviewDetailDto = new ReviewDetailDto();
 				reviewDetailDto.setReviewNo(rs.getInt("review_no"));
+				
+				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
+				reviewDetailDto.setId(rs.getString("member_id"));
+				reviewDetailDto.setName(rs.getString("member_name"));
+				
+				reviewDetailDto.setStockNo(rs.getInt("product_detail_no"));
+				reviewDetailDto.setSize(rs.getInt("product_size"));
+				
+				reviewDetailDto.setProductNo(rs.getInt("product_no"));
+				reviewDetailDto.setProductName(rs.getString("product_name"));
+				reviewDetailDto.setPhoto(rs.getString("product_img"));
+				reviewDetailDto.setBrand(rs.getString("product_brand"));
+				
 				reviewDetailDto.setContent(rs.getString("review_content"));
 				reviewDetailDto.setLikeCount(rs.getInt("review_like_count"));
 				reviewDetailDto.setDeleted(rs.getString("review_deleted"));
 				reviewDetailDto.setReviewDate(rs.getDate("review_date"));
-				reviewDetailDto.setProductNo(rs.getInt("product_no"));				
-				reviewDetailDto.setProductName(rs.getString("product_name"));
-				reviewDetailDto.setPhoto(rs.getString("product_img"));				
-				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
-				reviewDetailDto.setId(rs.getString("member_id"));
-				
-				reviewList.add(reviewDetailDto);
 			}
 			rs.close();
 			pstmt.close();
 			connection.close();
 			
-			return reviewList;
+			return reviewDetailDto;
 		}
 		
 		/**
@@ -246,13 +243,17 @@ public class ReviewDao {
 		 * @throws SQLException
 		 */
 		public List<ReviewDetailDto> selectReviewDetailByProductNo(int no) throws SQLException {
-			String sql = "select R.review_no, R.review_content, M.member_no, M.Member_id,  "
-					+ "          R.review_like_count, R.review_deleted, P.product_no, "
-					+ "		     R.review_date, P.product_name, P.product_img "
-					+ "	  from tb_reviews R, tb_Members M, tb_products P "
-					+ "	  where R.member_no = M.member_no "
-					+ "		    and R.product_no = P.product_no "
-					+ "         and R.product_no = ? ";
+			String sql = "SELECT R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
+					   + "		R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
+					   + "		M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
+					   + "		P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
+					   + "		S.PRODUCT_SIZE "
+					   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
+					   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
+					   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
+					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO "
+					   + "		AND S.PRODUCT_NO = ? ";
+					  
 			
 			List<ReviewDetailDto> reviewList = new ArrayList<>();
 			
@@ -261,21 +262,26 @@ public class ReviewDao {
 			pstmt.setInt(1, no);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				
-				
 				ReviewDetailDto reviewDetailDto = new ReviewDetailDto();
-				
-				
+
 				reviewDetailDto.setReviewNo(rs.getInt("review_no"));
+				
+				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
+				reviewDetailDto.setId(rs.getString("member_id"));
+				reviewDetailDto.setName(rs.getString("member_name"));
+				
+				reviewDetailDto.setStockNo(rs.getInt("product_detail_no"));
+				reviewDetailDto.setSize(rs.getInt("product_size"));
+				
+				reviewDetailDto.setProductNo(rs.getInt("product_no"));
+				reviewDetailDto.setProductName(rs.getString("product_name"));
+				reviewDetailDto.setPhoto(rs.getString("product_img"));
+				reviewDetailDto.setBrand(rs.getString("product_brand"));
+				
 				reviewDetailDto.setContent(rs.getString("review_content"));
 				reviewDetailDto.setLikeCount(rs.getInt("review_like_count"));
 				reviewDetailDto.setDeleted(rs.getString("review_deleted"));
 				reviewDetailDto.setReviewDate(rs.getDate("review_date"));
-				reviewDetailDto.setProductNo(rs.getInt("product_no"));				
-				reviewDetailDto.setProductName(rs.getString("product_name"));
-				reviewDetailDto.setPhoto(rs.getString("product_img"));				
-				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
-				reviewDetailDto.setId(rs.getString("member_id"));
 				
 				reviewList.add(reviewDetailDto);
 			}
@@ -292,13 +298,16 @@ public class ReviewDao {
 		 * @throws SQLException
 		 */
 		public List<ReviewDetailDto> selectReviewDetailByMemberNo(int no) throws SQLException {
-			String sql = "select R.review_no, R.review_content, M.member_no, M.Member_id, "
-		               + "R.review_like_count, R.review_deleted, P.product_no, "
-		               + "R.review_date, P.product_name, P.product_img "
-		               + "from tb_reviews R, tb_Members M, tb_products P "
-		               + "where R.member_no = M.member_no "
-		               + "and R.product_no = P.product_no "
-		               + "and R.member_no = ? ";
+			String sql = "SELECT R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
+					   + "		R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
+					   + "		M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
+					   + "		P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
+					   + "		S.PRODUCT_SIZE "
+					   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
+					   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
+					   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
+					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO "
+					   + "		AND M.MEMBER_NO = ? ";
 			
 			
 			List<ReviewDetailDto> reviewList = new ArrayList<>();
@@ -308,21 +317,26 @@ public class ReviewDao {
 			pstmt.setInt(1, no);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				
-				
 				ReviewDetailDto reviewDetailDto = new ReviewDetailDto();
-				
-				
+
 				reviewDetailDto.setReviewNo(rs.getInt("review_no"));
+				
+				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
+				reviewDetailDto.setId(rs.getString("member_id"));
+				reviewDetailDto.setName(rs.getString("member_name"));
+				
+				reviewDetailDto.setStockNo(rs.getInt("product_detail_no"));
+				reviewDetailDto.setSize(rs.getInt("product_size"));
+				
+				reviewDetailDto.setProductNo(rs.getInt("product_no"));
+				reviewDetailDto.setProductName(rs.getString("product_name"));
+				reviewDetailDto.setPhoto(rs.getString("product_img"));
+				reviewDetailDto.setBrand(rs.getString("product_brand"));
+				
 				reviewDetailDto.setContent(rs.getString("review_content"));
 				reviewDetailDto.setLikeCount(rs.getInt("review_like_count"));
 				reviewDetailDto.setDeleted(rs.getString("review_deleted"));
 				reviewDetailDto.setReviewDate(rs.getDate("review_date"));
-				reviewDetailDto.setProductNo(rs.getInt("product_no"));				
-				reviewDetailDto.setProductName(rs.getString("product_name"));
-				reviewDetailDto.setPhoto(rs.getString("product_img"));				
-				reviewDetailDto.setMemberNo(rs.getInt("member_no"));
-				reviewDetailDto.setId(rs.getString("member_id"));
 				
 				reviewList.add(reviewDetailDto);
 			}

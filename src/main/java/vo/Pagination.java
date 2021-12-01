@@ -158,7 +158,7 @@ public class Pagination {
 			return false;
 		}
 		
-		return currentBlock > totalBlocks;
+		return currentBlock < totalBlocks;
 	}
 	
 	/**
