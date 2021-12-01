@@ -31,11 +31,11 @@ a{text-decoration:none; color:black;}
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
 	
+	//카테고리 요청
 	String category = request.getParameter("category");
 	
-	//카테고리별 제품획득
 
-	// 
+	// select할 속성 요청.
 	String brand = request.getParameter("brand");
 	String gender = request.getParameter("gender");
 	String sort = request.getParameter("sort");

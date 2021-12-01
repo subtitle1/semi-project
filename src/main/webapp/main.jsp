@@ -13,8 +13,10 @@
    <title></title>
 </head>
 <style>
+
 .img1{height:285px; width:285px;}
-h1 {font-family:'Montserrat', Noto Sans KR; font-weight:550; font-size:30px color:black; }
+h1 {font-family:'Montserrat', Noto Sans KR; font-weight:550; font-size:30px color:black; 
+  }
 a{text-decoration:none; color:black;}
 </style>
 <body>
