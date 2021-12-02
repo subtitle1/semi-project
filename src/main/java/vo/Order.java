@@ -14,7 +14,7 @@ public class Order {
 	private String cancelReason;
 	private String cancelStatus;
 	private Date canceledDate;
-	private String reviewStatus;
+	
 	
 	public Order() {}
 
@@ -82,17 +82,11 @@ public class Order {
 		this.canceledDate = canceledDate;
 	}
 
-	public String getReviewStatus() {
-		return reviewStatus;
+	@Override
+	public String toString() {
+		return "Order [no=" + no + ", memberNo=" + memberNo + ", status=" + status + ", orderDate=" + orderDate
+				+ ", totalPrice=" + totalPrice + ", cancelReason=" + cancelReason + ", cancelStatus=" + cancelStatus
+				+ ", canceledDate=" + canceledDate + "]";
 	}
-
-	public void setReviewStatus(String reviewStatus) {
-		this.reviewStatus = reviewStatus;
-	}
-
-	
-
-	
-	
 	
 }

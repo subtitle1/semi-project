@@ -40,12 +40,14 @@ public class OrderItemDao {
 		String sql = "update tb_order_item "
 				   + "set "
 				   + "	product_amount = ? "
+				   + "  review_status = ? "
 				   + "where order_no = ? ";
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		pstmt.setInt(1, orderItem.getAmount());
-		pstmt.setInt(2, orderItem.getOrderNo());
+		pstmt.setString(2, orderItem.getReviewStatus());
+		pstmt.setInt(3, orderItem.getOrderNo());
 		
 		pstmt.executeUpdate();
 		

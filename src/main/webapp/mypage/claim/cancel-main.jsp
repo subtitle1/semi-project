@@ -1,4 +1,7 @@
-<%@page import="vo.Member"%>
+<%@page import="dto.CancelProductDto"%>
+<%@page import="dao.OrderDao"%>
+<%@page import="vo.Order"%>
+<%@page import="java.util.List"%>
 <%@page import="dao.MemberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -9,22 +12,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
     <link rel="stylesheet" href="/semi-project/resources/css/style.css" />
-    <title>회원 탈퇴</title>
+    <title>주문/배송현황 조회</title>
 </head>
 <body>
 <%@ include file="/common/navbar.jsp" %>
-<div class="container">    
 <%
+	int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
-	Member member = memberDao.selectMemberByNo(loginUserInfo.getNo());
+	OrderDao orderDao = OrderDao.getInstance();
+	
+	Member member = memberDao.selectMemberByNo(memberNo);
+	String claimCancel = request.getParameter("claimCancel");
+	if ("canceled".equals(claimCancel)) {
 %>
+<script type="text/javascript">
+	alert("주문이 취소되었습니다.");
+</script>
+<%
+	}
+%>
+<div class="container">    
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
+				<li class="crumb home"><a href="/semi-project/main.jsp" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">마이페이지</li>
-				<li class="crumb">마이페이지</li>
-				<li class="crumb">마이페이지</li>
+				<li class="crumb">쇼핑내역</li>
+				<li class="crumb">주문/배송현황 조회</li>
 			</ul>
 		</div>
 	</div>
@@ -38,7 +52,7 @@
 		<div class="col-2 p-0 aside">
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
-				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">마이페이지</a></li>
+				<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
 				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
 				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
@@ -68,27 +82,42 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col">
-					<p class="text-head2 mt-5">회원 탈퇴</p>
-					<form method="get" action="confirmleave.jsp">
-						<div class="register-box">
-							<span>정말로 탈퇴하시겠습니까?</span>
-						</div>
-						<div class="btn-box text-center">
-							<button type="submit" class="btn btn-lg btn-dark">확인</button>
-						</div>
-					</form>
-				</div>
+			<div class="buy-list mb-3">
+				<p>취소 현황 조회</p>
+<%
+	List<Order> canceledOrder = orderDao.selectCanceledOrderByMemberNo(memberNo);
+	if (canceledOrder.isEmpty()) {
+%>
+			<div class="order-list-box p-5">
+				<p class="text-center order-font">취소 내역이 존재하지 않습니다.</p>
 			</div>
-			<div class="leave-box p-4 mt-5">
-				<ul>
-					<li>서비스 이용에 불편을 끼쳐드려 죄송합니다.</li>
-					<li>항상 고객만족을 위해 최선을 다하는 ABC-MART가 되겠습니다.</li>
-					<li>진행 중인(구매확정 되지 않은) 주문 건이 있는 경우 탈퇴가 불가능합니다.</li>
-					<li>탈퇴 시 보유중인 포인트와 쿠폰, 거래정보 등이 모두 삭제됩니다.</li>
-					<li>회원 탈퇴 후 철회가 불가능합니다.</li>
-				</ul>
+<% 
+	} else {
+		for (Order order : canceledOrder) {
+%>
+				<div class="order-list-box mb-3">
+					<div class="row mb-1">
+						<div class="col mt-2">
+							<span style="font-weight: bold;">주문번호</span>
+							<a href="claim-order-detail.jsp?orderNo=<%=order.getNo() %>" style="color:black;"><span><%=order.getNo() %></span></a>
+						</div>
+						<div class="col mt-2">
+							<span style="font-weight: bold;">취소일시</span>
+							<span style="font-weight: bold;"><%=order.getCanceledDate() %></span>
+						</div>
+						<div class="col text-end mt-2">
+							<span style="font-weight: bold;"><%=order.getStatus() %></span>
+						</div>
+						<div class="col text-end mt-2">
+							<span style="font-weight: bold;">취소금액</span>
+							<span style="color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
+						</div>
+					</div>
+				</div>
+<%
+		}
+	}
+%>
 			</div>
 		</div>
 	</div>

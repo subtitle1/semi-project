@@ -50,7 +50,7 @@
 				<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
 				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
 				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
-				<li class=""><a href="../mypage/claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
+				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
 				<li class=""><a href="" class="nav-link p-0">주문 취소</a></li>
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
@@ -93,7 +93,6 @@
 			</div>
 			<div class="cancel-list">
 				<p>주문취소</p>
-				<input class="mb-3" type="checkbox" id="ck-all" onchange="toggle()"> 전체선택
 				<div class="cancel-list-box">
 					<div class="row">
 						<div class="col-2 mt-2">
@@ -104,17 +103,15 @@
 						<input type="hidden" name="orderNo" value="<%=order.getNo()%>"/>
 						<table class="table mt-3" id="product-list">
 							<colgroup>
-								<col width="50px">
 								<col>
 								<col width="20%">
 							</colgroup>
 							<tbody>
 <%
-	List<OrderDetailDto> orderDetails = orderDao.selectOrderDetailsByOrderNo(orderNo);
+	List<OrderDetailDto> orderDetails = orderDao.selectAllOrderDetailsByOrderNo(orderNo);
 	for (OrderDetailDto orderDetail : orderDetails) {
 %>
 								<tr>
-									<td><input type="checkbox" name="stockNo" value="<%=orderDetail.getProductDetailNo()%>"></td>
 									<td>
 										<div class="row">
 											<div class="col">
@@ -128,6 +125,7 @@
 													</div>
 													<div>
 														<span><%=orderDetail.getSize() %> / <%=orderDetail.getAmount() %>개</span>
+														<input type="hidden" name="stockNo" value="<%=orderDetail.getProductDetailNo() %>"/>
 													</div>
 												</div>
 											</div>
@@ -196,7 +194,7 @@
 								<span style="margin-left:5px;">상품금액</span>
 							</div>
 							<div class="col text-end">
-								<span style="margin-right:5px; color:red; font-weight: bold;">0원</span>
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
 							</div>
 							<div class="col-2">
 								<span style="margin-left:5px;">배송비</span>
@@ -208,7 +206,7 @@
 								<span style="margin-left:5px;">환불 예상 금액</span>
 							</div>
 							<div class="col text-end">
-								<span style="margin-right:5px; color:red; font-weight: bold;">0원</span>
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
 							</div>
 						</div>
 					</div>
@@ -261,34 +259,9 @@
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-	function toggle() {
-		var checkAll = document.querySelector("#ck-all");
-		var checkedStatus = checkAll.checked;
-		var checkboxes = document.querySelectorAll("#product-list tbody input[name=stockNo]");
-		
-		for (var i = 0; i < checkboxes.length; i++) {
-			var checkbox = checkboxes[i];
-			checkbox.checked = checkedStatus;
-		}
-	}
-	
 	function cancelOrder() {
 		var form = document.getElementById("list-form");
-		var checkboxes = document.querySelectorAll("#product-list tbody input[name=stockNo]");
-		var isExist = false;
-		for (var i = 0; i < checkboxes.length; i++) {
-			var checkbox = checkboxes[i];
-			if (checkbox.checked) {
-				isExist = true;
-				break;
-			}
-		}
-		
-		if (!isExist) {
-			alert("취소할 상품을 선택해 주세요.");
-			return;
-		} 
-		
+				
 		var selected = document.getElementById("select-box").value;
 		if (selected == "") {
 			alert('취소 사유를 선택해 주세요.');

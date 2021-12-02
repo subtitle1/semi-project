@@ -21,6 +21,14 @@
 	OrderDao orderDao = OrderDao.getInstance();
 	
 	Member member = memberDao.selectMemberByNo(memberNo);
+	String claimCancel = request.getParameter("claimCancel");
+	if ("canceled".equals(claimCancel)) {
+%>
+<script type="text/javascript">
+	alert("주문이 취소되었습니다.");
+</script>
+<%
+	}
 %>
 <div class="container">    
 	<div class="row">
@@ -47,7 +55,7 @@
 				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
 				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">주문 취소</a></li>
+				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
 			<ul class="nav flex-column p-0">
@@ -102,7 +110,7 @@
 				</div>
 			</div>
 			<div class="buy-list mb-3">
-				<p>주문/배송 현황 조회</p>
+				<p>전체 주문/배송 현황 조회</p>
 <%
 	List<Order> orders = orderDao.selectAllOrdersByMemberNo(memberNo);
 	if (orders.isEmpty()) {
