@@ -1,3 +1,4 @@
+        
 <%@page import="vo.Pagination"%>
 <%@page import="dto.ReviewDetailDto"%>
 <%@page import="java.util.List"%>
@@ -81,7 +82,7 @@
 	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(member.getNo());
 	Pagination pagination = new Pagination(pageNo, totalRecords);
 	
-	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewListByMemberNo(pagination.getBegin(), pagination.getEnd(), member.getNo());
+	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByMemberNo(member.getNo());
 	if (reviewDetails.isEmpty()) {
 %>
 						<div class="p-5">
@@ -145,30 +146,6 @@
 %>
 				</div>
 			</div>
-			<div class="row mb-3">
-				<div class="col-6 offset-3">
-					<nav>
-						<ul class="pagination justify-content-center">
-							<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=pagination.getPrevPage()%>" >이전</a></li>
-<%
-	if (totalRecords == 0) {
-%>
-							<li class="page-item <%=pagination.getPageNo() == 1 ? "active" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=1">1</a></li>
-<% 
-	} else {
-		for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
-%>					
-							<li class="page-item <%=pagination.getPageNo() == num ? "active" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=num%>"><%=num %></a></li>
-<%
-		}
-	}
-%>					
-
-							<li class="page-item <%=!pagination.isExistNext() ? "disabled" :"" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=pagination.getNextPage()%>" >다음</a></li>
-						</ul>
-					</nav>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>
@@ -176,3 +153,5 @@
 <%@ include file="/common/footer.jsp" %>
 </body>
 </html>
+
+    

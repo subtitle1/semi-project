@@ -28,13 +28,13 @@
 	<div class="container">
 		<%
 
-		int no = Integer.parseInt(request.getParameter("no"));
+		int productNo = Integer.parseInt(request.getParameter("no"));
 
 		ProductDao productDao = ProductDao.getInstance();
 		StockDao stockDao = StockDao.getInstance();
 
-		Product product = productDao.selectProductbyNo(no);
-		List<Stock> stockList = stockDao.selectStocksbyProductNo(no);
+		Product product = productDao.selectProductbyNo(productNo);
+		List<Stock> stockList = stockDao.selectStocksbyProductNo(productNo);
 		%>
 
 		<div class="product_view mt-5 mb-5">
@@ -62,9 +62,9 @@
 							<th>구매수량</th>
 							<td>
 								<div class="length">
-									<input name="amount" id="count" type="number" min="1" max="20"
-										value="1"> <a href="#a" onclick="plus()">증가</a> <a
-										href="#a" onclick="minus()">감소</a>
+									<input name="amount" id="count" type="number" min="1" max="20" value="1">
+										<a href="#a" onclick="plus()">증가</a> 
+										<a href="#a" onclick="minus()">감소</a>
 								</div>
 							</td>
 						</tr>
@@ -108,18 +108,18 @@
 			<p class="mb-3">상품 REVIEW</p>
 			<div class="inquiry-box">
 				<div class="row">
-					<%
-					ReviewDao reviewDao = ReviewDao.getInstance();
-					List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByProductNo(no);
+<%
+	ReviewDao reviewDao = ReviewDao.getInstance();
+	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByProductNo(productNo);
 
-					if (reviewDetails.isEmpty()) {
-					%>
+	if (reviewDetails.isEmpty()) {
+%>
 					<div class="p-5">
 						<p class="text-center order-font">작성된 상품 후기가 없습니다.</p>
 					</div>
-					<%
-					} else {
-					%>
+<%
+	} else {
+%>
 					<div class="col mt-2 mb-3s">
 						<span style="margin-left: 5px;">총 <%=reviewDetails.size()%>건의
 							상품 후기가 있습니다.
@@ -127,30 +127,55 @@
 					</div>
 				</div>
 				<hr>
-				<%
-				for (ReviewDetailDto detail : reviewDetails) {
-				%>
+<%
+		for (ReviewDetailDto detail : reviewDetails) {
+			if("N".equals(detail.getDeleted())){
+%>
 				<div class="row mt-2 mb-2">
 					<div>
 						<div class="accordion accordion-flush" id="faqlist">
-							<div class="accordion-item">
+							<div class="accordion-item mt-3">
 								<div class="row ">
-									<div class="col-6">
+									<div class="col-1">
 										<img class="order-img me-2"
 											src="resources/images/products/<%=detail.getPhoto()%>">
-										<div class="mt-4">
-											<div>
-												<span><strong><%=detail.getProductName()%></strong></span>
-											</div>
+									</div>
+									<div class="col-2 mt-3s">
+										<div>
+											<div><strong><%=detail.getProductName()%></strong></div>
+											<div><%=detail.getSize()%></div>
 										</div>
 									</div>
-									<div class="col-3 mt-4 text-end">
+									<div class="col-2 mt-3 ">
+										<button type="button" class="btn btn-outline-danger btn-sm rounded-pill">
+									  		likes <span class="badge rounded-pill bg-danger"><%=detail.getLikeCount() %></span>
+										</button>
+									</div>
+									<div class="col-2 mt-4 text-end">
 										<span><strong><%=detail.getId()%></strong> 님</span>
 									</div>
 									<div class="col-2 mt-4 text-end">
 										<span style="font-weight: bold;"><%=detail.getReviewDate()%></span>
 									</div>
-									<div class="col-1 mt-4  text-end">
+<%
+			if( loginUserInfo != null && loginUserInfo.getNo() == detail.getMemberNo()){ 
+%>
+									<div class="col-1 mt-4 text-center">
+										<button type=button class="btn-close " arial-label="Close" onclick="deleteReview(<%=detail.getReviewNo()%>,<%=productNo%>)"></button>
+									</div>
+<%
+			}
+%>
+<%
+			if( loginUserInfo == null || loginUserInfo.getNo() != detail.getMemberNo()){ 
+%>
+									<div class="col-1 mt-4 text-center">
+										
+									</div>
+<%
+			}
+%>
+									<div class="col-1 mt-3  text-end">
 										<h2 class="accordion-header"
 											id="faq-heading-<%=detail.getReviewNo()%>">
 											<button class="accordion-button collapsed" type="button"
@@ -170,14 +195,12 @@
 						</div>
 					</div>
 				</div>
-				<%
-				}
-				}
-				%>
-			</div>
-			<div class="mt-3 text-end">
-				<button class="review" type="button"
-					onclick="goReview(<%=no %>)">리뷰쓰기</button>
+<%
+			}
+	
+		}
+	}
+%>
 			</div>
 		</div> 	<!-- 리뷰리스트 -->
 		
@@ -187,7 +210,7 @@
 				<div class="row">
 <%
 	QnaDao qnaDao = QnaDao.getInstance();
-	List<QnADetailDto> qnaDetails = qnaDao.selectQnAListByProductNo(1, 10, no);
+	List<QnADetailDto> qnaDetails = qnaDao.selectQnAListByProductNo(1, 10,productNo);
 	if (qnaDetails.isEmpty()) {
 %>
 					<div class="p-5">
@@ -203,9 +226,9 @@
 					</div>
 				</div>
 				<hr>
-				<%
+<%
 		for (QnADetailDto detail : qnaDetails) {
-	%>
+%>
 				<div class="row">
 					<div>
 						<div class="accordion accordion-flush" id="faqlist">
@@ -224,21 +247,21 @@
 									<div class="col-2 mt-4 text-end">
 										<span style="font-weight: bold;"><%=detail.getQuestionDate()%></span>
 									</div>
-									<%
+<%
 				if ("N".equals(detail.getQuestionAnswered())) {
-			%>
+%>
 									<div class="col-1 mt-4 text-end">
 										<span style="font-weight: bold;">미답변</span>
 									</div>
 									<%
 				} else {
-			%>
+%>
 									<div class="col-1 mt-4 text-end">
 										<span style="font-weight: bold;">답변완료</span>
 									</div>
 									<%
 				}
-			%>
+%>
 									<div class="col-1 mt-3 text-end">
 										<h2 class="accordion-header"
 											id="faq-heading-<%=detail.getQnANo()%>">
@@ -257,15 +280,15 @@
 									<div class="accordion-body">
 										<%
 			if (detail.getAnswerContent() == null) {
-		%>
+%>
 										<strong>A. 답변 대기 중입니다.</strong>
 										<%
 			} else {
-		%>
+%>
 										<strong>A. </strong><%=detail.getAnswerContent()%>
-		<%
+<%
 			}
-		%>
+%>
 									</div>
 								</div>
 							</div>
@@ -287,7 +310,7 @@
 %>		
 		<div class="mt-3 mb-3" id="qna">
 			<form class="border p-4 bg-light" method="post" action="insertQna.jsp">
-				<input type="hidden" name="productNo" value="<%=no%>">
+				<input type="hidden" name="productNo" value="<%=productNo%>">
 				<div class="mb-3">
 					<label class="form-label mb-3" for="title"><strong>상품 Q&A 제목</strong></label>
 					<input type="text" class="form-control" name="title" id="title" maxlength="30">
@@ -343,6 +366,9 @@
 		function goReview(no){
 			location.href="/semi-project/mypage/shopping-note/my-review-form.jsp?productNo="+no;
 			
+		}
+		function deleteReview(reviewNo,productNo){
+			location.href="/semi-project/deleteReview.jsp?productNo="+productNo+"&reviewNo="+reviewNo;
 		}
 	</script>
 </body>

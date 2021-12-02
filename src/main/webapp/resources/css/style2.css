@@ -117,30 +117,4 @@ button.buy {
   font-weight: 300;
 }
 
-button.review {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  
-  margin: 0;
-  padding: 0px 25px;
-
-  text-align: center;
-  text-decoration: none;
-  
-  border: none;
-  
-  display: inline-block;
-  width: 270px;
-  height: 60px;
-  
-  cursor: pointer;
-  	
- background: #111111;
- color: white;
-   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 16px;
-  font-weight: 300;
-}
-
 
