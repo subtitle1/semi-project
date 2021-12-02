@@ -1,5 +1,3 @@
-        
-
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Order"%>
@@ -27,7 +25,7 @@
 	Member member = memberDao.selectMemberByNo(memberNo);
 	
 	OrderDao orderDao = OrderDao.getInstance();
-	Order order = orderDao.selectOrderDetailByOrderNo(orderNo);
+	Order order = orderDao.selectOrderByOrderNo(orderNo);
 %>
 	<div class="row">
 		<div class="col breadcrumb">
@@ -154,14 +152,12 @@
 								N이면 reviewform으로 이동
 							-->
 							<div class="col mt-3 text-end mt-1">
-								<button type="button" class="btn btn-dark btn-sm" 
-								onclick="location.href = '../shopping-note/my-review-form.jsp?productNo='+<%=orderDetail.getProductNo() %>+'&size='+<%=orderDetail.getSize() %>;">
-								리뷰 쓰기</button>
+								<button type="button" class="btn btn-dark btn-sm" onclick="goReview(<%=orderDetail.getProductNo() %>);">리뷰 작성</button>
 							</div>
-						</div>		
+						</div>
 <%
 	}
-%> 
+%>
 					
 				</div>
 				<div class="order-list">
@@ -223,10 +219,8 @@
 <script type="text/javascript">
 	function goReview(productNo) {
 		var item = document.getElementById("review-"+productNo).value;
-		location.href = "../shopping-note/my-review-form.jsp?productNo="+productNo+"&size=";
+		location.href = "my-review-form.jsp?productNo="+productNo;
 	}
 </script>
 </body>
 </html>
-
-    
