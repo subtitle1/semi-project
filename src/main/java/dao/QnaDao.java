@@ -24,6 +24,24 @@ public class QnaDao {
 		return self;
 	}
 	
+	public int selectQnACountByMemberNo(int memberNo) throws SQLException {
+		String sql = "select count(*) cnt from tb_qna where member_no = ? ";
+		int count = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, memberNo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
 	
 	public QnADetailDto selectQnADetailByQnANo(int QnANo)  throws SQLException {
 		String sql = "q.question_no, q.product_no, q.member_no, q.question_title, "

@@ -1,3 +1,4 @@
+<%@page import="vo.Pagination"%>
 <%@page import="dto.ReviewDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.ReviewDao"%>
@@ -75,8 +76,12 @@
 				<div class="inquiry-box">
 					<div class="row">
 <%
+	String pageNo = request.getParameter("pageNo");	
 	ReviewDao reviewDao = ReviewDao.getInstance();
-	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByMemberNo(member.getNo());
+	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(member.getNo());
+	Pagination pagination = new Pagination(pageNo, totalRecords);
+	
+	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewListByMemberNo(pagination.getBegin(), pagination.getEnd(), member.getNo());
 	if (reviewDetails.isEmpty()) {
 %>
 						<div class="p-5">
@@ -87,7 +92,7 @@
 		
 %>
 						<div class="col mt-2">
-							<span style="margin-left:5px;">총 <%=reviewDetails.size() %>건의 상품 후기가 있습니다.</span>
+							<span style="margin-left:5px;">총 <%=totalRecords%>건의 상품 후기가 있습니다.</span>
 						</div>
 					</div>
 					<hr>
@@ -138,6 +143,30 @@
 		}
 	}
 %>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-6 offset-3">
+					<nav>
+						<ul class="pagination justify-content-center">
+							<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=pagination.getPrevPage()%>" >이전</a></li>
+<%
+	if (totalRecords == 0) {
+%>
+							<li class="page-item <%=pagination.getPageNo() == 1 ? "active" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=1">1</a></li>
+<% 
+	} else {
+		for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+%>					
+							<li class="page-item <%=pagination.getPageNo() == num ? "active" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=num%>"><%=num %></a></li>
+<%
+		}
+	}
+%>					
+
+							<li class="page-item <%=!pagination.isExistNext() ? "disabled" :"" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=pagination.getNextPage()%>" >다음</a></li>
+						</ul>
+					</nav>
 				</div>
 			</div>
 		</div>

@@ -1,4 +1,3 @@
-
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Order"%>
@@ -26,7 +25,7 @@
 	Member member = memberDao.selectMemberByNo(memberNo);
 	
 	OrderDao orderDao = OrderDao.getInstance();
-	Order order = orderDao.selectOrderDetailByOrderNo(orderNo);
+	Order order = orderDao.selectOrderByOrderNo(orderNo);
 %>
 	<div class="row">
 		<div class="col breadcrumb">
@@ -109,51 +108,53 @@
 	List<OrderDetailDto> orderDetails = orderDao.selectOrderDetailsByOrderNo(orderNo);
 	for (OrderDetailDto orderDetail : orderDetails) {
 %>
-					<div class="row p-2">
-						<div class="col-6">
-							<img class="order-img me-2" src="../../resources/images/products/<%=orderDetail.getPhoto()%>">
-							<div>
+						<div class="row p-2">
+						<input id="review-<%=orderDetail.getProductNo() %>" type="hidden" name="productNo" value="<%=orderDetail.getProductNo() %>">
+							<div class="col-6">
+								<img class="order-img me-2" src="../../resources/images/products/<%=orderDetail.getPhoto()%>">
 								<div>
-									<span><%=orderDetail.getBrand() %></span>
-								</div>
-								<div>
-									<span><%=orderDetail.getProductName() %></span>
-								</div>
-								<div>
-									<span><%=orderDetail.getSize() %> / <%=orderDetail.getAmount() %>개</span>
+									<div>
+										<span><%=orderDetail.getBrand() %></span>
+									</div>
+									<div>
+										<span><%=orderDetail.getProductName() %></span>
+									</div>
+									<div>
+										<span><%=orderDetail.getSize() %> / <%=orderDetail.getAmount() %>개</span>
+									</div>
 								</div>
 							</div>
-						</div>
+						
 <%
 	if (orderDetail.getDisPrice() > 0) {
-%>						<div class="col mt-3">
-							<div class="text-center">
-								<span  style="text-decoration:line-through;"><%=orderDetail.getPrice() %>원</span>
+	%>						<div class="col mt-3">
+								<div class="text-center">
+									<span  style="text-decoration:line-through;"><%=orderDetail.getPrice() %>원</span>
+								</div>
+								<div class="text-center">
+									<span style="color: red; font-weight: bold; font-size: 17px;"><%=orderDetail.getDisPrice() %>원</span>
+								</div>
 							</div>
-							<div class="text-center">
-								<span style="color: red; font-weight: bold; font-size: 17px;"><%=orderDetail.getDisPrice() %>원</span>
-							</div>
-						</div>
 <%
 	} else {
 %>
-						<div class="col mt-4 text-end">
-							<span><%=orderDetail.getPrice() %>원</span>
-						</div>
+							<div class="col mt-4 text-end">
+								<span><%=orderDetail.getPrice() %>원</span>
+							</div>
 <%		
 	}
 %>
-						<div class="col mt-4 text-end">
-							<span style="font-weight: bold;"><%=order.getStatus() %></span>
+							<div class="col mt-4 text-end">
+								<span style="font-weight: bold;"><%=order.getStatus() %></span>
+							</div>
+							<!-- 
+								리뷰 작성 상태가 Y면 버튼 상태 disabled로 만들기 
+								N이면 reviewform으로 이동
+							-->
+							<div class="col mt-3 text-end mt-1">
+								<button type="button" class="btn btn-dark btn-sm" onclick="goReview(<%=orderDetail.getProductNo() %>);">리뷰 작성</button>
+							</div>
 						</div>
-						<!-- 
-							리뷰 작성 상태가 Y면 버튼 상태 disabled로 만들기 
-							N이면 reviewform으로 이동
-						-->
-						<div class="col mt-3 text-end mt-1">
-							<button type="button" class="btn btn-dark btn-sm"><a>리뷰 작성</a></button>
-						</div>
-					</div>
 <%
 	}
 %>
@@ -215,5 +216,11 @@
 </div>
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	function goReview(productNo) {
+		var item = document.getElementById("review-"+productNo).value;
+		location.href = "my-review-form.jsp?productNo="+productNo;
+	}
+</script>
 </body>
 </html>

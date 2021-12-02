@@ -21,11 +21,55 @@ public class CartDao {
 	}
 	
 	/**
-	 * 동일한 상품 수량이 업데이트를 진행한다. 
+	 * 장바구니 번호를 조회하여 해당 장바구니 정보를 삭제한다.
+	 * @param no 장바구니 번호
+	 * @throws SQLException
+	 */
+	public void deletedCartByNo(int no) throws SQLException{
+		
+		String sql = "delete tb_carts "
+				   + "where cart_no = ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, no);
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
+	
+	/**
+	 * 장바구니 번호로 장바구니 갯수를 조회하여 장바구니 갯수를 변경한다.
 	 * @param cart
 	 * @throws SQLException
 	 */
-	public void updateCartAmount(Cart cart) throws SQLException {
+	public void updateCartAmountByNo(Cart cart) throws SQLException {
+		
+		String sql = "update tb_carts "
+				   + "set "
+				   + "	product_amount = ? "
+				   + "where "
+				   + "	cart_no = ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, cart.getAmount());
+		pstmt.setInt(2, cart.getNo());
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
+	
+	/**
+	 * 제품상세정보로 장바구니 갯수을 조회하여, 장바구니 갯수를 변경한다. 
+	 * @param cart
+	 * @throws SQLException
+	 */
+	public void updateCartAmountByDetailNo(Cart cart) throws SQLException {
 		
 		String sql = "update tb_carts "
 				   + "set "
@@ -73,15 +117,17 @@ public class CartDao {
 	 * @return 해당 장바구니 정보
 	 * @throws SQLException
 	 */
-	public List<Cart> selectAllCartList() throws SQLException {
+	public List<Cart> selectAllCartListByMemberNo(int no) throws SQLException {
 		
 		String sql = "select cart_no, member_no, product_detail_no, product_amount "
-				   + "from tb_carts ";
+				   + "from tb_carts "
+				   + "where member_no = ? ";
 		
 		List<Cart> carts = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, no);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
