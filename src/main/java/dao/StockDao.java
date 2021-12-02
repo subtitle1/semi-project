@@ -20,6 +20,26 @@ public class StockDao {
 		return self;
 	}
 	
+	
+	public int selectTotalstocksCount() throws SQLException {
+		String sql = "select count(*) cnt "
+				   + "from tb_product_stocks";
+		
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return totalRecords;
+	}
+	
+	
 	public List<Stock> selectStocksbyProductNo(int no) throws SQLException{
 		 List<Stock> stockList = new ArrayList<>();
 			
@@ -142,7 +162,7 @@ public class StockDao {
 			return amount;
 		}
 	
-	public void insertstocks(int no, int size, int amount) throws SQLException {
+	public void insertstock(int no, int size, int amount) throws SQLException {
 		String sql = "insert into tb_product_stocks "
 				+ "(product_detail_no, product_no, product_size, product_stock ) "
 				+ "values(PRODUCT_DETAIL_NO.nextval, ?, ?, ?) ";

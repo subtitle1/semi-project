@@ -2,8 +2,7 @@ package dao;
 
 import static utils.ConnectionUtil.getConnection;
 
-import java.util.*;
-import java.sql.Date;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.OrderDetailDto;
-import dto.ProductDetailDto;
-import vo.Member;
+
+
 import vo.Order;
 
 public class OrderDao {
@@ -30,7 +29,7 @@ public class OrderDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Order selectOrderDetailByOrderNo(int orderNo) throws SQLException {
+	public Order selectOrderByOrderNo(int orderNo) throws SQLException {
 		Order order = null;
 		
 		String sql = "select order_no, order_status, order_date, order_total_price "
@@ -62,11 +61,11 @@ public class OrderDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<OrderDetailDto> selectOrderDetailsByOrderNo(int orderNo) throws SQLException {
+	public List<OrderDetailDto> selectAllOrderDetailsByOrderNo(int orderNo) throws SQLException {
 		List<OrderDetailDto> orderDetails = new ArrayList<>();
 		
-		String sql = "select p.product_no, p.product_img, p.product_name, p.product_price, "
-				   + "p.product_disprice, p.product_brand, i.product_amount, s.product_size, s.product_detail_no, s.product_stock "
+		String sql = "select i.order_no, p.product_no, p.product_img, p.product_name, p.product_price, "
+				   + "p.product_disprice, p.product_brand, i.product_amount, s.product_size, s.product_detail_no "
 				   + "from tb_products p, tb_order_item i, tb_product_stocks s "
 				   + "where i.product_detail_no = s.product_detail_no "
 				   + "and s.product_no = p.product_no "
@@ -80,6 +79,7 @@ public class OrderDao {
 	    while (rs.next()) {
 	    	OrderDetailDto orderDetail = new OrderDetailDto();
 	    	
+	    	orderDetail.setOrderNo(rs.getInt("order_no"));
 	    	orderDetail.setProductNo(rs.getInt("product_no"));
 	    	orderDetail.setProductName(rs.getString("product_name"));
 	    	orderDetail.setPhoto(rs.getString("product_img"));
@@ -89,7 +89,6 @@ public class OrderDao {
 	    	orderDetail.setAmount(rs.getInt("product_amount"));
 	    	orderDetail.setSize(rs.getInt("product_size"));
 	    	orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
-	    	orderDetail.setProductStock(rs.getInt("product_stock"));
 	    	
 	    	orderDetails.add(orderDetail);
 	    }
@@ -102,22 +101,79 @@ public class OrderDao {
 	}
 	
 	/**
+	 * 지정한 멤버번호와 상품(재고)번호로 한 건의 아이템만 조회한다
+	 * @param memberNo
+	 * @param stockNo
+	 * @return
+	 * @throws SQLException
+	 */
+	public OrderDetailDto selectOrderDetailByMemberNoAndProductDetailNo(int memberNo, int stockNo) throws SQLException {
+		
+		String sql = "select o.order_no, o.order_status, o.order_date, o.order_total_price, o.review_status, "
+				+ "       m.member_no, m.member_id, m.member_name, "
+				+ "       i.product_detail_no, i.product_amount, s.product_size, "
+				+ "       p.product_no, p.product_name, p.product_category, p.product_price, p.product_disprice, "
+				+ "       p.product_img, p.product_brand, p.product_gender "
+				+ "from tb_orders o, tb_members m, tb_order_item i, tb_product_stocks s, tb_products p "
+				+ "where o.member_no = m.member_no "
+				+ "and o.order_no = i.order_no "
+				+ "and p.product_no = s.product_no "
+				+ "and s.product_detail_no = i.product_detail_no "
+				+ "and m.member_no = ? and i.product_detail_no = ? ";
+		
+		OrderDetailDto orderDetail = null;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, memberNo);
+		pstmt.setInt(2, stockNo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			orderDetail = new OrderDetailDto();
+			
+			orderDetail.setOrderNo(rs.getInt("order_no"));
+			orderDetail.setStatus(rs.getString("order_status"));
+			orderDetail.setOrderDate(rs.getDate("order_date"));
+			orderDetail.setTotalPrice(rs.getInt("order_total_price"));
+			orderDetail.setReviewStatus(rs.getString("review_status"));
+			orderDetail.setMemberNo(rs.getInt("member_no"));
+			orderDetail.setMemberId(rs.getString("member_id"));
+			orderDetail.setMemberName(rs.getString("member_name"));
+			
+			orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
+			orderDetail.setAmount(rs.getInt("product_amount"));
+			orderDetail.setSize(rs.getInt("product_size"));
+			
+			orderDetail.setProductNo(rs.getInt("product_no"));
+			orderDetail.setProductName(rs.getString("product_name"));
+			orderDetail.setCategory(rs.getString("product_category"));
+			orderDetail.setPrice(rs.getInt("product_price"));
+			orderDetail.setDisPrice(rs.getInt("product_disprice"));
+			orderDetail.setPhoto(rs.getString("product_img"));
+			orderDetail.setBrand(rs.getString("product_brand"));
+			orderDetail.setGender(rs.getString("product_gender"));
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return orderDetail;
+	}
+	
+	/**
 	 * 멤버번호로 지정한 전체 주문내역을 반환한다.
 	 * @param memberNo
 	 * @return
 	 * @throws SQLException
 	 */
 	public List<Order> selectAllOrdersByMemberNo(int memberNo) throws SQLException {
-		String sql = "select o.order_no, o.order_status, "
-				+ "o.order_date, o.order_total_price, o.cancel_reason,"
-				+ "o.cancel_status, o.canceled_date, o.review_status, "
-				+ "m.member_no, m.member_id, m.member_pwd, m.member_name, "
-				+ "m.member_tel, m.member_email, "
-				+ "m.member_address, m.member_pct, m.member_registered_date, "
-				+ "m.member_deleted, m.member_deleted_date "
-				+ "from tb_orders o, tb_members m "
-				+ "where o.member_no = m.member_no "
-				+ "and m.member_no = ? ";
+		String sql = "select order_no, order_status, "
+			       + "order_date, order_total_price, cancel_reason,"
+				   + "cancel_status, canceled_date, review_status, member_no "
+				   + "from tb_orders "
+				   + "where member_no = ? ";
 		
 		List<Order> orders = new ArrayList<>();
 		
@@ -128,21 +184,8 @@ public class OrderDao {
 		
 		while (rs.next()) {
 			Order order = new Order();
-			Member member = new Member();
 			
-			member.setNo(rs.getInt("member_no"));
-			member.setId(rs.getString("member_id"));
-			member.setPwd(rs.getString("member_pwd"));
-			member.setName(rs.getString("member_name"));
-			member.setTel(rs.getString("member_tel"));
-			member.setEmail(rs.getString("member_email"));
-			member.setAddress(rs.getString("member_address"));
-			member.setPct(rs.getInt("member_pct"));
-			member.setRegisteredDate(rs.getDate("member_registered_date"));
-			member.setDeleted(rs.getString("member_deleted"));
-			member.setDeletedDate(rs.getDate("member_deleted_date"));
-			
-			order.setMember(member);
+			order.setMemberNo(rs.getInt("member_no"));
 			order.setNo(rs.getInt("order_no"));
 			order.setStatus(rs.getString("order_status"));
 			order.setOrderDate(rs.getDate("order_date"));
@@ -197,30 +240,31 @@ public class OrderDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Order> selectAllOrders() throws SQLException {
-		String sql = "select o.order_no, o.order_status, "
-				+ "o.order_date, o.order_total_price, o.cancel_reason, "
-				+ "o.cancel_status, o.canceled_date, o.review_status, "
-				+ "m.member_no, m.member_id, m.member_pwd, m.member_name, "
-				+ "m.member_tel, m.member_email, "
-				+ "m.member_address, m.member_pct, m.member_registered_date, "
-				+ "m.member_deleted, m.member_deleted_date "
-				   + "from tb_orders o, tb_members m "
-				   + "where o.member_no = m.member_no ";
+	public List<Order> selectAllOrders(int begin, int end) throws SQLException {
+		String sql = "select order_no, order_status, member_no, "
+				+ "order_date, order_total_price, cancel_reason, "
+				+ "cancel_status, canceled_date, review_status "
+				+ "from (select row_number() over (order by order_no desc) rn, "
+				+" order_no, order_status, member_no, "
+				+ "order_date, order_total_price, cancel_reason, "
+				+ "cancel_status, canceled_date, review_status "
+				+ "from tb_orders )"
+				+ "where rn>= ? and rn <= ? "
+				+ "order by order_no desc";
 		
 		List<Order> orders = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, begin);
+		pstmt.setInt(2, end);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
 			Order order = new Order();
-			Member member = new Member();
 			
 			order.setNo(rs.getInt("order_no"));
-			member.setNo(rs.getInt("member_no"));
-			order.setMember(member);
+			order.setMemberNo(rs.getInt("member_no"));
 			order.setStatus(rs.getString("order_status"));
 			order.setOrderDate(rs.getDate("order_date"));
 			order.setTotalPrice(rs.getInt("order_total_price"));
@@ -237,6 +281,8 @@ public class OrderDao {
 		connection.close();
 		return orders;
 	}
+
+	
 	
 	/**
 	 * 수정된 정보가 포함된 주문 정보를 테이블에 반영한다.
@@ -309,7 +355,7 @@ public class OrderDao {
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		
 		pstmt.setInt(1, order.getNo());
-		pstmt.setInt(2, order.getMember().getNo());
+		pstmt.setInt(2, order.getMemberNo());
 		pstmt.setInt(3, order.getTotalPrice());
 		
 		pstmt.executeUpdate();

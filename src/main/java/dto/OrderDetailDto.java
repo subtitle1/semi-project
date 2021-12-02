@@ -8,62 +8,34 @@ import vo.Stock;
 public class OrderDetailDto {
 //주문/주문아이템/프로덕트/ 조인
 	
-	private int orderNo;
-	private Member member;
-	private String status; //주문상태
-	private Date orderDate;
-	private int totalPrice;
-	private String reviewStatus;
-	private int amount;
-	private int productNo;
-	private int productDetailNo;
-	private String productName;
-	private String category;
-	private String name;
-	private int price;
-	private int disPrice;
-	private int size;
-	private int productStock;
-	private String photo;
-	private String brand;
-	private String gender;
-	private Date createdDate;
-	
-	public int getProductStock() {
-		return productStock;
-	}
-	public void setProductStock(int productStock) {
-		this.productStock = productStock;
-	}
-	public int getProductDetailNo() {
-		return productDetailNo;
-	}
-	public void setProductDetailNo(int productDetailNo) {
-		this.productDetailNo = productDetailNo;
-	}
-	public int getSize() {
-		return size;
-	}
-	public void setSize(int size) {
-		this.size = size;
-	}
+	private int orderNo; //주문번호
+    private String status; //주문상태
+    private Date orderDate; //주문날짜
+    private int totalPrice; //총액
+    private String reviewStatus; //리뷰상태
+   
+    private int memberNo;   //회원번호
+    private String memberId;  //회원아이디
+    private String memberName;  //회원이름
+   
+    private int productDetailNo; //상품상세번호 //orderitemjoin
+    private int size; //상품 사이즈
+    private int amount; //주문갯수
+   
+    private int productNo; //상품번호 //product.no = stock테이블에 있는 product.no
+    private String productName; //상품이름
+    private String category; //상품 카테고리
+    private int price; //가격
+    private int disPrice; //할인가격
+    private String photo;
+    private String brand;
+    private String gender;
+   
 	public int getOrderNo() {
 		return orderNo;
 	}
 	public void setOrderNo(int orderNo) {
 		this.orderNo = orderNo;
-	}
-	public String getProductName() {
-		return productName;
-	}
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-	public Member getMember() {
-		return member;
-	}
-	public void setMember(Member member) {
-		this.member = member;
 	}
 	public String getStatus() {
 		return status;
@@ -89,6 +61,36 @@ public class OrderDetailDto {
 	public void setReviewStatus(String reviewStatus) {
 		this.reviewStatus = reviewStatus;
 	}
+	public int getMemberNo() {
+		return memberNo;
+	}
+	public void setMemberNo(int memberNo) {
+		this.memberNo = memberNo;
+	}
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
+	public String getMemberName() {
+		return memberName;
+	}
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+	public int getProductDetailNo() {
+		return productDetailNo;
+	}
+	public void setProductDetailNo(int productDetailNo) {
+		this.productDetailNo = productDetailNo;
+	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
+	}
 	public int getAmount() {
 		return amount;
 	}
@@ -101,17 +103,17 @@ public class OrderDetailDto {
 	public void setProductNo(int productNo) {
 		this.productNo = productNo;
 	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
 	public String getCategory() {
 		return category;
 	}
 	public void setCategory(String category) {
 		this.category = category;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
 	}
 	public int getPrice() {
 		return price;
@@ -143,13 +145,13 @@ public class OrderDetailDto {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public Date getCreatedDate() {
-		return createdDate;
+	@Override
+	public String toString() {
+		return "OrderDetailDto [orderNo=" + orderNo + ", status=" + status + ", orderDate=" + orderDate
+				+ ", totalPrice=" + totalPrice + ", reviewStatus=" + reviewStatus + ", memberNo=" + memberNo
+				+ ", memberId=" + memberId + ", memberName=" + memberName + ", productDetailNo=" + productDetailNo
+				+ ", size=" + size + ", amount=" + amount + ", productNo=" + productNo + ", productName=" + productName
+				+ ", category=" + category + ", price=" + price + ", disPrice=" + disPrice + ", photo=" + photo
+				+ ", brand=" + brand + ", gender=" + gender + "]";
 	}
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-	
-	
-	
 }

@@ -1,13 +1,13 @@
 package vo;
 
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
+
 
 public class Order {
 
 	private int no;
-	private Member member;
+	private int memberNo;
 	private String status; //주문상태
 	private Date orderDate;
 	private int totalPrice;
@@ -26,12 +26,12 @@ public class Order {
 		this.no = no;
 	}
 
-	public Member getMember() {
-		return member;
+	public int getMemberNo() {
+		return memberNo;
 	}
-
-	public void setMember(Member member) {
-		this.member = member;
+	
+	public void setMemberNo(int memberNo) {
+		this.memberNo = memberNo;
 	}
 
 	public String getStatus() {

@@ -23,6 +23,24 @@ public class ProductDao {
 		return self;
 	}
 	
+
+
+	public int selectTotalProductsCount() throws SQLException {
+		String sql = "select count(*) cnt "
+				   + "from tb_products";
+		
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+
+    return totalRecords;
+	}
+    
+  
 	public CancelProductDto selectProductDetailByOrderNoAndStockNo(int orderNo, int stockNo) throws SQLException {
 		String sql = "select p.product_no, p.product_name, p.product_price, "
 				+ "       p.product_disprice, i.product_amount, s.product_size, s.product_detail_no, s.product_stock "
@@ -52,13 +70,48 @@ public class ProductDao {
 			canceledProduct.setStock(rs.getInt("product_stock"));
 		}
 		
+
 		rs.close();
 		pstmt.close();
 		connection.close();
 		
-		return canceledProduct;
+return canceledProduct;
 		
 	}
+		
+	
+	
+	/**
+	 * 프로덕트 객체를 db에 입력하는 메소드
+	 * @param product
+	 * @throws SQLException
+	 */
+	public void insertProduct(Product product) throws SQLException {
+		String sql = "insert into tb_products "
+				+ "(product_no, product_category, product_name, "
+				+ "product_img, product_brand, product_price, "
+				+ "product_disprice, product_gender ) "
+				+ "values(?, ?, ?, ?, ?, ?, ?, ?) ";
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, product.getNo());
+		pstmt.setString(2, product.getCategory());
+		pstmt.setString(3, product.getName());
+		pstmt.setString(4, product.getPhoto());
+		pstmt.setString(5, product.getBrand());
+		pstmt.setInt(6, product.getPrice());
+		pstmt.setInt(7, product.getDisPrice());
+		pstmt.setString(8, product.getGender());
+	
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
+	
+	
+	
 	public List<ProductDetailDto> selectAllProductDetail(int begin, int end) throws SQLException{
 		String sql = "select product_no, product_name, product_img, product_price, "
 				+ "product_disprice, product_brand, "
@@ -408,5 +461,24 @@ public class ProductDao {
 		return products;
 	}
 
+	public int getProductNo() throws SQLException {
+		String sql = "select product_no.nextval seq from dual";
+		
+		int productNo = 0;
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		
+		productNo = rs.getInt("seq");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return productNo;
+	}
+	
 }
 
