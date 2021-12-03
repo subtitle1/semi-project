@@ -24,7 +24,7 @@
 	// 로그인 링크를 눌러서 loginform.jsp를 요청하는 경우에는 요청파라미터 error값이 존재하지 않는다.
 	// 로그인에 실패한 경우, 로그인이 필요한 JSP를 로그인없이 이용한 경우에만 loginform.jsp를 요청할 때 생성한 요청객체에 요청파라미터로 error값이 존재한다.
 	String error = request.getParameter("error");
-	
+	String user = request.getParameter("user");
 	if ("empty".equals(error)) {						// login.jsp에서 사용자 인증처리를 할 때 id와 password값이 비어 있었다.
 %>
 			<div class="alert alert-danger">
@@ -60,6 +60,12 @@
 %>
 			<div class="alert alert-danger">
 				탈퇴한 회원은 로그인할 수 없습니다. <br> 서비스 이용을 원하시면, 다시 회원가입을 진행해 주세요.
+			</div>
+<%
+	} else if ("undefined".equals(user)) {
+%>
+			<div class="alert alert-danger">
+				로그인이 필요한 페이지를 요청하였습니다.
 			</div>
 <%
 	}

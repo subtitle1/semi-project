@@ -360,7 +360,7 @@
 
 		function goOrder() {
 			var form = document.getElementById("product-form");
-			form.setAttribute("action", "/semi-project/mypage/shopping-note/completeorder.jsp");
+			form.setAttribute("action", "/semi-project/mypage/shopping-note/order-confirm.jsp");
 			form.submit();
 		}
 		function goReview(no){

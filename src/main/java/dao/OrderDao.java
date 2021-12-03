@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.CancelProductDto;
 import dto.OrderDetailDto;
 
 
@@ -24,63 +23,27 @@ public class OrderDao {
 		return self;
 	}
 	
-	public CancelProductDto selectCanceledProductDetailByOrderNoAndStockNo(int orderNo, int stockNo) throws SQLException {
-		String sql = "select p.product_no, p.product_img, p.product_brand, p.product_name, p.product_price, "
-				+ "          p.product_disprice, i.product_amount, s.product_size, s.product_detail_no, s.product_stock "
-				+ "from tb_products p, tb_order_item i, tb_product_stocks s "
-				+ "where i.product_detail_no = s.product_detail_no "
-				+ "and s.product_no = p.product_no "
-				+ "and i.order_no = ? "
-				+ "and i.product_detail_no = ?";
-		
-		CancelProductDto canceledProduct = null;
-		
-		Connection connection = getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, orderNo);
-		pstmt.setInt(2, stockNo);
-		ResultSet rs = pstmt.executeQuery();
-		
-		if (rs.next()) {
-			canceledProduct = new CancelProductDto();
-			canceledProduct.setProductNo(rs.getInt("product_no"));
-			canceledProduct.setPhoto(rs.getString("product_img"));
-			canceledProduct.setBrand(rs.getString("product_brand"));
-			canceledProduct.setProductName(rs.getString("product_name"));
-			canceledProduct.setPrice(rs.getInt("product_price"));
-			canceledProduct.setDisprice(rs.getInt("product_disprice"));
-			canceledProduct.setAmount(rs.getInt("product_amount"));
-			canceledProduct.setSize(rs.getInt("product_size"));
-			canceledProduct.setProductDetailNo(rs.getInt("product_detail_no"));
-			canceledProduct.setStock(rs.getInt("product_stock"));
-		}
-		
-
-		rs.close();
-		pstmt.close();
-		connection.close();
-		
-		return canceledProduct;
-	}
-	
 	/**
 	 * 취소한 주문 목록들을 반환한다.
 	 * @param orderNo
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<CancelProductDto> selectAllCanceledProduct(int orderNo, int memberNo) throws SQLException {
+	public List<OrderDetailDto> selectAllCanceledOrderItem(int orderNo, int memberNo) throws SQLException {
 		
-		String sql = "select o.order_no, o.order_status, p.product_no, p.product_img, p.product_brand, p.product_name, p.product_price, "
-				   + "       p.product_disprice, i.product_amount, s.product_size, s.product_detail_no, s.product_stock "
-				   + "from tb_products p, tb_order_item i, tb_product_stocks s, tb_orders o "
-				   + "where i.product_detail_no = s.product_detail_no "
-				   + "and s.product_no = p.product_no "
-				   + "and i.order_no = ? "
-				   + "and o.member_no = ? "
-				   + "and o.cancel_status = 'Y' ";
+		String sql = "select o.order_no, o.order_status, o.order_date, o.order_total_price, i.review_status, "
+				+ "       m.member_no, m.member_id, m.member_name, "
+				+ "       i.product_detail_no, i.product_amount, s.product_size, "
+				+ "       p.product_no, p.product_name, p.product_category, p.product_price, p.product_disprice, "
+				+ "       p.product_img, p.product_brand, p.product_gender "
+				+ "from tb_orders o, tb_members m, tb_order_item i, tb_product_stocks s, tb_products p "
+				+ "where o.member_no = m.member_no "
+				+ "and o.order_no = i.order_no "
+				+ "and p.product_no = s.product_no "
+				+ "and s.product_detail_no = i.product_detail_no "
+			    + "and o.cancel_status = 'Y' ";
 		
-		List<CancelProductDto> canceledProducts = new ArrayList<>();
+		List<OrderDetailDto> canceledOrderItemList = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -89,42 +52,57 @@ public class OrderDao {
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
-			CancelProductDto product = new CancelProductDto();
+			OrderDetailDto orderDetail = new OrderDetailDto();
 			
-			product.setProductNo(rs.getInt("order_no"));
-			product.setProductNo(rs.getInt("order_status"));
-			product.setProductNo(rs.getInt("product_no"));
-			product.setPhoto(rs.getString("product_img"));
-			product.setBrand(rs.getString("product_brand"));
-			product.setProductName(rs.getString("product_name"));
-			product.setPrice(rs.getInt("product_price"));
-			product.setDisprice(rs.getInt("product_disprice"));
-			product.setAmount(rs.getInt("product_amount"));
-			product.setSize(rs.getInt("product_size"));
-			product.setProductDetailNo(rs.getInt("product_detail_no"));
-			product.setStock(rs.getInt("product_stock"));
+			orderDetail.setOrderNo(rs.getInt("order_no"));
+			orderDetail.setStatus(rs.getString("order_status"));
+			orderDetail.setOrderDate(rs.getDate("order_date"));
+			orderDetail.setTotalPrice(rs.getInt("order_total_price"));
+			orderDetail.setReviewStatus(rs.getString("review_status"));
+			orderDetail.setMemberNo(rs.getInt("member_no"));
+			orderDetail.setMemberId(rs.getString("member_id"));
+			orderDetail.setMemberName(rs.getString("member_name"));
 			
-			canceledProducts.add(product);
+			orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
+			orderDetail.setAmount(rs.getInt("product_amount"));
+			orderDetail.setSize(rs.getInt("product_size"));
+			
+			orderDetail.setProductNo(rs.getInt("product_no"));
+			orderDetail.setProductName(rs.getString("product_name"));
+			orderDetail.setCategory(rs.getString("product_category"));
+			orderDetail.setPrice(rs.getInt("product_price"));
+			orderDetail.setDisPrice(rs.getInt("product_disprice"));
+			orderDetail.setPhoto(rs.getString("product_img"));
+			orderDetail.setBrand(rs.getString("product_brand"));
+			orderDetail.setGender(rs.getString("product_gender"));
+			
+			canceledOrderItemList.add(orderDetail);
 		}
 		
 		rs.close();
 		pstmt.close();
 		connection.close();
 		
-		return canceledProducts;
+		return canceledOrderItemList;
 	}
 	
-	public CancelProductDto selectCanceledProductDetailByOrderNoAndStockNo(int orderNo, int stockNo) throws SQLException {
-		String sql = "select p.product_no, p.product_name, p.product_price, "
-				+ "          p.product_disprice, i.product_amount, s.product_size, "
-				+ "          s.product_detail_no, s.product_stock "
-				+ "from tb_products p, tb_order_item i, tb_product_stocks s "
-				+ "where i.product_detail_no = s.product_detail_no "
-				+ "and s.product_no = p.product_no "
+	
+	
+	public OrderDetailDto selectOrderDetailByOrderNoAndStockNo(int orderNo, int stockNo) throws SQLException {
+		String sql = "select o.order_no, o.order_status, o.order_date, o.order_total_price, i.review_status, "
+				+ "       m.member_no, m.member_id, m.member_name, "
+				+ "       i.product_detail_no, i.product_amount, s.product_size, "
+				+ "       p.product_no, p.product_name, p.product_category, p.product_price, p.product_disprice, "
+				+ "       p.product_img, p.product_brand, p.product_gender "
+				+ "from tb_orders o, tb_members m, tb_order_item i, tb_product_stocks s, tb_products p "
+				+ "where o.member_no = m.member_no "
+				+ "and o.order_no = i.order_no "
+				+ "and p.product_no = s.product_no "
+				+ "and s.product_detail_no = i.product_detail_no "
 				+ "and i.order_no = ? "
 				+ "and i.product_detail_no = ?";
 		
-		CancelProductDto canceledProduct = null;
+		OrderDetailDto orderDetail = null;
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -133,15 +111,29 @@ public class OrderDao {
 		ResultSet rs = pstmt.executeQuery();
 		
 		if (rs.next()) {
-			canceledProduct = new CancelProductDto();
-			canceledProduct.setProductNo(rs.getInt("product_no"));
-			canceledProduct.setProductName(rs.getString("product_name"));
-			canceledProduct.setPrice(rs.getInt("product_price"));
-			canceledProduct.setDisprice(rs.getInt("product_disprice"));
-			canceledProduct.setAmount(rs.getInt("product_amount"));
-			canceledProduct.setSize(rs.getInt("product_size"));
-			canceledProduct.setProductDetailNo(rs.getInt("product_detail_no"));
-			canceledProduct.setStock(rs.getInt("product_stock"));
+			orderDetail = new OrderDetailDto();
+			
+			orderDetail.setOrderNo(rs.getInt("order_no"));
+			orderDetail.setStatus(rs.getString("order_status"));
+			orderDetail.setOrderDate(rs.getDate("order_date"));
+			orderDetail.setTotalPrice(rs.getInt("order_total_price"));
+			orderDetail.setReviewStatus(rs.getString("review_status"));
+			orderDetail.setMemberNo(rs.getInt("member_no"));
+			orderDetail.setMemberId(rs.getString("member_id"));
+			orderDetail.setMemberName(rs.getString("member_name"));
+			
+			orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
+			orderDetail.setAmount(rs.getInt("product_amount"));
+			orderDetail.setSize(rs.getInt("product_size"));
+			
+			orderDetail.setProductNo(rs.getInt("product_no"));
+			orderDetail.setProductName(rs.getString("product_name"));
+			orderDetail.setCategory(rs.getString("product_category"));
+			orderDetail.setPrice(rs.getInt("product_price"));
+			orderDetail.setDisPrice(rs.getInt("product_disprice"));
+			orderDetail.setPhoto(rs.getString("product_img"));
+			orderDetail.setBrand(rs.getString("product_brand"));
+			orderDetail.setGender(rs.getString("product_gender"));
 		}
 		
 
@@ -149,7 +141,7 @@ public class OrderDao {
 		pstmt.close();
 		connection.close();
 		
-		return canceledProduct;
+		return orderDetail;
 	}
 	
 	/**
@@ -237,13 +229,17 @@ public class OrderDao {
 	public List<OrderDetailDto> selectAllOrderDetailsByOrderNo(int orderNo) throws SQLException {
 		List<OrderDetailDto> orderDetails = new ArrayList<>();
 		
-		String sql = "select i.order_no, p.product_no, p.product_img, p.product_name, p.product_price, "
-				   + "p.product_disprice, p.product_brand, i.product_amount, s.product_size, s.product_detail_no, "
-				   + "i.review_status "
-				   + "from tb_products p, tb_order_item i, tb_product_stocks s "
-				   + "where i.product_detail_no = s.product_detail_no "
-				   + "and s.product_no = p.product_no "
-				   + "and i.order_no = ?";
+		String sql = "select o.order_no, o.order_status, o.order_date, o.order_total_price, i.review_status, "
+				+ "       m.member_no, m.member_id, m.member_name, "
+				+ "       i.product_detail_no, i.product_amount, s.product_size, "
+				+ "       p.product_no, p.product_name, p.product_category, p.product_price, p.product_disprice, "
+				+ "       p.product_img, p.product_brand, p.product_gender "
+				+ "from tb_orders o, tb_members m, tb_order_item i, tb_product_stocks s, tb_products p "
+				+ "where o.member_no = m.member_no "
+				+ "and o.order_no = i.order_no "
+				+ "and p.product_no = s.product_no "
+				+ "and s.product_detail_no = i.product_detail_no "
+				+ "and i.order_no = ? ";
 		
 		Connection connection = getConnection();
 	    PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -254,16 +250,26 @@ public class OrderDao {
 	    	OrderDetailDto orderDetail = new OrderDetailDto();
 	    	
 	    	orderDetail.setOrderNo(rs.getInt("order_no"));
-	    	orderDetail.setProductNo(rs.getInt("product_no"));
-	    	orderDetail.setProductName(rs.getString("product_name"));
-	    	orderDetail.setReviewStatus(rs.getString("review_status"));
-	    	orderDetail.setPhoto(rs.getString("product_img"));
-	    	orderDetail.setPrice(rs.getInt("product_price"));
-	    	orderDetail.setDisPrice(rs.getInt("product_disprice"));
-	    	orderDetail.setBrand(rs.getString("product_brand"));
-	    	orderDetail.setAmount(rs.getInt("product_amount"));
-	    	orderDetail.setSize(rs.getInt("product_size"));
-	    	orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
+			orderDetail.setStatus(rs.getString("order_status"));
+			orderDetail.setOrderDate(rs.getDate("order_date"));
+			orderDetail.setTotalPrice(rs.getInt("order_total_price"));
+			orderDetail.setReviewStatus(rs.getString("review_status"));
+			orderDetail.setMemberNo(rs.getInt("member_no"));
+			orderDetail.setMemberId(rs.getString("member_id"));
+			orderDetail.setMemberName(rs.getString("member_name"));
+			
+			orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
+			orderDetail.setAmount(rs.getInt("product_amount"));
+			orderDetail.setSize(rs.getInt("product_size"));
+			
+			orderDetail.setProductNo(rs.getInt("product_no"));
+			orderDetail.setProductName(rs.getString("product_name"));
+			orderDetail.setCategory(rs.getString("product_category"));
+			orderDetail.setPrice(rs.getInt("product_price"));
+			orderDetail.setDisPrice(rs.getInt("product_disprice"));
+			orderDetail.setPhoto(rs.getString("product_img"));
+			orderDetail.setBrand(rs.getString("product_brand"));
+			orderDetail.setGender(rs.getString("product_gender"));
 	    	
 	    	orderDetails.add(orderDetail);
 	    }

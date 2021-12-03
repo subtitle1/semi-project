@@ -9,6 +9,13 @@ import vo.OrderItem;
 
 public class OrderItemDao {
 
+	private static OrderItemDao self = new OrderItemDao();
+	private OrderItemDao() {};
+	
+	public static OrderItemDao getInstance() {
+		return self;
+	}
+	
 	/**
 	 * 주문정보를 테이블에 저장한다.
 	 * @param orderItem
@@ -16,19 +23,18 @@ public class OrderItemDao {
 	 */
 	public void insertOrderItem(OrderItem orderItem) throws SQLException{
 		String sql = "insert into tb_order_item (order_no, product_detail_no, product_amount) "
-				   + "values (order_no_seq.nextval, ? , ?) ";
+				   + "values (?, ?, ?) ";
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, orderItem.getStockNo());
-		pstmt.setInt(2, orderItem.getAmount());
+		pstmt.setInt(1, orderItem.getOrderNo());
+		pstmt.setInt(2, orderItem.getStockNo());
+		pstmt.setInt(3, orderItem.getAmount());
 		
 		pstmt.executeUpdate();
 		
 		pstmt.close();
 		connection.close();
-		
-		
 	}
 	
 	/**

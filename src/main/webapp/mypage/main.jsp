@@ -1,5 +1,5 @@
-<%@page import="vo.Member"%>
 <%@page import="dao.OrderDao"%>
+<%@page import="vo.Member"%>
 <%@page import="java.util.List"%>
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="vo.Order"%>
@@ -18,7 +18,7 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
-	int memberNo = loginUserInfo.getNo();
+int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
 	

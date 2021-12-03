@@ -16,6 +16,11 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
+	if (loginUserInfo == null) {
+%>
+	<a href="#" onclick="javascript=alert('로그인이 필요한 페이지입니다.'); location.href='/semi-project/loginform.jsp';" class="nav-link util-mypage" ></a>		
+<%
+	}
 	int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
