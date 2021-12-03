@@ -301,7 +301,7 @@ a {
     height: 11px;
     left: 0;
     top: 4px;
-    background: url(/abcMart-app/resources/images/comm_crumb.png) no-repeat -12px 0;
+    background: url(../images/comm_crumb.png) no-repeat -12px 0;
 }
 
 .breadcrumb li.crumb.home::before {
