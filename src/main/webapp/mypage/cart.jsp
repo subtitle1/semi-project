@@ -41,10 +41,12 @@
 	.cart-table .btn{min-width: 110px; height:38px; border-radius:0; font-family:"Montserrat","Noto Sans KR",sans-serif; font-size:13px; text-align:center;}
 	.cart-table .btn-light{margin-top:10px; border:1px solid #000;}
 	.cart-table .btn-modify{margin-top:3px; min-width:77px; height:26px; background-color:#fff; border:1px solid #666; font-family:"Montserrat"; font-weight:700; font-size:12px; color:#666;}
+	.cart .check-total {margin-top:20px; font-family:"Montserrat"; font-weight:500; font-size:16px;}
+	.cart .check-total input{vertical-align:middle; margin-right:8px;}
 </style>
 <body>
 <%@ include file="../common/navbar.jsp" %>
-<div class="container">
+<div class="container cart">
 <%
 	// 클라이언트 전용의 세션객체에서 사용자 정보가 조회되지 않으면 로그인하지 않은 사용자임
 	// 로그인폼 페이지를 재요청하는 URL을 응답으로 보낸다.
@@ -78,12 +80,16 @@
 	</div>
 	<div class="row">
 		<div class="col">
-			<form id="form" action="order.jsp">
+			<form id="cart-form" action="order-cart.jsp">
+			<div class="check-total">
+				<input type="checkbox" id="ck-all" onchange="toggleCheckbox()" /> 전체선택
+			</div>
 <%
 	for (CartDetailDto cart : cartList) {
 %>
 				<table class="table cart-table">
 					<colgroup>
+						<col width="50px" />
 						<col width="110px" />
 						<col />
 						<col width="110px" />
@@ -92,13 +98,16 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th colspan="5">
-								<p><%=cart.getProductBrand() %> 배송 상품 <span class="sidebar"><span class="num"><%=cart.getAmount() %></span> <span class="unit">개</span></span></p>
+							<th colspan="6">
+								<p>
+									<%=cart.getProductBrand() %> 배송 상품 <span class="sidebar"><span class="num"><%=cart.getAmount() %></span><span class="unit">개</span></span>
+								</p>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
+							<td><input type="checkbox" id="ck-<%=cart.getNo() %>" name="no" value="<%=cart.getNo() %>" /></td>
 							<td class="td-img"><img src="../resources/images/products/<%=cart.getProductImg() %>" alt="" /></td>
 							<td>
 								<span class="text-product-name"><%=cart.getProductName() %></span><br>
@@ -107,7 +116,7 @@
 							<td>
 								<div class="product-stock">
 									<span class="minus" onclick="minus(<%=cart.getNo() %>)"></span>
-									<input type="number" id="Qty-<%=cart.getNo() %>" class="count" name="orderQty" value="<%=cart.getAmount() %>" min="1" max="20" />
+									<input type="number" id="Qty-<%=cart.getNo() %>" class="count" value="<%=cart.getAmount() %>" min="1" max="20" />
 									<span class="plus" onclick="plus(<%=cart.getNo() %>)"></span>
 								</div>
 								<div>
@@ -131,7 +140,7 @@
 	%>
 							</td>
 							<td>
-								<button class="btn btn-dark" type="submit">바로구매</button><br>
+								<button class="btn btn-dark" type="button" onclick="thisOrder(<%=cart.getNo() %>)">바로구매</button><br>
 								<button class="btn btn-light" type="button" onclick="deletedCart(<%=cart.getNo() %>)">삭제</button>
 							</td>
 						</tr>
@@ -139,7 +148,10 @@
 				</table>
 <%
 	}
-%>			
+%>
+				<div class="text-center">
+					<button class="btn btn-lg btn-dark" type="button" onclick="checkOrder()">상품 주문하기</button>
+				</div>		
 			</form>
 		</div>
 	</div>
@@ -176,6 +188,39 @@
 		location.href = "deletedCart.jsp?no=" + cartNo; 
 	}
 	
+	function toggleCheckbox() {
+		var checkboxAll = document.getElementById("ck-all");
+				
+		var currentCheckedStatus = checkboxAll.checked;
+		var checkboxList = document.querySelectorAll(".cart-table tbody input[name=no]");
+		for (var i = 0; i < checkboxList.length; i++) {
+			var checkbox = checkboxList[i];
+			checkbox.checked = currentCheckedStatus;
+		}
+	}
+	
+	function thisOrder(cartNo) {
+		var no = document.getElementById("ck-" + cartNo).value;
+		location.href="order-cart.jsp?no=" + no;
+	}
+	
+	function checkOrder() {
+		var form = document.getElementById("cart-form");
+		// 선택된 목록 가져오기
+		var checkedList = document.querySelectorAll(".cart-table tbody input[name=no]:checked")
+		
+		for (var i = 0; i < checkedList.length; i++) {
+			var checked = checkedList[i];
+			console.log(checked.value);
+		}
+		
+		if (checked == null){
+			alert('선택된 상품 정보가 존재하지 않습니다.');
+			return;
+		}
+		
+		form.submit();
+	}
 </script>
 </body>
 </html>

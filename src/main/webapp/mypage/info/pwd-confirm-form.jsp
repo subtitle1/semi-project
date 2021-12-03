@@ -6,7 +6,7 @@
 	Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");
 	String pwd = request.getParameter("pwd");
 	
-	if (pwd != null && pwd.isBlank()) {
+	if (pwd == null && pwd.isBlank()) {
 		response.sendRedirect("pwd-confirm.jsp?error=empty-pwd");
 		return;
 	}
