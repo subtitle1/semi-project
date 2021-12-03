@@ -29,7 +29,7 @@
 	Product product = productDao.selectProductbyNo(productNo);
 			
 	
-%>
+%> 
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">

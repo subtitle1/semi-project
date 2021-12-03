@@ -1,3 +1,4 @@
+        
 package dao;
 
 import static utils.ConnectionUtil.*;
@@ -270,9 +271,10 @@ public class ReviewDao {
 		}
 		
 		/**
-		 * 리뷰번호의 리뷰 정보를 반영한다.
-		 * @param no 
-		 * @return 리뷰 정보
+		 * 재고(detail_no)번호와 회원번호로 리뷰를 조회한다.
+		 * @param stockNo	재고번호
+		 * @param memberNo  회원번호
+		 * @return
 		 * @throws SQLException
 		 */
 		public ReviewDetailDto selectReviewDetailByProductDetailNoAndMemberNo(int stockNo, int memberNo) throws SQLException {
@@ -438,6 +440,6 @@ public class ReviewDao {
 
 
 
-
-
 }
+
+    

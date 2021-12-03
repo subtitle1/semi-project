@@ -1,3 +1,4 @@
+        
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Order"%>
@@ -52,8 +53,9 @@
 				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
 
+
 				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
-r
+
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
 			<ul class="nav flex-column p-0">
@@ -90,23 +92,21 @@ r
 						<span><%=order.getStatus() %></span>
 					</div>
 <%
-	if ("Y".equals(order.getCancelStatus())) {
+   if ("Y".equals(order.getCancelStatus())) {
 %>
-					<div class="col text-end mt-1">
-						<span>취소날짜</span>
-						<span><%=order.getCanceledDate() %></span>
-					</div>
+               <div class="col text-end mt-1">
+                  <span>취소날짜</span>
+                  <span><%=order.getCanceledDate() %></span>
+               </div>
 <%
-	} else {
+   } else {
 %>
-					<div class="col text-end mt-1">
-
-						<a style="text-decoration: none; color:white;" href="claim-cancel-request.jsp?orderNo=<%=order.getNo() %>">
-						<button type="button" class=" btn-dark btn-sm" >전체주문취소</button></a>
-
-					</div>
+               <div class="col text-end mt-1">
+                  <a style="text-decoration: none; color:white;" href="claim-cancel-request.jsp?orderNo=<%=order.getNo() %>">
+                  <button type="button" class=" btn-dark btn-sm" >전체주문취소</button></a>
+               </div>
 <%
-	}
+   }
 %>
 				</div>
 			</div>
@@ -127,7 +127,6 @@ r
 	for (OrderDetailDto orderDetail : orderDetails) {
 %>
 						<div class="row p-2">
-						<input id="review-<%=orderDetail.getProductNo() %>" type="hidden" name="productNo" value="<%=orderDetail.getProductNo() %>">
 							<div class="col-6">
 								<img class="order-img me-2" src="../../resources/images/products/<%=orderDetail.getPhoto()%>">
 								<div>
@@ -168,7 +167,9 @@ r
 							</div>
 
 							<div class="col mt-3 text-end mt-1">
-								<button type="button" class="btn btn-dark btn-sm <%="Y".equals(orderDetail.getReviewStatus()) && "Y".equals(order.getCancelStatus()) ? "disabled" : "" %>" onclick="goReview(<%=orderDetail.getProductNo() %>);">리뷰 작성</button>
+
+								<button type="button" class="btn btn-dark btn-sm <%="Y".equals(orderDetail.getReviewStatus()) && "Y".equals(order.getCancelStatus()) ? "disabled" : "" %>" 
+                         onclick="goReview(<%=orderDetail.getProductNo() %>,<%=orderDetail.getSize()%>)">리뷰 작성</button>
 							</div>
 						</div>
 <%
@@ -233,10 +234,11 @@ r
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-	function goReview(productNo) {
-		var item = document.getElementById("review-"+productNo).value;
-		location.href = "my-review-form.jsp?productNo="+productNo;
+	function goReview(productNo,size) {
+		location.href = "/semi-project//mypage/shopping-note/my-review-form.jsp?productNo="+productNo+"&size="+size;
 	}
 </script>
 </body>
 </html>
+
+    

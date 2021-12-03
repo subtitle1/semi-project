@@ -24,9 +24,7 @@
 	Review review = new Review();
 	review.setMemberNo(member.getNo());
 	review.setStockNo(stockNo);
-	
 	review.setContent(content);
-	
 	
 	reviewDao.insertReview(review);
 	
@@ -34,3 +32,5 @@
 	
 
 %>
+
+s
