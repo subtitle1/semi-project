@@ -1,4 +1,3 @@
-<%@page import="dto.CancelProductDto"%>
 <%@page import="dao.OrderDao"%>
 <%@page import="vo.Order"%>
 <%@page import="java.util.List"%>
@@ -17,7 +16,7 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
-	int memberNo = loginUserInfo.getNo();
+int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
 	
