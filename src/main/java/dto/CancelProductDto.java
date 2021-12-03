@@ -1,5 +1,7 @@
 package dto;
 
+import java.util.Date;
+
 /**
  * 주문 취소 시에 필요한 정보들을 모아놓은 Dto다
  * 마이페이지 -> 주문취소 클릭 시에 정보 확인 가능
@@ -7,6 +9,12 @@ package dto;
  *
  */
 public class CancelProductDto {
+	private int orderNo;
+	private String orderStatus;
+	private Date orderDate;
+	private Date canceledDate;
+	private String canceledReason;
+	private int totalPrice;
 	private int productNo;
 	private String photo;
 	private String brand;
@@ -18,6 +26,42 @@ public class CancelProductDto {
 	private int productDetailNo;
 	private int stock;
 	
+	public int getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(int orderNo) {
+		this.orderNo = orderNo;
+	}
+	public String getCanceledReason() {
+		return canceledReason;
+	}
+	public void setCanceledReason(String canceledReason) {
+		this.canceledReason = canceledReason;
+	}
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+	public Date getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+	public Date getCanceledDate() {
+		return canceledDate;
+	}
+	public void setCanceledDate(Date canceledDate) {
+		this.canceledDate = canceledDate;
+	}
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 	public int getProductNo() {
 		return productNo;
 	}

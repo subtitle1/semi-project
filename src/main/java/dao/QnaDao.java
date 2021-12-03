@@ -150,7 +150,7 @@ public class QnaDao {
 	            + "    and p.product_no = q.product_no) "
 	            + "where rn >= ? and rn <= ? "
 	            + "and member_no = ? "
-	            + "order by question_date desc ";
+	            + "order by question_no desc ";
 		
 		List<QnADetailDto> qnADetailList = new ArrayList<>();
 		
