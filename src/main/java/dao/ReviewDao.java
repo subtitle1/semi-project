@@ -14,6 +14,7 @@ import java.util.List;
 import dto.ReviewDetailDto;
 import vo.Product;
 import vo.Review;
+import vo.ReviewLiker;
 import vo.Member;
 
 /**
@@ -74,6 +75,29 @@ public class ReviewDao {
 			pstmt.close();
 			connection.close();
 		}
+
+		/**
+		 * 좋아요 갯수를 증가시킨다.
+		 * @param review
+		 * @throws SQLException
+		 */
+		public void updateLikeCount(Review review) throws SQLException {
+			String sql = "update tb_reviews "
+					+ "set "
+					+ "	review_like_count = ? "
+					+ "where review_no= ? ";
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			
+			pstmt.setInt(1, review.getLikeCount());
+			pstmt.setInt(2, review.getNo());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			connection.close();
+		}
 		
 		/**
 		 * 지정된 번호의 리뷰를 삭제한다.
@@ -96,6 +120,58 @@ public class ReviewDao {
 			connection.close();
 		}
 		
+		
+		/**
+		 * 게시글 추천 정보를 저장한다.
+		 * @param reviewLiker
+		 * @throws SQLException
+		 */
+		public void insertReviewLiker(ReviewLiker reviewLiker) throws SQLException {
+			String sql = "insert into tb_review_likers (review_no, member_no) "
+					   + "values (?, ?) ";
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, reviewLiker.getReviewNo());
+			pstmt.setInt(2, reviewLiker.getMemberNo());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			connection.close();
+		}
+		
+		/**
+		 *  지정된 글번호와 사용자번호로 추천정보를 조회해서 반환한다.
+		 * @param reviewNo
+		 * @param memberNo
+		 * @return
+		 * @throws SQLException
+		 */
+		public ReviewLiker selectReviewLiker(int reviewNo, int memberNo) throws SQLException {
+			String sql = "select review_no, member_no "
+					   + "from tb_review_likers "
+					   + "where review_no = ? and member_no = ? ";
+			
+			ReviewLiker reviewLiker = null;
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, reviewNo);
+			pstmt.setInt(2, memberNo);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				reviewLiker = new ReviewLiker();
+				reviewLiker.setReviewNo(rs.getInt("review_no"));
+				reviewLiker.setMemberNo(rs.getInt("member_no"));	
+			}
+			rs.close();
+			pstmt.close();
+			connection.close();
+			
+			return reviewLiker;
+		}
+		
 		/**
 		 * 회원번호로 지장된 리뷰정보의 갯수를 반환한다.
 		 * @return 리뷰 정보 갯수
@@ -103,8 +179,9 @@ public class ReviewDao {
 		 */
 		public int selectTotalReviewCountByMemberNo(int memberNo) throws SQLException {
 			String sql = "select count(*) cnt "
-					   + "from tb_reviews "
-					   + "where member_no = ? ";
+					   + "from tb_reviews  "
+					   + "where member_no = ? "
+					   + "and review_deleted = 'N' ";
 			
 			int totalRecords = 0;
 			
@@ -324,6 +401,37 @@ public class ReviewDao {
 			connection.close();
 			
 			return reviewDetailDto;
+		}
+		
+		/**
+		 * 리뷰번호로 작성자와 좋아요 갯수를 조회한다.
+		 * @param reviewNo 리뷰번호
+		 * @return
+		 * @throws SQLException
+		 */
+		public Review selectReviewByReviewNo(int reviewNo) throws SQLException{
+			String sql = "select member_no, review_like_count "
+					   + "from tb_reviews "
+					   + "where review_no = ? ";			
+			
+			Review review = null;
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, reviewNo);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				review = new Review();
+
+				review.setLikeCount(rs.getInt("review_like_count"));
+				review.setMemberNo(rs.getInt("member_no"));
+
+			}
+			rs.close();
+			pstmt.close();
+			connection.close();			
+			
+			return review;
 		}
 		
 		/**
