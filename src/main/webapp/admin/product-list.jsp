@@ -1,3 +1,6 @@
+<%@page import="vo.Criteria2"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
+<%@page import="org.apache.commons.lang3.math.NumberUtils"%>
 <%@page import="vo.Pagination2"%>
 <%@page import="vo.Product"%>
 <%@page import="dao.ProductDao"%>
@@ -19,18 +22,34 @@
 
 <%
 ProductDao productDao = ProductDao.getInstance();
-	// 요청파라미터에서 pageNo값을 조회한다.
-	// 요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
-	String pageNo = request.getParameter("pgno");
+//요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
+	int pageNo = NumberUtils.toInt(request.getParameter("page"), 1);
+	String option = StringUtils.defaultString(request.getParameter("option"), "");
+	String keyword = StringUtils.defaultString(request.getParameter("keyword"), "");
 	
+	Criteria2 criteria = new Criteria2();
+	
+	// 검색옵션과 검색키워드가 모두 있는 경우에만 Criteria객체에 검색옵션과 검색 키워드를 저장한다.
+    if (!StringUtils.isEmpty(option) && !StringUtils.isEmpty(keyword)) {
+      	criteria.setOption(option);
+      	criteria.setKeyword(keyword);
+    }
+	
+
 	// 총 데이터 갯수를 조회한다.
-	int totalRecords = productDao.selectTotalProductsCount();
-	
+	 	int totalRecords = productDao.selectTotalProductsCountByCriteria(criteria);
+
 	// 페이징 처리 필요한 값을 계산하는 Paginatition객체를 생성한다.
 	Pagination2 pagination = new Pagination2(pageNo, totalRecords);
 	
+	
+	 // 게시글 리스틀 조회할 때 필요한 조회범위를 Criteria객체에 저장한다.
+    criteria.setBeginIndex(pagination.getBeginIndex());
+    criteria.setEndIndex(pagination.getEndIndex());
+
+    
 	// 현재 페이지번호에 해당하는 게시글 목록을 조회한다.
-	List<Product> productList = productDao.selectAllProducts(pagination.getBegin(), pagination.getEnd());
+	List<Product> productList = productDao.selectAllProductsByCriteria(criteria);
 %>	
 <div class="container">    
 <div class="row">
@@ -131,12 +150,16 @@ if (product.getDisPrice() == 0) {
 						Pagination객체가 제공하는 isExistPrev()는 이전 블록이 존재하는 경우 true를 반환한다.
 						Pagination객체가 제공하는 getPrevPage()는 이전 블록의 마지막 페이지값을 반환한다.
 					 -->
-					<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>"><a class="page-link" href="product-list.jsp?pageNo=<%=pagination.getPrevPage()%>" >이전</a></li>
+					<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>">
+					<a href="" class="page-link" onclick="moveToPage(event, <%=pagination.getPrev()%>)" >이전</a>
+					</li>
 <%
 	// Pagination 객체로부터 해당 페이지 블록의 시작 페이지번호와 끝 페이지번호만큼 페이지내비게이션 정보를 표시한다.
-	for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+	for (int num = pagination.getBegin(); num <= pagination.getEnd(); num++) {
 %>					
-					<li class="page-item <%=pagination.getPageNo() == num ? "active" : "" %>"><a class="page-link" href="product-list.jsp?pgno=<%=num%>"><%=num %></a></li>
+						<li class="page-item <%=num == pagination.getPage() ? "active" : ""%>">
+						<a href="" class="page-link" onclick="moveToPage(event, <%=num%>)"><%=num%></a>
+					</li>
 <%
 	}
 %>					
@@ -144,16 +167,63 @@ if (product.getDisPrice() == 0) {
 						Pagination객체가 제공하는 isExistNext()는 다음 블록이 존재하는 경우 true를 반환한다.
 						Pagination객체가 제공하는 getNexPage()는 다음 블록의 첫 페이지값을 반환한다.
 					 -->
-					<li class="page-item <%=!pagination.isExistNext() ? "disabled" :"" %>"><a class="page-link" href="product-list.jsp?pageNo=<%=pagination.getNextPage()%>" >다음</a></li>
+					<li class="page-item <%=!pagination.isExistNext() ? "disabled" : "" %>">
+					<a href="" class="page-link" onclick="moveToPage(event, <%=pagination.getNext()%>)">다음</a></li>
 				</ul>
 			</nav>
 		</div>
 	</div>
 </div>
-		
+		<div class="row mb-3">
+			<div class="col">
+				<!--  
+					페이징처리와 검색에 필요한 값을 서버로 제출할 때 사용하는 폼이다.
+					페이지번호를 클릭하거나 검색버튼을 클릭하면 폼의 입력요소에 적절한 값을 설정하고, 폼 입력값을 제출한다.
+					
+					검색옵션과 검색어가 존재하면 해당 해당 옵션이 선택되고, 검색어가 입력필드에 표시된다.
+				-->
+				<form id="form-search" class="row row-cols-lg-auto g-3" method="get" action="product-list.jsp">
+					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
+					<div class="col-2 offset-3">
+						<div class="input-group">
+							<select class="form-select" id="search-option" name="option">
+								<option value="name" <%="name".equals(option) ? "selected" : ""%>>상품이름</option>
+								<option value="brand" <%="brand".equals(option) ? "selected" : ""%>>브랜드</option>
+								<option value="category" <%="category".equals(option) ? "selected" : ""%>>카테고리</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="input-group">
+							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
+						</div>
+					</div>
+					<div class="col-2">
+						<div class="input-group">
+							<button class="btn btn-primary" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 </div>	
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+//페이지번호를 클릭했을 때 실행되는 함수
+function moveToPage(event, page) {
+	event.preventDefault();	// a태그에서 onclick이벤트가 발생하면 href에 정의된 주소로 이동하는 기본동작이 일어나지 않게 함.
+	searchBoards(page);
+}
+
+//검색버튼을 클릭했을 때 실행되는 함수
+function searchBoards(page) {
+	document.getElementById("page-field").value = page;
+	var form = document.getElementById("form-search");
+	form.submit();
+} 
+
+</script>
 </body>
 </html>

@@ -13,6 +13,9 @@ public class OrderDetailDto {
     private Date orderDate; //주문날짜
     private int totalPrice; //총액
     private String reviewStatus; //리뷰상태
+    private String cancelReason;
+	private String cancelStatus;
+	private Date canceledDate;
    
     private int memberNo;   //회원번호
     private String memberId;  //회원아이디
@@ -31,6 +34,24 @@ public class OrderDetailDto {
     private String brand;
     private String gender;
    
+	public String getCancelReason() {
+		return cancelReason;
+	}
+	public void setCancelReason(String cancelReason) {
+		this.cancelReason = cancelReason;
+	}
+	public String getCancelStatus() {
+		return cancelStatus;
+	}
+	public void setCancelStatus(String cancelStatus) {
+		this.cancelStatus = cancelStatus;
+	}
+	public Date getCanceledDate() {
+		return canceledDate;
+	}
+	public void setCanceledDate(Date canceledDate) {
+		this.canceledDate = canceledDate;
+	}
 	public int getOrderNo() {
 		return orderNo;
 	}

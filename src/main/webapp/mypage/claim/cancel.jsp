@@ -1,3 +1,4 @@
+<%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.Date"%>
 <%@page import="dao.MemberDao"%>
 <%@page import="vo.Stock"%>
@@ -30,8 +31,8 @@
 		Stock stock = stockDao.selectStockByProductDetailNo(stockNo);
 		
 		// 주문번호와 재고번호에 해당하는 취소주문정보를 가져온다
-		CancelProductDto product = orderDao.selectCanceledProductDetailByOrderNoAndStockNo(orderNo, stockNo);
-		stock.setStock(stock.getStock() + product.getAmount());
+		OrderDetailDto orderItem = orderDao.selectOrderDetailByOrderNoAndStockNo(orderNo, stockNo);
+		stock.setStock(stock.getStock() + orderItem.getAmount());
 		
 		stockDao.updateStock(stock);
 	}
