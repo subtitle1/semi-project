@@ -1,4 +1,3 @@
-        
 <%@page import="vo.Pagination"%>
 <%@page import="dto.ReviewDetailDto"%>
 <%@page import="java.util.List"%>
@@ -82,7 +81,9 @@
 	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(member.getNo());
 	Pagination pagination = new Pagination(pageNo, totalRecords);
 	
-	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByMemberNo(member.getNo());
+
+	List<ReviewDetailDto> reviewDetails = reviewDao.getReviewListByMemberNo(pagination.getBegin(), pagination.getEnd(), member.getNo());
+
 	if (reviewDetails.isEmpty()) {
 %>
 						<div class="p-5">
@@ -153,5 +154,3 @@
 <%@ include file="/common/footer.jsp" %>
 </body>
 </html>
-
-    

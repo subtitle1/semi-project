@@ -5,10 +5,21 @@ public class OrderItem {
 	private int orderNo;
 	private int stockNo;
 	private int amount;
+	private String reviewStatus;
 	
 	public OrderItem() {}
 
 	
+	public String getReviewStatus() {
+		return reviewStatus;
+	}
+
+
+	public void setReviewStatus(String reviewStatus) {
+		this.reviewStatus = reviewStatus;
+	}
+
+
 	public int getOrderNo() {
 		return orderNo;
 	}

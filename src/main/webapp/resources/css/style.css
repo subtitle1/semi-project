@@ -4,6 +4,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 
+ .hot-deal{
+               animation:blink;
+               animation-duration:1.5s;
+               animation-direction:alternate;
+               animation-iteration-count: infinite;
+            }
+            @keyframes blink {
+               0% {
+                  color:#000;
+               }
+               
+               50% {
+                  color: #ee1c25;
+                  text-shadow: 1px 0 1px rgba(238, 28, 37, .4);
+               }
+               
+               100% {
+                  color: #ee1c25;
+                  text-shadow: 1px 0 1px rgba(238, 28, 37, .7);
+               }
+            }
+
+
+
 /* common */
 h1,
 p,

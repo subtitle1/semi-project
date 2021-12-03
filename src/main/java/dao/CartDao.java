@@ -157,8 +157,8 @@ public class CartDao {
 	public List<CartDetailDto> selectCartList(int memberNo) throws SQLException {
 		
 		String sql = "select C.cart_no, C.product_amount, C.member_no, "
-				   + "P.product_no, P.product_name, P.product_img, P.product_brand, P.product_price, P.product_disprice, "
-				   + "S.product_size, S.product_stock "
+				   + "P.product_name, P.product_img, P.product_brand, P.product_price, P.product_disprice, "
+				   + "S.product_detail_no, S.product_size, S.product_stock "
 				   + "from tb_carts C, tb_products P, tb_product_stocks S, tb_members M "
 				   + "where C.product_detail_no = S.product_detail_no and P.product_no = S.product_no and C.member_no = M.member_no "
 				   + "and C.member_no = ? ";
@@ -176,7 +176,7 @@ public class CartDao {
 			cartDetail.setNo(rs.getInt("cart_no"));
 			cartDetail.setAmount(rs.getInt("product_amount"));
 			cartDetail.setMemberNo(rs.getInt("member_no"));
-			cartDetail.setProductNo(rs.getInt("product_no"));
+			cartDetail.setStockNo(rs.getInt("product_detail_no"));
 			cartDetail.setProductName(rs.getString("product_name"));
 			cartDetail.setProductImg(rs.getString("product_img"));
 			cartDetail.setProductBrand(rs.getString("product_brand"));

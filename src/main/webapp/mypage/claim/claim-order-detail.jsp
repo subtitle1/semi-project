@@ -52,7 +52,10 @@
 				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
 				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">주문 취소</a></li>
+
+
+				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
+
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
 			<ul class="nav flex-column p-0">
@@ -88,9 +91,23 @@
 					<div class="col mt-1">
 						<span><%=order.getStatus() %></span>
 					</div>
-					<div class="col text-end mt-1">
-						<a style="text-decoration: none; color:white;" href="claim-cancel-request.jsp?orderNo=<%=order.getNo() %>"><button type="button" class=" btn-dark btn-sm" >전체주문취소</button></a>
-					</div>
+<%
+   if ("Y".equals(order.getCancelStatus())) {
+%>
+               <div class="col text-end mt-1">
+                  <span>취소날짜</span>
+                  <span><%=order.getCanceledDate() %></span>
+               </div>
+<%
+   } else {
+%>
+               <div class="col text-end mt-1">
+                  <a style="text-decoration: none; color:white;" href="claim-cancel-request.jsp?orderNo=<%=order.getNo() %>">
+                  <button type="button" class=" btn-dark btn-sm" >전체주문취소</button></a>
+               </div>
+<%
+   }
+%>
 				</div>
 			</div>
 			<div class="order-list">
@@ -127,7 +144,8 @@
 						
 <%
 	if (orderDetail.getDisPrice() > 0) {
-	%>						<div class="col mt-3">
+%>						
+							<div class="col mt-3">
 								<div class="text-center">
 									<span  style="text-decoration:line-through;"><%=orderDetail.getPrice() %>원</span>
 								</div>
@@ -142,17 +160,16 @@
 								<span><%=orderDetail.getPrice() %>원</span>
 							</div>
 <%		
-	}
+	}	
 %>
 							<div class="col mt-4 text-end">
 								<span style="font-weight: bold;"><%=order.getStatus() %></span>
 							</div>
-							<!-- 
-								리뷰 작성 상태가 Y면 버튼 상태 disabled로 만들기 
-								N이면 reviewform으로 이동
-							-->
+
 							<div class="col mt-3 text-end mt-1">
-								<button type="button" class="btn btn-dark btn-sm" onclick="goReview(<%=orderDetail.getProductNo() %>,<%=orderDetail.getSize()%>)">리뷰 작성</button>
+
+								<button type="button" class="btn btn-dark btn-sm <%="Y".equals(orderDetail.getReviewStatus()) && "Y".equals(order.getCancelStatus()) ? "disabled" : "" %>" 
+                         onclick="goReview(<%=orderDetail.getProductNo() %>,<%=orderDetail.getSize()%>)">리뷰 작성</button>
 							</div>
 						</div>
 <%

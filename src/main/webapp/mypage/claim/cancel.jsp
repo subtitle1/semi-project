@@ -1,17 +1,17 @@
+<%@page import="java.util.Date"%>
 <%@page import="dao.MemberDao"%>
 <%@page import="vo.Stock"%>
 <%@page import="vo.Order"%>
 <%@page import="dto.CancelProductDto"%>
 <%@page import="vo.Member"%>
-<%@page import="vo.Product"%>
 <%@page import="dao.StockDao"%>
 <%@page import="dao.ProductDao"%>
-<%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.OrderDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <%
+
 	Member member = (Member) session.getAttribute("LOGIN_USER_INFO");
 
 	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
@@ -19,44 +19,31 @@
 	String reason = request.getParameter("cancelReason");
 	
 	OrderDao orderDao = OrderDao.getInstance();
-	ProductDao productDao = ProductDao.getInstance();
 	StockDao stockDao = StockDao.getInstance();
 	
+	// stockNo로 가져온 번호를 하나씩 조회한다
 	int stockNo = 0;
 	for (int i = 0; i < values.length; i++) {
 		stockNo = Integer.parseInt(values[i]);
+		
+		// stockNo로 재고 정보를 가져온다
+		Stock stock = stockDao.selectStockByProductDetailNo(stockNo);
+		
+		// 주문번호와 재고번호에 해당하는 취소주문정보를 가져온다
+		CancelProductDto product = orderDao.selectCanceledProductDetailByOrderNoAndStockNo(orderNo, stockNo);
+		stock.setStock(stock.getStock() + product.getAmount());
+		
+		stockDao.updateStock(stock);
 	}
-
-	// product, order, stock 정보 조회
-	CancelProductDto product = productDao.selectProductDetailByOrderNoAndStockNo(orderNo, stockNo);
+	
 	Order order = orderDao.selectOrderByOrderNo(orderNo);
-	Stock stock = stockDao.selectStockByProductDetailNo(stockNo);
+	order.setStatus("주문취소");
+	order.setCancelReason(reason);
+	order.setCancelStatus("Y");
+	order.setCanceledDate(new Date());
 	
-	System.out.println(product);
-	System.out.println(order);
-	System.out.println(stock);
+	orderDao.updateOrder(order);
 	
-	// 아래 메소드로 stock, order_item, product 총 세개의 테이블 조회 가능
-	List<OrderDetailDto> orderDetails = orderDao.selectOrderDetailByItems(orderNo, stockNo);
-	for (OrderDetailDto orderDetail : orderDetails) {
-		order.setStatus("주문취소");
-		order.setCancelReason(reason);
-		order.setCancelStatus("Y");
-		
-		if (product.getDisprice() > 0) {
-			order.setTotalPrice(order.getTotalPrice() - product.getDisprice());
-		} else {
-			order.setTotalPrice(order.getTotalPrice() - product.getPrice());
-		}
-		
-		stock.setNo(orderDetail.getProductDetailNo());
-		stock.setStock(stock.getStock() - orderDetail.getAmount());
-		
-		// orderDao.updateOrder(order);
-		// stockDao.updateStock(stock);
-		
-		System.out.println();
-		System.out.println(order);
-		System.out.println(stock);
-	}
+
+	response.sendRedirect("../claim/claim-order-main.jsp?claimCancel=canceled");
 %>
