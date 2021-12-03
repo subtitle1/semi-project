@@ -12,6 +12,7 @@ import java.util.List;
 
 import dto.Criteria;
 import dto.ProductDetailDto;
+import vo.Criteria2;
 import vo.Product;
 
 public class ProductDao {
@@ -26,6 +27,7 @@ public class ProductDao {
 		String sql = "select count(*) cnt "
 				   + "from tb_products";
 		
+		
 		int totalRecords = 0;
 		
 		Connection connection = getConnection();
@@ -36,6 +38,90 @@ public class ProductDao {
 
     return totalRecords;
 	}
+	
+	public List<Product> selectAllProductsByCriteria(Criteria2 criteria) throws SQLException {
+		String sql = "select product_no, product_name, product_img, product_price, "
+				+ "product_disprice, product_brand, "
+				+ "product_category, product_created_date, product_gender "
+				+ " from (select row_number() over (order by product_no asc) rn, "
+				+ "product_no, product_name, product_img, product_price, "
+				+ "product_disprice, product_brand, "
+				+ "product_category, product_created_date, product_gender "
+				+ "from tb_products ";
+				if ("name".equals(criteria.getOption())) {	
+					sql += "        where product_name like '%' || ? || '%' ";
+				} else if ("brand".equals(criteria.getOption())) {
+					sql += "        where product_brand like '%' || ? || '%' ";
+				} else if ("category".equals(criteria.getOption())) {
+					sql += "        where product_category like '%' || ? || '%' ";
+				}	sql += "    ) where rn >= ? and rn <= ? order by product_no desc ";
+				
+				List<Product> products = new ArrayList<>();
+				Connection connection = getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(sql.toString());
+				if (criteria.getOption() != null) {
+					pstmt.setString(1, criteria.getKeyword());
+					pstmt.setInt(2, criteria.getBeginIndex());
+					pstmt.setInt(3, criteria.getEndIndex());
+				} else {
+					pstmt.setInt(1, criteria.getBeginIndex());
+					pstmt.setInt(2, criteria.getEndIndex());
+				}
+				ResultSet rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					Product product = new Product();
+					product.setNo(rs.getInt("product_no"));
+					product.setName(rs.getString("product_name"));
+					product.setPhoto(rs.getString("product_img"));
+					product.setName(rs.getString("product_name"));
+					product.setPrice(rs.getInt("product_price"));
+					product.setDisPrice(rs.getInt("product_disprice"));
+					product.setBrand(rs.getString("product_brand"));
+					product.setCategory(rs.getString("product_category"));
+					product.setGender(rs.getString("product_gender"));
+					product.setCreatedDate(rs.getDate("product_created_date"));
+				
+					products.add(product);
+				}
+				rs.close();
+				pstmt.close();
+				connection.close();
+				
+				return products;
+				
+		
+	}
+	
+	public int selectTotalProductsCountByCriteria(Criteria2 criteria) throws SQLException {
+		String sql = "select count(*) cnt "
+				+ "   from (select product_no, product_name, product_img, product_price, "
+				+ "		product_disprice, product_brand, "
+				+ "		product_category, product_created_date, product_gender "
+				+ "		from tb_products ";
+			if ("name".equals(criteria.getOption())) {	
+				sql += "        where product_name like '%' || ? || '%' ";
+			} else if ("brand".equals(criteria.getOption())) {
+				sql += "        where product_brand like '%' || ? || '%' ";
+			} else if ("category".equals(criteria.getOption())) {
+				sql += "        where product_category like '%' || ? || '%' ";
+			}	sql += "    )";
+		
+		
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+		} 
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+
+    return totalRecords;
+	}
+	
 	
 	/**
 	 * 프로덕트 객체를 db에 입력하는 메소드
@@ -66,27 +152,77 @@ public class ProductDao {
 		connection.close();
 	}
 	
-	public List<ProductDetailDto> selectAllProductDetail(int begin, int end) throws SQLException{
+	
+	public int getTotalProductDetailRows(Criteria2 criteria) throws SQLException {
+		int totalRows = 0;
+		String sql = "select count(*) cnt "
+				+ "   from (select p.product_no, p.product_name, p.product_img, p.product_price, "
+				+ "		p.product_disprice, p.product_brand, "
+				+ "		p.product_category, p.product_created_date, p.product_gender, "
+				+ "		s.product_detail_no, s.product_size, s.product_stock "
+				+ "		from tb_products p, tb_product_stocks s "
+				+ "		where p.product_no = s.product_no ";
+			if ("name".equals(criteria.getOption())) {	
+				sql += "        and product_name like '%' || ? || '%' ";
+			} else if ("brand".equals(criteria.getOption())) {
+				sql += "        and product_brand like '%' || ? || '%' ";
+			} else if ("category".equals(criteria.getOption())) {
+				sql += "        and product_category like '%' || ? || '%' ";
+			}	sql += "    )";
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			if (criteria.getOption() != null) {
+				pstmt.setString(1, criteria.getKeyword());
+			} 
+			
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			totalRows = rs.getInt("cnt");
+			
+			rs.close();
+			pstmt.close();
+			connection.close();
+
+			return totalRows;
+			
+		}
+	
+	public List<ProductDetailDto> selectAllProductDetail(Criteria2 criteria) throws SQLException{
 		String sql = "select product_no, product_name, product_img, product_price, "
 				+ "product_disprice, product_brand, "
 				+ "product_category, product_created_date, product_gender, "
 				+ "product_detail_no, product_size, product_stock "
-				+ "from (select row_number() over (order by p.product_no asc) rn, "
+				+ "from (select row_number() over (order by p.product_no desc) rn, "
 				+" p.product_no, p.product_name, p.product_img, p.product_price, "
 						+ "p.product_disprice, p.product_brand, "
 						+ "p.product_category, p.product_created_date, p.product_gender, "
 						+ "s.product_detail_no, s.product_size, s.product_stock "
 				   + "from tb_products p, tb_product_stocks s "
-				   + "where p.product_no = s.product_no) "
+				   + "where p.product_no = s.product_no ";
+		if ("name".equals(criteria.getOption())) {
+				sql += "        and product_name like '%' || ? || '%' ";
+		} else if ("brand".equals(criteria.getOption())) {
+				sql += "        and product_brand like '%' || ? || '%' ";
+		} else if ("category".equals(criteria.getOption())) {
+				sql += "        and product_category like '%' || ? || '%' ";
+		}
+				sql += "            ) "	
 				   + "where rn >= ? and rn <= ? "
-				   + "order by product_no asc ";
+				   + "order by product_no desc ";
 		
 		List<ProductDetailDto> productDetails = new ArrayList<>();
 		
 		Connection connection = getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, begin);
-		pstmt.setInt(2, end);
+		PreparedStatement pstmt = connection.prepareStatement(sql.toString());
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+			pstmt.setInt(2, criteria.getBeginIndex());
+			pstmt.setInt(3, criteria.getEndIndex());
+		} else {
+			pstmt.setInt(1, criteria.getBeginIndex());
+			pstmt.setInt(2, criteria.getEndIndex());
+		}
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
@@ -163,7 +299,7 @@ public class ProductDao {
 	 * @throws SQLException
 	 */
 	public List<Product> selectAllProducts(int begin, int end) throws SQLException{
-		List<Product> products = new ArrayList<>();
+		
 		
 		String sql = "select product_no, product_name, product_img, product_price, "
 				 + "product_disprice, product_brand, "
@@ -176,7 +312,7 @@ public class ProductDao {
 		   + "where rn >= ? and rn <= ? "
 		   + "order by product_no desc ";
 		
-	
+		List<Product> products = new ArrayList<>();
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		pstmt.setInt(1, begin);
