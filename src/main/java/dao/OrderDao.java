@@ -62,11 +62,12 @@ public class OrderDao {
 			orderDetail.setMemberNo(rs.getInt("member_no"));
 			orderDetail.setMemberId(rs.getString("member_id"));
 			orderDetail.setMemberName(rs.getString("member_name"));
+
 			
 			orderDetail.setProductDetailNo(rs.getInt("product_detail_no"));
 			orderDetail.setAmount(rs.getInt("product_amount"));
 			orderDetail.setSize(rs.getInt("product_size"));
-			
+      
 			orderDetail.setProductNo(rs.getInt("product_no"));
 			orderDetail.setProductName(rs.getString("product_name"));
 			orderDetail.setCategory(rs.getString("product_category"));

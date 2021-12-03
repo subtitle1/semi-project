@@ -3,7 +3,6 @@
 <%@page import="dao.MemberDao"%>
 <%@page import="vo.Stock"%>
 <%@page import="vo.Order"%>
-<%@page import="dto.CancelProductDto"%>
 <%@page import="vo.Member"%>
 <%@page import="dao.StockDao"%>
 <%@page import="dao.ProductDao"%>
@@ -45,6 +44,5 @@
 	
 	orderDao.updateOrder(order);
 	
-
 	response.sendRedirect("../claim/claim-order-main.jsp?claimCancel=canceled");
 %>

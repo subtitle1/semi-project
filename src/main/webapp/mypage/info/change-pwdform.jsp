@@ -8,7 +8,7 @@
 
 	String pwd = request.getParameter("pwd");
 	
-	if(pwd != null && pwd.isBlank()) {
+	if(pwd == null && pwd.isBlank()) {
 		response.sendRedirect("change-pwd.jsp?error=empty-pwd");
 		return;
 	}

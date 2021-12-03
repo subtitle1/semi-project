@@ -1,7 +1,7 @@
+<%@page import="dao.OrderDao"%>
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Order"%>
-<%@page import="dao.OrderDao"%>
 <%@page import="dao.MemberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -17,16 +17,16 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <div class="container">    
-	<%
-	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
+<%
+   	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 
-	int memberNo = loginUserInfo.getNo();
-	MemberDao memberDao = MemberDao.getInstance();
-	Member member = memberDao.selectMemberByNo(memberNo);
-	
-	OrderDao orderDao = OrderDao.getInstance();
-	Order order = orderDao.selectOrderByOrderNo(orderNo);
-%>
+   		int memberNo = loginUserInfo.getNo();
+   		MemberDao memberDao = MemberDao.getInstance();
+   		Member member = memberDao.selectMemberByNo(memberNo);
+   		
+   		OrderDao orderDao = OrderDao.getInstance();
+   		Order order = orderDao.selectOrderByOrderNo(orderNo);
+   	%>
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">

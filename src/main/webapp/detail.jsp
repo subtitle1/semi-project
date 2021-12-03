@@ -111,7 +111,8 @@
 <%
 	ReviewDao reviewDao = ReviewDao.getInstance();
 	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByProductNo(productNo);
-
+	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(loginUserInfo.getNo());
+	
 	if (reviewDetails.isEmpty()) {
 %>
 					<div class="p-5">
@@ -121,7 +122,7 @@
 	} else {
 %>
 					<div class="col mt-2 mb-3s">
-						<span style="margin-left: 5px;">총 <%=reviewDetails.size()%>건의
+						<span style="margin-left: 5px;">총 <%=totalRecords%>건의
 							상품 후기가 있습니다.
 						</span>
 					</div>
@@ -146,12 +147,26 @@
 											<div><%=detail.getSize()%></div>
 										</div>
 									</div>
+<%
+			if( loginUserInfo == null){ 
+%>									
 									<div class="col-2 mt-3 ">
-										<button type="button" class="btn btn-outline-danger btn-sm rounded-pill">
+										<button type="button" class="btn btn-outline-danger btn-sm rounded-pill" onclick="needLogin()" value="alert">
 									  		likes <span class="badge rounded-pill bg-danger"><%=detail.getLikeCount() %></span>
 										</button>
 									</div>
-									<div class="col-2 mt-4 text-end">
+<%
+			} else {
+%>
+									<div class="col-2 mt-3 ">
+										<button type="button" class="btn btn-outline-danger btn-sm rounded-pill" onclick="likeCount(<%=detail.getReviewNo()%>,<%=productNo%>)">
+									  		likes <span class="badge rounded-pill bg-danger"><%=detail.getLikeCount() %></span>
+										</button>
+									</div>
+<%
+			}
+%>
+									<div class="col-3 mt-4 text-end">
 										<span><strong><%=detail.getId()%></strong> 님</span>
 									</div>
 									<div class="col-2 mt-4 text-end">
@@ -164,10 +179,7 @@
 										<button type=button class="btn-close " arial-label="Close" onclick="deleteReview(<%=detail.getReviewNo()%>,<%=productNo%>)"></button>
 									</div>
 <%
-			}
-%>
-<%
-			if( loginUserInfo == null || loginUserInfo.getNo() != detail.getMemberNo()){ 
+			} else {
 %>
 									<div class="col-1 mt-4 text-center">
 										
@@ -348,7 +360,7 @@
 				count--;
 			} else {
 				count;
-			}
+			}s
 			document.getElementById('count').value = count;
 		}
 
@@ -360,7 +372,7 @@
 
 		function goOrder() {
 			var form = document.getElementById("product-form");
-			form.setAttribute("action", "/semi-project/mypage/shopping-note/completeorder.jsp");
+			form.setAttribute("action", "/semi-project/mypage/shopping-note/order-confirm.jsp");
 			form.submit();
 		}
 		function goReview(no){
@@ -369,6 +381,12 @@
 		}
 		function deleteReview(reviewNo,productNo){
 			location.href="/semi-project/deleteReview.jsp?productNo="+productNo+"&reviewNo="+reviewNo;
+		}
+		function needLogin(productNo){
+			alert('로그인이 필요한 기능입니다.'); 
+		}
+		function likeCount(reviewNo,productNo){
+			location.href="/semi-project/likeCount.jsp?productNo="+productNo+"&reviewNo="+reviewNo;
 		}
 	</script>
 </body>

@@ -36,6 +36,12 @@ List<Product> newProductList = productDao.selectAllProducts(1, 8);
 	alert("탈퇴가 완료되었습니다.");
 </script>
 <%
+	} else if ("undefined".equals(user)) {
+%>
+<script type="text/javascript">
+	alert("로그인 후 이용하실 수 있는 페이지입니다.");
+</script>
+<%
 	}
 %>
 	<!-- 

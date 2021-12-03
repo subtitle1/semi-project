@@ -100,6 +100,7 @@
 					<hr>
 	<% 
 			for (ReviewDetailDto detail : reviewDetails) {
+				if("N".equals(detail.getDeleted())){
 	%>
 					<div class="row">
 			            <div>
@@ -123,6 +124,9 @@
 										<div class="col mt-4 text-end">
 											<span style="font-weight: bold;"><%=detail.getReviewDate() %></span>
 										</div>
+										<div class="col-1 mt-4 text-center">
+											<button type=button class="btn-close " arial-label="Close" onclick="deleteReview(<%=detail.getReviewNo()%>)"></button>
+										</div>										
 										<div class="col mt-3 text-end">
 										<h2 class="accordion-header" id="faq-heading-<%=detail.getReviewNo()%>">
 				                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-<%=detail.getReviewNo()%>">
@@ -142,6 +146,7 @@
 		        	<hr>
 				
 <%
+			}
 		}
 	}
 %>
@@ -151,6 +156,11 @@
 	</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function deleteReview(reviewNo){
+	location.href="/semi-project/mypage/shopping-note/deleteMypageReview.jsp?reviewNo="+reviewNo;
+}
+</script>
 <%@ include file="/common/footer.jsp" %>
 </body>
 </html>
