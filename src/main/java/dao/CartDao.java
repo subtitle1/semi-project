@@ -149,6 +149,51 @@ public class CartDao {
 	}
 	
 	/**
+	 * 장바구니 번호를 통해 장바구니 상세정보를 반환한다.
+	 * @param no 장바구니 번호
+	 * @return 해당 장바구니 정보
+	 * @throws SQLException
+	 */
+	public CartDetailDto selectCartByNo(int no) throws SQLException {
+		
+		String sql = "select C.cart_no, C.product_amount, C.member_no, "
+				   + "P.product_name, P.product_img, P.product_brand, P.product_price, P.product_disprice, "
+				   + "S.product_detail_no, S.product_size, S.product_stock "
+				   + "from tb_carts C, tb_products P, tb_product_stocks S, tb_members M "
+				   + "where C.product_detail_no = S.product_detail_no and P.product_no = S.product_no and C.member_no = M.member_no "
+				   + "and C.cart_no = ? ";
+		
+		CartDetailDto cartDetail = null;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, no);
+		ResultSet rs = pstmt.executeQuery();
+		
+		if(rs.next()) {
+			cartDetail = new CartDetailDto();
+			
+			cartDetail.setNo(rs.getInt("cart_no"));
+			cartDetail.setAmount(rs.getInt("product_amount"));
+			cartDetail.setMemberNo(rs.getInt("member_no"));
+			cartDetail.setStockNo(rs.getInt("product_detail_no"));
+			cartDetail.setProductName(rs.getString("product_name"));
+			cartDetail.setProductImg(rs.getString("product_img"));
+			cartDetail.setProductBrand(rs.getString("product_brand"));
+			cartDetail.setProductPrice(rs.getInt("product_price"));
+			cartDetail.setProductDisprice(rs.getInt("product_disprice"));
+			cartDetail.setProductSize(rs.getInt("product_size"));
+			cartDetail.setProductStock(rs.getInt("product_stock"));
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return cartDetail;
+	}
+	
+	/**
 	 * 회원 번호를 통해 장바구니 정보를 반환한다.
 	 * @param no 회원 번호
 	 * @return 해당 장바구니 정보
