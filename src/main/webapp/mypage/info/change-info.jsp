@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
     <link rel="stylesheet" href="/semi-project/resources/css/style.css" />
-    <title>비밀번호 변경</title>
+    <title>개인정보 수정</title>
 </head>
 <body>
 <%@ include file="/common/navbar.jsp" %>
@@ -66,44 +66,43 @@
 		<div class="offset-md-1 col-9 p-0">
 			<div class="row">
 				<div class="col">
-					<p class="text-head2">비밀번호 변경</p>
-					<form method="get" action="change-pwdform.jsp">
-						<div class="register-box">
-							<div class="pwd-box">
-								<label class="form-label" for="user-password">비밀번호<span>*</span></label>
-								<input class="form-control" type="password" name="pwd" id="user-pwd" placeholder="비밀번호를 입력해주세요." />
+					<p class="text-head2">개인정보 변경</p>
+						<form method="get" action="change-infoform.jsp">
+							<div class="register-box">
+								<div>
+									<label class="form-label" for="user-name">이름</label> <input
+										type="text" class="form-control" name="name" id="user-name"
+										value="<%=loginUserInfo.getName() %>" disabled="disabled">
+								</div>
+								<div>
+									<label class="form-label" for="user-id">아이디</label> <input
+										type="text" class="form-control" name="id" id="user-id"
+										value="<%=loginUserInfo.getId() %>" disabled="disabled" />
+								</div>
+								<div>
+									<label class="form-label" for="user-pwd">비밀번호</label>
+									<input type="password" class="form-control" name="pwd" id="user-pwd" value="<%=loginUserInfo.getPwd() %>" disabled="disabled" />
+								</div>
+								<div>
+									<label class="form-label" for="user-address">주소<span>*</span></label>
+									<input type="text" class="form-control" name="address"
+										id="user-address" placeholder="주소를 입력해주세요." />
+								</div>
+								<div>
+									<label class="form-label" for="user-email">이메일<span>*</span></label>
+									<input type="text" class="form-control" name="email"
+										id="user-email" placeholder="이메일을 입력해주세요." />
+								</div>
+								<div>
+									<label class="form-label" for="user-tel">휴대폰 번호<span>*</span></label>
+									<input type="text" class="form-control" name="tel"
+										id="user-tel" placeholder="휴대폰 번호를 입력해주세요." />
+								</div>
+								<div class="btn-box text-center">
+									<button type="submit" class="btn btn-lg btn-dark">확인</button>
+								</div>
 							</div>
-							<div class="pwd-box">
-								<label class="form-label" for="pwd-confirm">비밀번호 확인<span>*</span></label>
-								<input class="form-control" type="password" name="pwd-confirm" id="pwd-confirm" placeholder="비밀번호를 다시 입력해주세요." />
-							</div>
-<%
-	String error = request.getParameter("error");
-	if ("empty-pwd".equals(error)) {
-%>
-	<script type="text/javascript">
-		alert("비밀번호를 입력해주세요.");
-	</script>
-<%
-	} else if ("empty-pwdconfirm".equals(error)) {
-%>
-	<script type="text/javascript">
-		alert("동일한 비밀번호를 다시한번 입력해주세요.");
-	</script>
-<%
-	} else if ("notmatch-pwd".equals(error)) {
-%>
-	<script type="text/javascript">
-		alert("동일한 비밀번호를 다시한번 입력해주세요.");
-	</script>
-<%
-	}
-%>
-						</div>
-						<div class="btn-box text-center">
-							<button type="submit" class="btn btn-lg btn-dark">확인</button>
-						</div>
-					</form>
+						</form>
 				</div>
 			</div>
 		</div>
