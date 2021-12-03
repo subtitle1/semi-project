@@ -14,7 +14,7 @@ public class Order {
 	private String cancelReason;
 	private String cancelStatus;
 	private Date canceledDate;
-	private String reviewStatus;
+	
 	
 	public Order() {}
 
@@ -82,13 +82,6 @@ public class Order {
 		this.canceledDate = canceledDate;
 	}
 
-	public String getReviewStatus() {
-		return reviewStatus;
-	}
-
-	public void setReviewStatus(String reviewStatus) {
-		this.reviewStatus = reviewStatus;
-	}
 
 	
 

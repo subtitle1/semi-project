@@ -102,7 +102,18 @@ ProductDao productDao = ProductDao.getInstance();
 				<td><%=product.getBrand() %></td>
 				<td><%=product.getGender() %></td>
 				<td><%=product.getPrice() %></td>
+<%
+if (product.getDisPrice() == 0) {
+%> 				
+				
+				<td> - </td>
+<% 
+	} else {
+%>	
 				<td><%=product.getDisPrice() %></td>
+<% 
+	}
+%>				
 				<td><%=product.getCreatedDate() %></td>
 			</tr>
 <% 

@@ -214,13 +214,13 @@ return canceledProduct;
 		String sql = "select product_no, product_name, product_img, product_price, "
 				 + "product_disprice, product_brand, "
 				 + "product_category, product_created_date, product_gender "
-		   + "from (select row_number() over (order by product_created_date desc) rn, "
+		   + "from (select row_number() over (order by product_no desc) rn, "
 		   + "             product_no, product_name, product_img, product_price,  "
 		   + "             product_disprice, product_brand, "
 		   + "			   product_category, product_created_date, product_gender "
 		   + "      from tb_products) "
 		   + "where rn >= ? and rn <= ? "
-		   + "order by product_created_date desc ";
+		   + "order by product_no desc ";
 		
 	
 		Connection connection = getConnection();
