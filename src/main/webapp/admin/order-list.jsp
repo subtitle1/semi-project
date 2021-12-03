@@ -121,14 +121,14 @@ List<OrderDetailDto> orderDetailList = orderDao.selectAllOrderDetail(criteria);
 %>	
 			<tr>
 			
-				<td><a href="order-detail.jsp?no=<%=order.getOrderNo()%>"></td>		
-				<td><%=order.getMemberNo() %></td>		
-				<td><%=order.getTotalPrice() %></td>
+				<td><a href="order-detail.jsp?no=<%=order.getOrderNo()%>"><%=order.getOrderNo()%></td>		
+				<td><%=order.getMemberName() %></td>		
+				<td><%=order.getProductName() %></td>
 				<td><%=order.getStatus()%></td>
 				<td><%=order.getOrderDate() %></td>
 				<td><%=order.getCancelReason() %></td>
 				<td><%=order.getCanceledDate() %></td>
-				<td><%=order.getOrderDate() %></td>
+				
 				
 			</tr>
 <% 
