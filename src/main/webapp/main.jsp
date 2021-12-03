@@ -44,7 +44,7 @@ List<Product> newProductList = productDao.selectAllProducts(1, 8);
 	 -->   
 	<div class="row mb-5 mt-5">
 		<div class="col-3">
-			<h1 class="mb-3">HOT DEAL</h1>
+			<h1 class="mb-3 hot-deal">HOT DEAL</h1>
 			<div>기간한정 특가할인!</div>				
 			<div  class="mb-3" >지금 특별한 가격을 만나보세요!</div>
 			<a href="sale.jsp" class="mt-5"><ins><strong>more</strong></ins></a>				

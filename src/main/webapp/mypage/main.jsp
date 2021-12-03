@@ -23,7 +23,37 @@
 	OrderDao orderDao = OrderDao.getInstance();
 	
 	Member member = memberDao.selectMemberByNo(memberNo);
+	
+	String referer = request.getHeader("referer");
+	String completed = request.getParameter("completed");
+	
+	if (referer == null) {
 %>
+		<script>
+			alert("로그인이 필요한 페이지 입니다.");
+			location.href="../loginform.jsp";
+		</script>
+<%
+		return;
+	}
+	
+	if ("change-info".equals(completed)){
+		
+%>
+	<script type="text/javascript">
+		alert("회원정보 수정이 정상적으로 완료되었습니다.")
+	</script>
+<%
+	}
+	
+	if ("change-pwd".equals(completed)) {
+%>
+		<script>
+			alert("비밀번호 변경이 정상적으로 완료되었습니다.")
+		</script>
+<%
+	}
+%>		
 <div class="container">    
 	<div class="row">
 		<div class="col breadcrumb">
@@ -44,8 +74,8 @@
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="#" class="nav-link p-0">마이페이지</a></li>
-				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
-				<li class=""><a href="info/confirm-password.jsp" class="nav-link p-0">비밀번호 변경</a></li>
+				<li class=""><a href="info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
+				<li class=""><a href="info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../mypage/claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
 				<li class=""><a href="../mypage/claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
 				<li class=""><a href="../mypage/info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>

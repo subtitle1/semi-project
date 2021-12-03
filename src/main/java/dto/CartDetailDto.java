@@ -5,7 +5,7 @@ public class CartDetailDto {
 	private int no;					// 장바구니 번호
 	private int amount;				// 장바구니 수량
 	private int memberNo;			// 회원 번호
-	private int productNo;			// 상품 번호
+	private int stockNo;			// 상품 번호
 	private String productName;		// 상품 이름
 	private String productImg;		// 상품 이미지
 	private String productBrand;	// 상품 제조회사
@@ -40,12 +40,12 @@ public class CartDetailDto {
 		this.memberNo = memberNo;
 	}
 
-	public int getProductNo() {
-		return productNo;
+	public int getStockNo() {
+		return stockNo;
 	}
 
-	public void setProductNo(int productNo) {
-		this.productNo = productNo;
+	public void setStockNo(int stockNo) {
+		this.stockNo = stockNo;
 	}
 
 	public String getProductName() {

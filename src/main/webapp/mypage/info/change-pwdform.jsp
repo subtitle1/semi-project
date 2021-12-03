@@ -7,16 +7,18 @@
 	Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");
 
 	String pwd = request.getParameter("pwd");
+	
+	if(pwd != null && pwd.isBlank()) {
+		response.sendRedirect("change-pwd.jsp?error=empty-pwd");
+		return;
+	}
+	
 	String confirmPwd = request.getParameter("pwd-confirm");
 
 	String secretPwd = DigestUtils.sha256Hex(pwd);
 	String secretConfirmPwd = DigestUtils.sha256Hex(confirmPwd);
 	
 	
-	if(secretPwd.equals(null)) {
-		response.sendRedirect("change-pwd.jsp?error=empty-pwd");
-		return;
-	}
 	
 	if(!secretPwd.equals(secretConfirmPwd)) {
 		response.sendRedirect("change-pwd.jsp?error=notmatch-pwd");
@@ -30,6 +32,6 @@
 	memberDao.updateMemberByPassword(secretPwd, no);
 	
 	
-	response.sendRedirect("../main.jsp?completd=change-pwd");
+	response.sendRedirect("../main.jsp?completed=change-pwd");
 
 %>

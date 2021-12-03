@@ -51,7 +51,9 @@
 				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
 				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
+
 				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
+r
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
 			<ul class="nav flex-column p-0">
@@ -98,8 +100,10 @@
 	} else {
 %>
 					<div class="col text-end mt-1">
+
 						<a style="text-decoration: none; color:white;" href="claim-cancel-request.jsp?orderNo=<%=order.getNo() %>">
 						<button type="button" class=" btn-dark btn-sm" >전체주문취소</button></a>
+
 					</div>
 <%
 	}
