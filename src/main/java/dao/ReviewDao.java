@@ -96,6 +96,31 @@ public class ReviewDao {
 		}
 		
 		/**
+		 * 회원번호로 지장된 리뷰정보의 갯수를 반환한다.
+		 * @return 리뷰 정보 갯수
+		 * @throws SQLException
+		 */
+		public int selectTotalReviewCountByMemberNo(int memberNo) throws SQLException {
+			String sql = "select count(*) cnt "
+					   + "from tb_reviews "
+					   + "where member_no = ? ";
+			
+			int totalRecords = 0;
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, memberNo);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			totalRecords = rs.getInt("cnt");
+			rs.close();
+			pstmt.close();
+			connection.close();
+			
+			return totalRecords;
+		}
+		
+		/**
 		 * 테이블에 저장된 리뷰정보의 갯수를 반환한다.
 		 * @return 리뷰 정보 갯수
 		 * @throws SQLException
@@ -118,7 +143,6 @@ public class ReviewDao {
 			return totalRecords;
 		}
 
-	
 		/**
 		 * 지정된 범위에 속하는 리뷰 정보를 반환한다.
 		 * @param begin 시작 순번번호
