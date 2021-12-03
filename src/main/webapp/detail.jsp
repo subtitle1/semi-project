@@ -111,7 +111,7 @@
 <%
 	ReviewDao reviewDao = ReviewDao.getInstance();
 	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByProductNo(productNo);
-	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(loginUserInfo.getNo());
+//	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(loginUserInfo.getNo());
 	
 	if (reviewDetails.isEmpty()) {
 %>
@@ -122,7 +122,7 @@
 	} else {
 %>
 					<div class="col mt-2 mb-3s">
-						<span style="margin-left: 5px;">총 <%=totalRecords%>건의
+						<span style="margin-left: 5px;">총 건의
 							상품 후기가 있습니다.
 						</span>
 					</div>
