@@ -57,7 +57,7 @@ ProductDao productDao = ProductDao.getInstance();
 			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">관리자페이지</li>
-				<li class="crumb">관리자페이지</li>
+				<li class="crumb">상품목록</li>
 			</ul>
 		</div>
 	</div>

@@ -89,6 +89,7 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 				<td><%=member.getEmail() %></td>
 				<td><%=member.getAddress() %></td>
 				<td><%=member.getPct() %></td>
+				<td><%=member.getRegisteredDate() %></td>
 				<td><%=member.getDeletedDate() %></td>
 			</tr>
 <% 

@@ -1,3 +1,6 @@
+<%@page import="vo.Stock"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.StockDao"%>
 <%@page import="vo.Product"%>
 <%@page import="dao.ProductDao"%>
 <%@page import="dto.ProductDetailDto"%>
@@ -21,6 +24,8 @@ int no = Integer.parseInt(request.getParameter("no"));
 
 ProductDao productDao= ProductDao.getInstance();
 Product product = productDao.selectProductbyNo(no);
+StockDao stockDao = StockDao.getInstance();
+List<Stock> stockList = stockDao.selectStocksbyProductNo(no);
 
 %>
 <div class="container">    
@@ -29,7 +34,8 @@ Product product = productDao.selectProductbyNo(no);
 			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">관리자페이지</li>
-				<li class="crumb">관리자페이지</li>
+				<li class="crumb">상품목록</li>
+				<li class="crumb">상품상세</li>
 			</ul>
 		</div>
 	</div>
@@ -54,37 +60,85 @@ Product product = productDao.selectProductbyNo(no);
 				</ul>
 		</div>	
 		
-		
+<style>
+	.img-box{margin-bottom:20px;}
+	.img-box tr td{vertical-align:middle; text-align:center; max-width:50%;}
+	.table-detail{margin-bottom:20px;}
+	.table-detail tr th, .table tr td{vertical-align:middle; height:35px; border-right:1px solid #dee2e6; font-size:13px;}
+	.table tr td{word-break:keep-all;}
+	.table-detail tr th{text-align:center;}
+	.table-stock tr th, .table-stock tr td{height:35px; border-right:1px solid #dee2e6; font-size:13px; text-align:center;}
+	table tr th:first-child, table tr td:first-child{border-left:none;}
+	table tr th:last-child, table tr td:last-child{border-right:none;}
+</style>		
 		 
 <div class="product_admin_detail mt-5 mb-5 col-9">
-		<div class="row">
- 		<div class="col-4">
-			<img src="/semi-project/resources/images/products/<%=product.getPhoto() %>" width="300" height="300">
+		<div class="row img-box">
+			<div class="col">
+				<table>
+					<colgroup>
+						<col width="40%" />
+						<col width="60%" />
+					</colgroup>
+					<tr>
+						<td>
+							<h1>상품 이미지</h1>
+						</td>
+						<td>
+							<img src="/semi-project/resources/images/products/<%=product.getPhoto() %>" width=100% />
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
-		<div class="col-4">
-		<h4><%=product.getName() %></h4>
-		<h5>by <%=product.getBrand() %></h5>
-		<table style="border-top: 2px solid #000">
-			<tbody>
-			<tr>
-				<th>판매가</th>
-				<td class="price"><%=product.getPrice() %></td>
-			</tr>
-			<tr>
-				<th>할인가격</th>
-				<td><%=product.getDisPrice() %></td>
-			</tr>
-			<tr>
-				<th>상품번호</th>
-				<td><%=product.getNo() %></td>
-			</tr>
-			<tr>
-				<th>카테고리</th>
-				<td><%=product.getCategory() %></td>
-			</tr>
-			</tbody>
-		</table>	
-		</div>	
+		<div class="row">
+ 			<div class="col">
+				<table class="table table-detail" style="border-top: 2px solid #000">
+					<tbody>
+						<tr>
+							<th>상품 이름</th>
+							<th>by</th>
+							<th>판매가</th>
+							<th>할인가격</th>
+							<th>상품번호</th>
+							<th>카테고리</th>
+						</tr>
+						<tr>
+							<td class="text-center"><%=product.getName() %></td>
+							<td class="text-center"><%=product.getBrand() %></td>
+							<td class="price text-center"><%=product.getPrice() %></td>
+							<td class="text-center"><%=product.getDisPrice() %></td>
+							<td class="text-center"><%=product.getNo() %></td>
+							<td class="text-center"><%=product.getCategory() %></td>
+						</tr>
+					</tbody>
+				</table>	
+				<table class="table table-stock" style="border-top: 2px solid #000">
+				
+					<tbody>
+					<tr>
+		<%
+			for (Stock stock : stockList) {
+		%>
+						<th><%=stock.getSize() %>재고량</th>
+		<%
+			}
+		%>			
+					</tr>
+					<tr>
+		<%
+			for (Stock stock : stockList) {
+		%>
+						<td><%=stock.getStock() %></td>
+		<%
+			}
+		%>
+					</tr>
+					<tbody>
+				</table>
+		
+			</div>
+		
 		</div>
 </div>
 </div>

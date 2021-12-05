@@ -1,4 +1,6 @@
 
+<%@page import="org.apache.commons.lang3.ObjectUtils"%>
+<%@page import="org.apache.commons.lang3.time.DateUtils"%>
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="vo.Criteria2"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
@@ -67,7 +69,7 @@ List<OrderDetailDto> orderDetailList = orderDao.selectAllOrderDetail(criteria);
 			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">관리자페이지</li>
-				<li class="crumb">관리자페이지</li>
+				<li class="crumb">주문목록</li>
 			</ul>
 		</div>
 	</div>
@@ -126,8 +128,8 @@ List<OrderDetailDto> orderDetailList = orderDao.selectAllOrderDetail(criteria);
 				<td><%=order.getProductName() %></td>
 				<td><%=order.getStatus()%></td>
 				<td><%=order.getOrderDate() %></td>
-				<td><%=order.getCancelReason() %></td>
-				<td><%=order.getCanceledDate() %></td>
+				<td><%=StringUtils.defaultString(order.getCancelReason(), "") %></td>
+				<td><%=order.getCanceledDate() != null ? order.getCanceledDate() : ""%></td>
 				
 				
 			</tr>
