@@ -1,3 +1,6 @@
+<%@page import="org.apache.commons.lang3.math.NumberUtils"%>
+<%@page import="vo.Pagination3"%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dto.Criteria"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Product"%>
@@ -28,14 +31,19 @@ a{text-decoration:none; color:black;}
 	// 요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
 //	String pageNo = request.getParameter("pageNo");
 
+	// 가격표 천단위로 콤마 표시하기
+	DecimalFormat price = new DecimalFormat("###,###");	
+	
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
 
-
+	// 페이지번호, 검색옵션, 검색키워드를 요청파라미터에서 조회한다.
+    int pageNo = NumberUtils.toInt(request.getParameter("page"), 1);
+	// select할 속성 요청.
 	String brand = request.getParameter("brand");
 	String gender = request.getParameter("gender");
 	String sort = request.getParameter("sort");
-	
+	 
 	Criteria c = new Criteria();
 
 	if( brand != null && !brand.isEmpty()){
@@ -47,36 +55,28 @@ a{text-decoration:none; color:black;}
 	if(sort != null && !sort.isEmpty()) {
 		c.setSort(sort);
 	}
+	// 검색조건에 맞는게시글의 총 갯수를 조회한다.
+	int totalRows = productDao.selectTotalRowsBrandAllProductsByOption(c);
+	// 페이징처리에 필요한정보를 제공하는 Pagination객체를 생성한다.
+	Pagination3 pagination = new Pagination3(pageNo, totalRows);
 	
+	// 상품리스트를 조회할때 필요한 조회범위를 Criteria객체에 저장한다.
+	c.setBegin(pagination.getBegin());
+	c.setEnd(pagination.getEnd());
+	
+	// 검색조건에 맞는 게시글 목록을 조회한다.
 	List<Product> products = productDao.selectProductsBrandAllByOption(c);
 
-
-	
-	
-	// 페이징 처리 필요한 값을 계산하는 Paginatition객체를 생성한다.
-//	Pagination pagination = new Pagination(pageNo, totalRecords);
-	
-	// 현재 페이지번호에 해당하는 게시글 목록을 조회한다.
-//	List<Board> boardList = boardDao.getBoardList(pagination.getBegin(), pagination.getEnd());
 %>
     
-	<div class="mt-2 mb-5 p-2 " >
-			<a href="main.jsp"><strong>HOME</strong></a>
-			<img alt="" src="resources/images/home.png" style="margin:5px; width:20px;">
-			<select class= "border-0 text-center" onchange= "if(this.value) location.href=(this.value);" >
-				<option value="brand.jsp"style="background:lightgray;border:0;padding:15px" >BRAND</option>
-				<option value="list.jsp?category=SNEAKERS">SNEAKERS</option>
-				<option value="list.jsp?category=SPORTS">SPORTS</option>
-				<option value="list.jsp?category=SANDALS">SANDALS</option>
-				<option value="list.jsp?category=LOAFERS">LOAFERS</option>
-			</select>
-	</div>
-    <div class="title mb-5 p-3 ">
+
+    <div class="title mt-5 mb-5 p-5 ">
     	BRAND
     </div>
    	<nav class="navbar navbar-expand-lg navbar-ligth ">
 	<div class="container">
 		<form id="search-form" action="brand.jsp" method="get">
+		<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
 			<div class="collapse navbar-collapse " id="navbar-1">
 				<ul class="navbar-nav" >
 					<li class="nav-item" >
@@ -113,7 +113,7 @@ a{text-decoration:none; color:black;}
 %>
 	<div class="col-3">
     	<div class="card h-100 border-white rounded-0">
-	 		<a href="detail.jsp?no=<%=product.getNo() %>">
+	 		<a href="detail.jsp?no=<%=product.getNo() %>&page=<%=pageNo%>&brand=<%=brand%>&gender=<%=gender%>&sort=<%=sort%>">
       			<img src="resources/images/products/<%=product.getPhoto() %>" class="card-img-top" alt="...">
       <div class="card-body">
         <h6 class="card-title"><strong><%=product.getBrand() %></strong></h6>
@@ -122,14 +122,15 @@ a{text-decoration:none; color:black;}
 	if (product.getDisPrice() > 0) {
 %>
       	  <div class="d-flex justify-content-between">
-	        <span class="col card-text p-1 p"><%=product.getPrice() %> 원</span>
-	        <span class="col card-text  p-1 dp"><%=product.getDisPrice() %> 원</span>
+
+	        <span class="col card-text p-1 p"><%=price.format(product.getPrice()) %> 원</span>
+	        <span class="col card-text  p-1 dp"><%=price.format(product.getDisPrice())%> 원</span>
       	  </div>
 <%
 	} else {
 %>
 	<div class="text-end">
-	        	<span class="col card-text  p-1 dp"><%=product.getPrice() %> 원</span>
+	        	<span class="col card-text  p-1 dp"><%=price.format(product.getPrice())%> 원</span>
       	  </div>
 <%
 	}
@@ -142,6 +143,29 @@ a{text-decoration:none; color:black;}
  }
 %>
 </div>
+		<div class="row mb-3">
+			<div class="col">
+				<ul class="pagination justify-content-center">
+					<li class="page-item <%=pagination.isExistPrev() ? "" : "disabled"%>">
+						<a href="" class="page-link" onclick="moveToPage(event, <%=pagination.getPrev()%>)" >이전</a>
+					</li>
+<%
+	// Pagination객체는 시작페이지번호와 끝 페이지번호를 제공한다.
+	// 해당 범위의 페이지를 화면에 표시하다.
+	for (int num = pagination.getBegin(); num <= pagination.getEnd(); num++) {
+%>
+					<li class="page-item <%=num == pagination.getPage() ? "active" : ""%>">
+						<a href="" class="page-link" onclick="moveToPage(event, <%=num%>)"><%=num%></a>
+					</li>
+<%
+	}
+%>
+					<li class="page-item <%=pagination.isExistNext() ? "" : "disabled"%>">
+						<a href="" class="page-link" onclick="moveToPage(event, <%=pagination.getNext()%>)">다음</a>
+					</li>
+				</ul>
+			</div>
+		</div>
 </div>
 <%@ include file ="common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -150,6 +174,13 @@ a{text-decoration:none; color:black;}
 		var form = document.getElementById("search-form");
 		form.submit();
 	}
+	//페이지번호를 클릭했을 때 실행되는 함수
+	function moveToPage(event, page) {
+		event.preventDefault();	// a태그에서 onclick이벤트가 발생하면 href에 정의된 주소로 이동하는 기본동작이 일어나지 않게 함.
+		searchBoards(page);
+	}
+	
+
 </script>
 </body>
 </html>

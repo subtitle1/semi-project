@@ -23,7 +23,7 @@
 %>
 	<div class="row">
 		<div class="col breadcrumb">
-			<ul class="nav">
+			<ul class="nav"> 
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">마이페이지</li>
 				<li class="crumb">마이페이지</li>
@@ -125,7 +125,7 @@
 											<span style="font-weight: bold;"><%=detail.getReviewDate() %></span>
 										</div>
 										<div class="col-1 mt-4 text-center">
-											<button type=button class="btn-close " arial-label="Close" onclick="deleteReview(<%=detail.getReviewNo()%>)"></button>
+											<button type=button class="btn-close " arial-label="Close" onclick="deleteMyReview(<%=detail.getReviewNo()%>)"></button>
 										</div>										
 										<div class="col mt-3 text-end">
 										<h2 class="accordion-header" id="faq-heading-<%=detail.getReviewNo()%>">
@@ -157,8 +157,8 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-function deleteReview(reviewNo){
-	location.href="/semi-project/mypage/shopping-note/deleteMypageReview.jsp?reviewNo="+reviewNo;
+function deleteMyReview(reviewNo){
+	location.href="deleteMypageReview.jsp?reviewNo="+reviewNo;
 }
 </script>
 <%@ include file="/common/footer.jsp" %>

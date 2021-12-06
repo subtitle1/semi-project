@@ -7,7 +7,13 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");	
+	Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");
+ 
+	// 세션이 파기됐을 때 오류창을 방지하기 위해 loginedUser가 null일 때 로그인창으로 이동한다
+	if (loginUserInfo == null) {
+		response.sendRedirect("/semi-project/loginform.jsp?user=undefined");
+		return;
+	}
 	
 	// 회원번호 정보를 가져온다.
 	int memberNo = loginUserInfo.getNo();

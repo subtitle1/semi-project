@@ -26,7 +26,7 @@
 <body data-spy='scroll' data-target='.navbar' data-offset='50'>
 	<%@ include file="common/navbar.jsp"%>
 	<div class="container">
-		<%
+		<% 
 
 		int productNo = Integer.parseInt(request.getParameter("no"));
 
@@ -63,8 +63,8 @@
 							<td>
 								<div class="length">
 									<input name="amount" id="count" type="number" min="1" max="20" value="1">
-										<a href="#a" onclick="plus()">증가</a> 
-										<a href="#a" onclick="minus()">감소</a>
+										<a href="#" onclick="plus()">증가</a> 
+										<a href="#" onclick="minus()">감소</a>
 								</div>
 							</td>
 						</tr>
@@ -111,7 +111,7 @@
 <%
 	ReviewDao reviewDao = ReviewDao.getInstance();
 	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByProductNo(productNo);
-//	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(loginUserInfo.getNo());
+	int totalRecords = reviewDao.selectTotalReviewCountByProductNo(productNo);
 	
 	if (reviewDetails.isEmpty()) {
 %>
@@ -122,7 +122,7 @@
 	} else {
 %>
 					<div class="col mt-2 mb-3s">
-						<span style="margin-left: 5px;">총 건의
+						<span style="margin-left: 5px;">총<%=totalRecords%>건의
 							상품 후기가 있습니다.
 						</span>
 					</div>
@@ -222,6 +222,7 @@
 				<div class="row">
 <%
 	QnaDao qnaDao = QnaDao.getInstance();
+
 	List<QnADetailDto> qnaDetails = qnaDao.selectQnAListByProductNo(1, 10,productNo);
 	if (qnaDetails.isEmpty()) {
 %>
@@ -352,6 +353,7 @@
 				count++;
 			}
 			document.getElementById('count').value = count;
+			return false;
 		}
 
 		function minus() {
@@ -360,8 +362,9 @@
 				count--;
 			} else {
 				count;
-			}s
+			}
 			document.getElementById('count').value = count;
+			return false;
 		}
 
 		function goCart() {
@@ -382,9 +385,10 @@
 		function deleteReview(reviewNo,productNo){
 			location.href="/semi-project/deleteReview.jsp?productNo="+productNo+"&reviewNo="+reviewNo;
 		}
-		function needLogin(productNo){
+		function needLogin(){
 			alert('로그인이 필요한 기능입니다.'); 
 		}
+
 		function likeCount(reviewNo,productNo){
 			location.href="/semi-project/likeCount.jsp?productNo="+productNo+"&reviewNo="+reviewNo;
 		}

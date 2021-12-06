@@ -21,12 +21,13 @@
 <div class="container">    
 <%
 	int productNo = Integer.parseInt(request.getParameter("productNo"));
+	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 	int size  = Integer.parseInt(request.getParameter("size"));
 	MemberDao memberDao = MemberDao.getInstance();
 	Member member = memberDao.selectMemberByNo(loginUserInfo.getNo());
 	
 	ProductDao productDao = ProductDao.getInstance();
-	Product product = productDao.selectProductbyNo(productNo);
+	Product product = productDao.selectProductbyNo(productNo); 
 			
 	
 %> 
@@ -114,6 +115,7 @@
 					<p>리뷰작성</p>
 						<div class="order-list-box p-3">
 						 <form method="get" action="insert-review.jsp">
+						 	<input type="hidden" name="orderNo" value="<%=orderNo%>">
 						 	<input type="hidden" name="productNo" value="<%=productNo%>">
 						 	<input type="hidden" name="size" value="<%=size%>">
 							<div class="row mb-3 mt-2 order-font">

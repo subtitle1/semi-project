@@ -28,7 +28,7 @@
 		response.sendRedirect("detail.jsp?no="+productNo);
 		return;
 	}
-	
+	 
 	// 좋아요한 사람을 좋아요테이블에 저장한다.
 	ReviewLiker addReviewLiker = new ReviewLiker();
 	addReviewLiker.setMemberNo(loginUser.getNo());
