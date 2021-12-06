@@ -1,3 +1,4 @@
+<%@page import="dao.MemberDao"%>
 <%@page import="vo.Stock"%>
 <%@page import="dao.StockDao"%>
 <%@page import="dto.CartDetailDto"%>
@@ -11,7 +12,14 @@
 <%
 	Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");
 
+	int memberNo = loginUserInfo.getNo();
+
 	String values[] = request.getParameterValues("no");
+	
+	MemberDao memberDao = MemberDao.getInstance();
+	Member member = new Member();
+	
+	Member memberInfo = memberDao.selectMemberByNo(memberNo);
 	
 	CartDao cartDao = CartDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
@@ -32,15 +40,23 @@
 		CartDetailDto cart = cartDao.selectCartByNo(no);
 	
 		if(cart.getProductDisprice() > 0){
-			sum += cart.getAmount()*cart.getProductDisprice();
+			sum += cart.getProductDisprice() * cart.getAmount();
 			order.setTotalPrice(sum);
+			
 		} else {
-			sum += cart.getAmount()*cart.getProductPrice();
+			sum += cart.getProductPrice() * cart.getAmount();
 			order.setTotalPrice(sum);
 		}
-		
 	}
+	
+	
 	orderDao.insertOrder(order);
+	
+	int pct = (int)(sum * 0.01);
+	
+	member.setPct(memberInfo.getPct() + pct);
+	member.setNo(memberNo);
+	memberDao.updateMemberPoint(member);
 	
 	orderItem.setOrderNo(orderNumber);
 	for (int i = 0; i < values.length; i ++){
