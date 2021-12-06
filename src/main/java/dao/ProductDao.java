@@ -14,6 +14,7 @@ import dto.Criteria;
 import dto.ProductDetailDto;
 import vo.Criteria2;
 import vo.Product;
+import vo.Stock;
 
 public class ProductDao {
 	
@@ -23,6 +24,34 @@ public class ProductDao {
 		return self;
 	}
 
+	   public void updateProduct(Product product) throws SQLException {
+	         String sql = "update tb_products "
+	                  + "set "
+	                  + "   product_name = ?, "
+	                  + "   product_img = ?, "
+	                  + "   product_category = ?, "
+	                  + "   product_brand = ?, "
+	                  + "   product_price = ?, "
+	                  + "   product_disprice = ?, "
+	                  + "   product_gender = ? "
+	                  + "where product_no = ? ";
+	         
+	         Connection connection = getConnection();
+	         PreparedStatement pstmt = connection.prepareStatement(sql);
+	         pstmt.setString(1, product.getName());
+	         pstmt.setString(2, product.getPhoto());
+	         pstmt.setString(3, product.getCategory());
+	         pstmt.setString(4, product.getBrand());
+	         pstmt.setInt(5, product.getPrice());
+	         pstmt.setInt(6, product.getDisPrice());
+	         pstmt.setString(7, product.getGender());
+	         pstmt.setInt(8, product.getNo());
+	         pstmt.executeUpdate();
+	         
+	         pstmt.close();
+	         connection.close();
+	      }
+	
 	public int selectTotalProductsCount() throws SQLException {
 		String sql = "select count(*) cnt "
 				   + "from tb_products";
@@ -43,7 +72,7 @@ public class ProductDao {
 		String sql = "select product_no, product_name, product_img, product_price, "
 				+ "product_disprice, product_brand, "
 				+ "product_category, product_created_date, product_gender "
-				+ " from (select row_number() over (order by product_no asc) rn, "
+				+ " from (select row_number() over (order by product_no desc) rn, "
 				+ "product_no, product_name, product_img, product_price, "
 				+ "product_disprice, product_brand, "
 				+ "product_category, product_created_date, product_gender "

@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="vo.Criteria2"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>
@@ -47,7 +48,7 @@ ProductDao productDao = ProductDao.getInstance();
     criteria.setBeginIndex(pagination.getBeginIndex());
     criteria.setEndIndex(pagination.getEndIndex());
 
-    
+    DecimalFormat priceDF = new DecimalFormat("###,###");
 	// 현재 페이지번호에 해당하는 게시글 목록을 조회한다.
 	List<Product> productList = productDao.selectAllProductsByCriteria(criteria);
 %>	
@@ -83,7 +84,7 @@ ProductDao productDao = ProductDao.getInstance();
 		</div>	
 		<div class="col-9">
 		<h4>상품 목록</h4>
-		<table class="table table-hover">
+		<table class="table table-hover table-striped">
 		<colgroup>
 			<col width="5%">
 			<col width="5%">
@@ -98,7 +99,7 @@ ProductDao productDao = ProductDao.getInstance();
 		<thead>
 			<tr>
 				<th>이미지</th>
-				<th>상품번호</th>
+				<th>No.</th>
 				<th>이름</th>
 				<th>카테고리</th>
 				<th>브랜드</th>
@@ -114,26 +115,26 @@ ProductDao productDao = ProductDao.getInstance();
 %>	
 			<tr>
 			
-				<td><img src = "/semi-project/resources/images/products/<%=product.getPhoto() %> " width="60" height="60"></td>		
+				<td><img src = "/semi-project/resources/images/products/<%=product.getPhoto() %> " width="50" height="50"></td>		
 				<td><%=product.getNo() %></td>		
 				<td><a href="product-detail.jsp?no=<%=product.getNo()%>"><%=product.getName() %></td>
 				<td><%=product.getCategory() %></td>
 				<td><%=product.getBrand() %></td>
 				<td><%=product.getGender() %></td>
-				<td><%=product.getPrice() %></td>
+				<td><%=priceDF.format(product.getPrice())  %></td>   
 <%
 if (product.getDisPrice() == 0) {
 %> 				
 				
-				<td> - </td>
+				<td>  </td>
 <% 
 	} else {
 %>	
-				<td><%=product.getDisPrice() %></td>
+				<td><%=priceDF.format(product.getDisPrice()) %></td>
 <% 
 	}
 %>				
-				<td><%=product.getCreatedDate() %></td>
+				<td><small class="text-muted"><%=product.getCreatedDate() %></small></td>
 			</tr>
 <% 
 	}
@@ -195,7 +196,8 @@ if (product.getDisPrice() == 0) {
 					</div>
 					<div class="col-3">
 						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
+							<input type="text" class="form-control" id="search-keyword" name="keyword" value=
+							"<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
 						</div>
 					</div>
 					<div class="col-2">

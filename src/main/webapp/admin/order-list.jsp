@@ -1,4 +1,6 @@
 
+<%@page import="java.util.StringJoiner"%>
+<%@page import="dto.OrderMemberInfoDto"%>
 <%@page import="org.apache.commons.lang3.ObjectUtils"%>
 <%@page import="org.apache.commons.lang3.time.DateUtils"%>
 <%@page import="dto.OrderDetailDto"%>
@@ -49,7 +51,7 @@ OrderDao orderDao = OrderDao.getInstance();
 	
 	
  // 검색조건에 맞는 게시글의 총 갯수를 조회한다.
-    int totalRows = orderDao.getTotalRows(criteria);
+    int totalRows = orderDao.getTotalOrderMemberInfoRows(criteria);
  
     // 페이징처리에 필요한 정보를 제공하는 Pagination객체를 생성한다.
     Pagination2 pagination = new Pagination2(pageNo, totalRows);
@@ -60,7 +62,7 @@ OrderDao orderDao = OrderDao.getInstance();
 	
     
 	// 현재 페이지번호에 해당하는 게시글 목록을 조회한다.
-List<OrderDetailDto> orderDetailList = orderDao.selectAllOrderDetail(criteria);
+List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(criteria);
 
 %>
 <div class="container">    
@@ -95,41 +97,78 @@ List<OrderDetailDto> orderDetailList = orderDao.selectAllOrderDetail(criteria);
 		</div>	
 		<div class="col-9">
 		<h4>주문 목록</h4>
-		<table class="table table-hover">
+		<table class="table table-hover table-striped">
 		<colgroup>
+			<col width="3%">
 			<col width="5%">
-			<col width="5%">
-			<col width="12%">
-			<col width="10%">
-			<col width="10%">
-			<col width="5%">
+			<col width="20%">
 			<col width="8%">
+			<col width="8%">
+			<col width="8%">
+			<col width="11%">
 		</colgroup>
 		<thead>
 			<tr>
-				<th>주문번호</th>
+				<th>No.</th>
 				<th>주문자</th>
-				<th>상품이름</th>
-				<th>주문상태</th>
+				<th>상품명</th>
+				<th>총액</th>
 				<th>주문일</th>
+				<th>주문상태</th>
 				<th>취소사유</th>
-				<th>취소일</th>
 				
 			</tr>
 		</thead>
 		<tbody>
 			<% 
-	for (OrderDetailDto order : orderDetailList) {
+	for (OrderMemberInfoDto order : orderDetailList) {
+		List<OrderDetailDto> orderItemList = orderDao.selectAllOrderDetailsByOrderNo(order.getNo());
 %>	
 			<tr>
 			
-				<td><a href="order-detail.jsp?no=<%=order.getOrderNo()%>"><%=order.getOrderNo()%></td>		
+				<td><a href="order-detail.jsp?no=<%=order.getNo()%>"><%=order.getNo()%></td>		
 				<td><%=order.getMemberName() %></td>		
-				<td><%=order.getProductName() %></td>
-				<td><%=order.getStatus()%></td>
-				<td><%=order.getOrderDate() %></td>
-				<td><%=StringUtils.defaultString(order.getCancelReason(), "") %></td>
-				<td><%=order.getCanceledDate() != null ? order.getCanceledDate() : ""%></td>
+				<td>
+<%					
+	for(OrderDetailDto orderItem : orderItemList)	{
+%>					
+				
+				<strong><a href="product-detail.jsp?no=<%=orderItem.getProductNo()%>"><%=orderItem.getProductName()%></a></strong>(<%=orderItem.getSize() %>)
+				
+<% 
+	}
+%>					
+	
+				</td>
+				<td><%=order.getTotalPrice() %></td>
+				<td><small class="text-muted"><%=order.getOrderDate() %></small></td>
+<% if ("주문취소".equals(order.getStatus())) { 
+%>		
+				<td style="font-size: 14px; color: red;"><%=order.getStatus()%></td>
+				
+<% 
+} else if ("배송완료".equals(order.getStatus())) { 
+%>		
+				<td style="font-size: 14px; color: blue;"><%=order.getStatus()%></td>
+				
+<% 
+} else {
+%>
+				<td>
+				<select name="status" style="height: 29px; font-size: 14px;" id="status-<%=order.getNo()%>" onchange="change(<%=order.getNo() %>)">
+						 <option selected disabled value=<%=order.getStatus()%>><%=order.getStatus()%></option>
+						 <option value="주문완료">주문완료</option>
+						 <option value="상품준비중">상품준비중</option>
+						 <option value="배송중">배송중</option>
+						 <option value="배송완료">배송완료</option>
+  				</select>
+				</td>
+<% 
+} 
+%>				
+				
+				<td><small><%=StringUtils.defaultString(order.getCancelReason(), "") %></small>
+				<small class="text-muted"><%=order.getCanceledDate() != null ? "("+order.getCanceledDate()+")" : ""%></small></td>
 				
 				
 			</tr>
@@ -220,6 +259,10 @@ function searchBoards(page) {
 	form.submit();
 }  
 
+function change(orderNo) {
+	var status = document.getElementById("status-" + orderNo).value;
+	location.href="order-status-change.jsp?no=" + orderNo + "&status=" + status;
+}
 </script>
 </body>
 </html>

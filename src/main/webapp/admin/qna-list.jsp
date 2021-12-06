@@ -1,3 +1,7 @@
+<%@page import="vo.Pagination2"%>
+<%@page import="vo.Criteria2"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
+<%@page import="org.apache.commons.lang3.math.NumberUtils"%>
 <%@page import="dto.QnADetailDto"%>
 <%@page import="dao.QnaDao"%>
 <%@page import="java.util.List"%>
@@ -13,8 +17,7 @@
    <link rel="stylesheet" href="../resources/css/style.css" />
     <title></title>
 <style>
-#complete {color: white;  padding: 4px 8px;  border:none; background-color : rgb(57, 209, 146); }
-#answer {color: white;  padding: 4px 8px; border:none; background-color : rgb(126, 181, 245); }
+#answer {color: white;  padding: 4px 8px; border:none; background-color : black; }
 
 </style>
 
@@ -24,8 +27,29 @@
 
 <% 
 QnaDao qnaDao = QnaDao.getInstance();
+//요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
+	int pageNo = NumberUtils.toInt(request.getParameter("page"), 1);
+	String option = StringUtils.defaultString(request.getParameter("option"), "");
+	String keyword = StringUtils.defaultString(request.getParameter("keyword"), "");
+	
+	Criteria2 criteria = new Criteria2();
 
-List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
+	// 검색옵션과 검색키워드가 모두 있는 경우에만 Criteria객체에 검색옵션과 검색 키워드를 저장한다.
+  if (!StringUtils.isEmpty(option) && !StringUtils.isEmpty(keyword)) {
+    	criteria.setOption(option);
+    	criteria.setKeyword(keyword);
+  }
+    	
+    	// 검색조건에 맞는 게시글의 총 갯수를 조회한다.
+        int totalRows = qnaDao.selectTotalQnADetailRows(criteria);
+        // 페이징처리에 필요한 정보를 제공하는 Pagination객체를 생성한다.
+        Pagination2 pagination = new Pagination2(pageNo, totalRows);
+        
+        // 게시글 리스틀 조회할 때 필요한 조회범위를 Criteria객체에 저장한다.
+        criteria.setBeginIndex(pagination.getBeginIndex());
+        criteria.setEndIndex(pagination.getEndIndex());
+    	
+List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(criteria);
 
 
 %>
@@ -59,68 +83,65 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
 				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>	</ul>
 		</div>	
 		<div class="col-9">
-			<h4>QnA 목록</h4>
-			
-			<div class="qna-list">
-				<div class="order-list-box">
-					<div class="row">
-						<div class="col mt-2">
-							<span style="margin-left:5px;">총 큐엔에이 카운트건의 상품 후기가 있습니다.</span>
+			<div class="row mb-3">
+			<div class="col-2"><h4>QnA 목록</h4></div>
+			<div>
+			<form id="form-search" class="row" method="get" action="qna-list.jsp">
+					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
+					<div class="col-4" style="height: 31px; line-height: 31px;">
+						총 <strong><%=totalRows %></strong> 개의 QnA가 있습니다.
+					</div>			
+					<div class="col-2 offset-2">
+						<div class="input-group">
+							<select class="form-select" id="search-option" name="option"
+								style="height: 31px; font-size: 14px;">
+								<option value="productName" <%="productName".equals(option) ? "selected" : ""%>>상품이름</option>
+								<option value="id" <%="id".equals(option) ? "selected" : ""%>>회원아이디</option>
+							</select>
 						</div>
 					</div>
-					<hr>
+					<div class="col-3">
+						<div class="input-group">
+							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요"
+							style="height: 31px; font-size: 14px;">
+						</div>
+					</div>
+					<div class="col-1">
+						<div class="input-group justify-content-end">
+							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			</div>
+			
+				
+					
 <% 
 	for (QnADetailDto qnaDetail : qnaDetailList) {
 %>						
-					<div class="row">
-			            <div class="col">
-			                 <div class="row p-2">
-								<div class="col-3">
-									<img class="order-img me-2" src="/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %>">
-									<div>
-										<div>
-											<span><%=qnaDetail.getProductName() %></span>
-										</div>
-									</div>
-								</div>
-								<div class="col-3 mt-1">
-									<span>id: <%=qnaDetail.getMemberId() %></span>
-								</div>
-								<div class="col-3 mt-1">
-									<span>제목: <%=qnaDetail.getTitle() %></span>
-								</div>
-								<div class="col-3 mt-1">
-									<span><%=qnaDetail.getQuestionDate() %></span>
-								</div>
-								<div class="col-9 mt-1">
-									<span>내용: <%=qnaDetail.getQuestionContent() %></span>
-								</div>
-							</div>
-						</div>
-					</div>
-<% if (qnaDetail.getQuestionAnswered().equals("Y")) { %>					
-					<div class="row">
-						<div class="col mt-1 accordion accordion-flush" id="faqlist">
-	                    	<div class="accordion-item">
-								<h2 class="accordion-header" id="faq-heading-<%=qnaDetail.getQnANo()%>">
-		                    		<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-<%=qnaDetail.getQnANo()%>">
-		                        		<small id="complete">답변완료</small>
-		                    		</button>
-	                     		</h2>
-							</div>
-	                       	<div id="faq-content-<%=qnaDetail.getQnANo()%>" class="accordion-collapse collapse" data-bs-parent="#faqlist">
-	                        	<div class="accordion-body">
-									<div class="text-muted text-end mb-3"><small><%=qnaDetail.getAnswerDate() %></small></div>
-									<hr>
-									<div class="text-left"><%=qnaDetail.getAnswerContent() %></div>
-								</div>
-							</div>		
-						</div>	
-					</div>			
-								
+				<table class="table table-hover mb-0" style="border-top: 2px solid #000">
+					<tbody>
+						<tr class="d-flex">
+							<td class="col-4">
+							<img src = "/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %> " width="50" height="50">
+							<a href="product-detail.jsp?no=<%=qnaDetail.getProductNo()%>"><%=qnaDetail.getProductName() %></a>
+						    <small class="text-muted"><%=qnaDetail.getProductBrand() %></small></td>
+							<td class="col-2"><%=qnaDetail.getMemberName() %>(<%=qnaDetail.getMemberId() %>)</td>
+								<td class="col-6 table-active"><strong>Q.</strong><%=" "+qnaDetail.getTitle() %>
+								<%=" - "+ qnaDetail.getQuestionContent()+"  "%><small>(<%=qnaDetail.getQuestionDate() %>)</small></td>						
+						</tr>
+<% if (qnaDetail.getQuestionAnswered().equals("Y")) { %>	
+						<tr class="d-flex">
+							<td class="col-12"><strong>A.</strong><%=" "+qnaDetail.getAnswerContent()+"  " %><small>(<%=qnaDetail.getAnswerDate() %>)</small></td>
+						</tr>
+					</tbody>				
+			</table>							
 <% 
-	} else {
-%>			               		
+	} else {  
+%>			            
+					</tbody>				
+			</table>   		
 					<div class="row">
 						<div class="col mt-1 accordion accordion-flush" id="faqlist">
 	                    	<div class="accordion-item">
@@ -134,11 +155,11 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
 								<div class="accordion-body">          
 			                		<form class="well row g-3" method="post" action="qna-answer.jsp">
 			                			<input type="hidden" name="qnANo" value="<%=qnaDetail.getQnANo()%>"/>
-	   			 						<div class="col-10">
+	   			 						<div class="col-11">
 	   			 							<textarea class="form-control" aria-label="With textarea" name="content"></textarea> 
 	   			 						</div>
-	   			 						<div class="text-right col-2">
-											<button class="btn btn-primary btn-sm" type="submit">등록</button>
+	   			 						<div class="text-right col-1" >
+	   			 						    <button class="btn btn-dark btn-sm" type="submit">등록</button>
 										</div>
 	  			 					</form>
 	     			 			</div>
@@ -147,17 +168,63 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(1, 20);
 			       	</div>	
 <% 
 	}
-%>	         	       			 						
+%>	        	       			 						
 
 <% 
 }
 %>	       
 				</div>
-			</div>
+			
 		</div>
+		<div class="row mt-3 mb-3">
+		<div class="col-6 offset-3">
+			<nav>
+				<ul class="pagination justify-content-center">
+					<!-- 
+						Pagination객체가 제공하는 isExistPrev()는 이전 블록이 존재하는 경우 true를 반환한다.
+						Pagination객체가 제공하는 getPrevPage()는 이전 블록의 마지막 페이지값을 반환한다.
+					 -->
+					<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>">
+					<a href="" class="page-link" onclick="moveToPage(event, <%=pagination.getPrev()%>)" >이전</a>
+					</li>
+<%
+	// Pagination 객체로부터 해당 페이지 블록의 시작 페이지번호와 끝 페이지번호만큼 페이지내비게이션 정보를 표시한다.
+	for (int num = pagination.getBegin(); num <= pagination.getEnd(); num++) {
+%>					
+						<li class="page-item <%=num == pagination.getPage() ? "active" : ""%>">
+						<a href="" class="page-link" onclick="moveToPage(event, <%=num%>)"><%=num%></a>
+					</li>
+<%
+	}
+%>					
+					<!-- 
+						Pagination객체가 제공하는 isExistNext()는 다음 블록이 존재하는 경우 true를 반환한다.
+						Pagination객체가 제공하는 getNexPage()는 다음 블록의 첫 페이지값을 반환한다.
+					 -->
+					<li class="page-item <%=!pagination.isExistNext() ? "disabled" : "" %>">
+					<a href="" class="page-link" onclick="moveToPage(event, <%=pagination.getNext()%>)">다음</a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+		
 	</div>	
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+
+//페이지번호를 클릭했을 때 실행되는 함수
+function moveToPage(event, page) {
+	event.preventDefault();	// a태그에서 onclick이벤트가 발생하면 href에 정의된 주소로 이동하는 기본동작이 일어나지 않게 함.
+	searchBoards(page);
+}
+
+//검색버튼을 클릭했을 때 실행되는 함수
+function searchBoards(page) {
+	document.getElementById("page-field").value = page;
+	var form = document.getElementById("form-search");
+	form.submit();
+}  </script>
 </body>
 </html>

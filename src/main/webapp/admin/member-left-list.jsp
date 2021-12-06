@@ -55,7 +55,7 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 		<div class="col-9">
 		
 		<h4>탈퇴한 회원 리스트</h4>
-	<table class="table table-hover">
+	<table class="table table-hover table-striped">
 		<colgroup>
 			<col width="5%">
 			<col width="7%">
@@ -90,7 +90,7 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 				<td><%=member.getAddress() %></td>
 				<td><%=member.getPct() %></td>
 				<td><%=member.getRegisteredDate() %></td>
-				<td><%=member.getDeletedDate() %></td>
+				<td><%=member.getDeletedDate() != null ? member.getDeletedDate() : ""%></td>
 			</tr>
 <% 
 	}

@@ -54,7 +54,7 @@ List<Member> leftMemberList = memberDao.selectAllLeftMembers(1, 10);
 		</div>	
 		<div class="col-9">
 		<h4>이용 회원 목록</h4>
-		<table class="table table-hover">
+		<table class="table table-hover table-striped">
 		<colgroup>
 			<col width="5%">
 			<col width="7%">
