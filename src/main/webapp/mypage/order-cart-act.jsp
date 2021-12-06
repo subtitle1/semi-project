@@ -56,7 +56,7 @@
 	
 	member.setPct(memberInfo.getPct() + pct);
 	member.setNo(memberNo);
-	memberDao.updateMemberPoint(member);
+	memberDao.updateMember(member);
 	
 	orderItem.setOrderNo(orderNumber);
 	for (int i = 0; i < values.length; i ++){
