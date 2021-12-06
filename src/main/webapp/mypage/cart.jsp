@@ -55,7 +55,7 @@
 		response.sendRedirect("../loginform.jsp?fail=deny&job=" + encodedText);
 		return;
 	}
-	// 조회된 사용자정보에서 사용자 아이디 조회
+	// 조회된 사용자정보에서 사용자 번호조회.
 	int memberNo = loginUserInfo.getNo();
 	
 	CartDao cartDao = CartDao.getInstance();
@@ -120,6 +120,8 @@
 									<span class="plus" onclick="plus(<%=cart.getNo() %>)"></span>
 								</div>
 								<div>
+
+
 									<button class="btn-modify" type="button" onclick="changeQty(<%=cart.getNo() %>)">변경</button>
 								</div>
 								

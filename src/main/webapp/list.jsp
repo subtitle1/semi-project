@@ -1,3 +1,5 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="org.apache.commons.lang3.math.NumberUtils"%>
 <%@page import="dto.Criteria"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Product"%>
@@ -24,9 +26,9 @@ a{text-decoration:none; color:black;}
 <%@ include file = "common/navbar.jsp" %>
 <div class="container">
 <%
-//요청파라미터에서 pageNo값을 조회한다.
-	// 요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
-//	String pageNo = request.getParameter("pageNo");
+	// 가격표 천단위로 콤마 표시하기
+	DecimalFormat price = new DecimalFormat("###,###");
+	
 
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
@@ -71,14 +73,13 @@ a{text-decoration:none; color:black;}
 			<img alt="" src="resources/images/home.png" style="margin:5px; width:20px;">
 			<select class= "border-0 text-center" onchange= "if(this.value) location.href=(this.value);" >
 				<option value="" style="background:lightgray;border:0;padding:15px" ><%=category %></option>
-				<option value="brand.jsp">BRAND</option>
 				<option value="list.jsp?category=SNEAKERS">SNEAKERS</option>
 				<option value="list.jsp?category=SPORTS">SPORTS</option>
 				<option value="list.jsp?category=SANDALS">SANDALS</option>
 				<option value="list.jsp?category=LOAFERS">LOAFERS</option>
 			</select>
 	</div>
-
+  
     <div class="title mb-5 p-3 ">
     	<%=category%>
     </div>
@@ -132,14 +133,15 @@ a{text-decoration:none; color:black;}
 	if (product.getDisPrice() > 0) {
 %>
       	  <div class="d-flex justify-content-between">
-	        <span class="col card-text p-1 p"><%=product.getPrice() %> 원</span>
-	        <span class="col card-text  p-1 dp"><%=product.getDisPrice() %> 원</span>
+
+	        <span class="col card-text p-1 p"><%=price.format(product.getPrice()) %> 원</span>
+	        <span class="col card-text  p-1 dp"><%=price.format(product.getDisPrice())%> 원</span>
       	  </div>
 <%
 	} else {
 %>
 	<div class="text-end">
-	        	<span class="col card-text  p-1 dp"><%=product.getPrice() %> 원</span>
+	        	<span class="col card-text  p-1 dp"><%=price.format(product.getPrice())%> 원</span>
       	  </div>
 <%
 	}

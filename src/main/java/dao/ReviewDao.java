@@ -121,14 +121,15 @@ public class ReviewDao {
 		}
 		
 		
+		
 		/**
-		 * 게시글 추천 정보를 저장한다.
+		 * 리뷰 추천 정보를 저장한다.
 		 * @param reviewLiker
 		 * @throws SQLException
 		 */
 		public void insertReviewLiker(ReviewLiker reviewLiker) throws SQLException {
 			String sql = "insert into tb_review_likers (review_no, member_no) "
-					   + "values (?, ?) ";
+					+ "values (?, ?) ";
 			
 			Connection connection = getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -140,7 +141,7 @@ public class ReviewDao {
 			pstmt.close();
 			connection.close();
 		}
-		
+
 		/**
 		 *  지정된 글번호와 사용자번호로 추천정보를 조회해서 반환한다.
 		 * @param reviewNo
@@ -179,15 +180,46 @@ public class ReviewDao {
 		 */
 		public int selectTotalReviewCountByMemberNo(int memberNo) throws SQLException {
 			String sql = "select count(*) cnt "
-					   + "from tb_reviews  "
-					   + "where member_no = ? "
-					   + "and review_deleted = 'N' ";
+					   + "from (select * "
+					   + "		from tb_reviews  "
+					   + "		where member_no = ? "
+					   + "		and review_deleted = 'N') ";
 			
 			int totalRecords = 0;
 			
 			Connection connection = getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			pstmt.setInt(1, memberNo);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			totalRecords = rs.getInt("cnt");
+			rs.close();
+			pstmt.close();
+			connection.close();
+			
+			return totalRecords;
+		}
+		
+
+		/**
+		 * 상품번호로 지장된 리뷰정보의 갯수를 반환한다.
+		 * @return 리뷰 정보 갯수
+		 * @throws SQLException
+		 */
+		public int selectTotalReviewCountByProductNo(int productNo) throws SQLException {
+			String sql = "select count(*) cnt "
+					+ "from (select count(*)cnt "
+					+ "		from tb_products P, tb_product_stocks S, tb_reviews R "
+					+ "		where  P.product_no = S.product_no "
+					+ "		and S.product_detail_no = R.product_detail_no "
+					+ "		and r.review_deleted = 'N' "
+					+ "		and P.product_no = ?) ";
+			
+			int totalRecords = 0;
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, productNo);
 			ResultSet rs = pstmt.executeQuery();
 			rs.next();
 			totalRecords = rs.getInt("cnt");
@@ -241,7 +273,8 @@ public class ReviewDao {
 					   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
 					   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
 					   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
-					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO) "
+					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO"
+					   + "		AND REVIEW_DELETED = 'N') "
 					   + "WHERE RN >= ? AND RN <= ? "
 					   + "AND MEMBER_NO = ? "
 					   + "ORDER BY REVIEW_NO DESC ";

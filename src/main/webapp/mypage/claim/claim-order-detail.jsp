@@ -163,22 +163,30 @@
 	}	
 %>
 							<div class="col mt-4 text-end">
-								<span style="font-weight: bold;"><%=order.getStatus() %></span>
+								<span style="font-weight: bold;"><%=orderDetail.getStatus() %></span>
 							</div>
-
-							<div class="col mt-3 text-end mt-1">
-
-								<button type="button" class="btn btn-dark btn-sm <%="Y".equals(orderDetail.getReviewStatus()) && "Y".equals(order.getCancelStatus()) ? "disabled" : "" %>" 
-                         onclick="goReview(<%=orderDetail.getProductNo() %>,<%=orderDetail.getSize()%>)">리뷰 작성</button>
-							</div>
-						</div>
 <%
+	if("주문완료".equals(order.getStatus()) && "N".equals(orderDetail.getReviewStatus())) {
+%>
+							<div class="col mt-4 text-end ">
+								<button type="button" class="btn btn-dark btn-sm " 
+                         onclick="goReview(<%=orderDetail.getOrderNo() %>,<%=orderDetail.getProductNo() %>,<%=orderDetail.getSize()%>)">리뷰 작성</button>
+							</div>
+<%
+		} else {
+%>
+							<div class="col mt-4 text-end">
+								<button type="button" class="btn btn-dark btn-sm disabled" >작성완료</button>
+							</div>
+						</div>							
+<%			
+		}
 	}
 %>
 					
 				</div>
 				<div class="order-list">
-				<p>주문자 정보</p>
+				<p>주문자 정보</p>s
 					<div class="order-list-box p-3">
 						<div class="row mb-3 mt-3 order-font">
 							<div class="col-2">
@@ -222,7 +230,7 @@
 								<span style="margin-left:5px;">총 결제금액</span>
 							</div>
 							<div class="col text-end">
-								<span style="margin-right:5px; color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%= order.getTotalPrice() %>원</span>
 							</div>
 						</div>
 					</div>
@@ -234,8 +242,8 @@
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-	function goReview(productNo,size) {
-		location.href = "/semi-project//mypage/shopping-note/my-review-form.jsp?productNo="+productNo+"&size="+size;
+	function goReview(orderNo,productNo,size) {
+		location.href = "/semi-project//mypage/shopping-note/my-review-form.jsp?orderNo="+orderNo+"&productNo="+productNo+"&size="+size;
 	}
 </script>
 </body>

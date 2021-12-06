@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dao.OrderDao"%>
 <%@page import="vo.Member"%>
 <%@page import="java.util.List"%>
@@ -18,7 +19,10 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
-int memberNo = loginUserInfo.getNo();
+	// 가격표 천단위로 콤마 표시하기
+	DecimalFormat price = new DecimalFormat("###,###");
+
+	int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
 	

@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="vo.Product"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.ProductDao"%>
@@ -24,25 +25,12 @@ a{text-decoration:none; color:black;}
 <div class="container"> 
 
 <%
-ProductDao productDao = ProductDao.getInstance();
+	ProductDao productDao = ProductDao.getInstance();
+	
+	List<Product> saleProductList = productDao.selectProductsOnSale(1, 3);
+	List<Product> newProductList = productDao.selectAllProducts(1, 8);
+	DecimalFormat price = new DecimalFormat("###,###");
 
-List<Product> saleProductList = productDao.selectProductsOnSale(1, 3);
-List<Product> newProductList = productDao.selectAllProducts(1, 8);
-
-	String user = request.getParameter("user");
-	if ("deleted".equals(user)) {
-%>
-<script type="text/javascript">
-	alert("탈퇴가 완료되었습니다.");
-</script>
-<%
-	} else if ("undefined".equals(user)) {
-%>
-<script type="text/javascript">
-	alert("로그인 후 이용하실 수 있는 페이지입니다.");
-</script>
-<%
-	}
 %>
 	<!-- 
 		세일상품목록
@@ -69,14 +57,14 @@ List<Product> newProductList = productDao.selectAllProducts(1, 8);
 	if(product.getDisPrice() > 0){
 %>						  
 						  <div class="mt-3">
-					        <span class="col card-text p-2 p"><%=product.getPrice() %> 원</span>
-					        <span class="col card-text  p-2 dp"><%=product.getDisPrice() %> 원</span>
+					        <span class="col card-text p-2 p"><%=price.format(product.getPrice()) %> 원</span>
+					        <span class="col card-text  p-2 dp"><%=price.format(product.getDisPrice()) %> 원</span>
 		    		   	  </div>
 <%
 	} else {
 %>
 						 <div class= "mt-3 text-end">
-						 	<span class="col card-text p-2 dp"><%=product.getPrice() %> 원</span>
+						 	<span class="col card-text p-2 dp"><%=price.format(product.getPrice()) %> 원</span>
 						 </div>
 <%		
 	}
@@ -113,14 +101,14 @@ for(Product product : newProductList){
 	if(product.getDisPrice() > 0){
 %>	
 					<div class="mt-3">
-						<span class="col card-text p-2 p"><%=product.getPrice()%> 원</span> 
-						<span class="col card-text  p-2 dp"><%=product.getDisPrice()%> 원</span>
+						<span class="col card-text p-2 p"><%=price.format(product.getPrice()) %> 원</span> 
+						<span class="col card-text  p-2 dp"><%=price.format(product.getDisPrice())%> 원</span>
 					</div>
 <%
 	} else {
 %>
 						 <div class= "mt-3 text-end">
-						 	<span class="col card-text p-2 dp"><%=product.getPrice() %> 원</span>
+						 	<span class="col card-text p-2 dp"><%=price.format(product.getPrice()) %> 원</span>
 						 </div>
 <%		
 	}
