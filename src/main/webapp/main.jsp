@@ -36,7 +36,7 @@ a{text-decoration:none; color:black;}
 		세일상품목록
 		3개만 출력.
 	 -->   
-	<div class="row mb-5 mt-5">
+	<div class="row mb-5 mt-5"> 
 		<div class="col-3">
 			<h1 class="mb-3 hot-deal">HOT DEAL</h1>
 			<div>기간한정 특가할인!</div>				

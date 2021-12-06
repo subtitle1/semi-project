@@ -462,7 +462,7 @@ public class ProductDao {
 				+ "		    	   product_no, product_img, product_brand, "
 				+ "				   product_name, product_price, product_disprice "
 				+ "			from tb_products ";
-		if (c.getBrand()!= null) {
+		if (c.getBrand()!= null) { 
 			sql += "where product_brand =  '"+ c.getBrand() +"' ";
 		}		   
 		if (c.getGender()!= null) {

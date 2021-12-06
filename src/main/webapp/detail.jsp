@@ -26,7 +26,7 @@
 <body data-spy='scroll' data-target='.navbar' data-offset='50'>
 	<%@ include file="common/navbar.jsp"%>
 	<div class="container">
-		<%
+		<% 
 
 		int productNo = Integer.parseInt(request.getParameter("no"));
 

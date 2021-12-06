@@ -12,4 +12,4 @@ reviewDao.deleteReview(reviewNo);
 response.sendRedirect("/semi-project/mypage/shopping-note/my-review.jsp?memberNo="+loginUser.getNo());
 
 
-%> 
+%>  

@@ -25,7 +25,7 @@ a{text-decoration:none; color:black;}
 <body>
 <%@ include file = "common/navbar.jsp" %>
 <div class="container">
-<%
+<% 
 	// 가격표 천단위로 콤마 표시하기
 	DecimalFormat price = new DecimalFormat("###,###");
 	

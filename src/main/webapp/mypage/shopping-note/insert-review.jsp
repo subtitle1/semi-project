@@ -20,7 +20,7 @@
 		response.sendRedirect("my-review-form.jsp?error=contentEmpty");
 		return;
 	}
-	StockDao stockDao = StockDao.getInstance();
+	StockDao stockDao = StockDao.getInstance(); 
 	int stockNo = stockDao.selectStockNoByProductNoAndSize(productNo, size);
 	
 	ReviewDao reviewDao = ReviewDao.getInstance();

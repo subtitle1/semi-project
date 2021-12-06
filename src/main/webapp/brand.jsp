@@ -43,7 +43,7 @@ a{text-decoration:none; color:black;}
 	String brand = request.getParameter("brand");
 	String gender = request.getParameter("gender");
 	String sort = request.getParameter("sort");
-	
+	 
 	Criteria c = new Criteria();
 
 	if( brand != null && !brand.isEmpty()){

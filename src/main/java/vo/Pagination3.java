@@ -21,7 +21,7 @@ package vo;
 public class Pagination3 {
 
 		private int rowsPerPage = 8;
-		private int pagesPerBlock = 5;
+		private int pagesPerBlock = 5; 
 		private int page = 1;
 		private int totalPages;
 		private int totalBlocks;

@@ -27,7 +27,7 @@
 	Member member = memberDao.selectMemberByNo(loginUserInfo.getNo());
 	
 	ProductDao productDao = ProductDao.getInstance();
-	Product product = productDao.selectProductbyNo(productNo);
+	Product product = productDao.selectProductbyNo(productNo); 
 			
 	
 %> 

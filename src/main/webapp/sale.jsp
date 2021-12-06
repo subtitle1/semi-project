@@ -33,7 +33,7 @@ a{text-decoration:none; color:black;}
 	DecimalFormat price = new DecimalFormat("###,###");
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
-
+ 
 	// select할 속성 요청.
 	String brand = request.getParameter("brand");
 	String gender = request.getParameter("gender");
