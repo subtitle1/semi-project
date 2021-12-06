@@ -20,7 +20,18 @@
 <%
 	MemberDao memberDao = MemberDao.getInstance();
 	Member member = memberDao.selectMemberByNo(loginUserInfo.getNo());
+
+	String referer = request.getHeader("referer");
+	if (referer == null) {
 %>
+	<script>
+		alert("정상적인 경로를 통해 다시 접근해 주세요.");
+		history.back();
+	</script>
+<%
+	return;
+	}
+%>	
 		<div class="row">
 			<div class="col breadcrumb">
 				<ul class="nav">
@@ -41,16 +52,12 @@
 			<div class="col-2 p-0 aside">
 				<span class="aside-title">마이 페이지</span>
 				<ul class="nav flex-column p-0">
-					<li class=""><a
-						href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>"
-						class="nav-link p-0">마이페이지</a></li>
-					<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
-					<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
-					<li class=""><a
-						href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>"
-						class="nav-link p-0">주문현황 조회</a></li>
-					<li class=""><a href="" class="nav-link p-0">주문 취소</a></li>
-					<li class=""><a href="" class="nav-link p-0">회원 탈퇴</a></li>
+					<li class=""><a	href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">마이페이지</a></li>
+					<li class=""><a href="../info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
+					<li class=""><a href="../info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
+					<li class=""><a	href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
+					<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
+					<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 				</ul>
 				<ul class="nav flex-column p-0">
 					<li class=""><a

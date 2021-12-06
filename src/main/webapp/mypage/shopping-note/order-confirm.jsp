@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dao.ProductDao"%>
 <%@page import="vo.Product"%>
 <%@page import="dao.StockDao"%>
@@ -24,6 +25,7 @@
 	int amount = Integer.parseInt(request.getParameter("amount"));
 	int size = Integer.parseInt(request.getParameter("size"));
 	
+	DecimalFormat price = new DecimalFormat("###,###");
 	ProductDao productDao = ProductDao.getInstance();
 	Product product = productDao.selectProductbyNo(productNo);
 %>
@@ -72,17 +74,17 @@
 %>
 					<div class="col mt-3">
 						<div class="text-end">
-							<span  style="text-decoration:line-through;"><%=product.getPrice() %>원</span>
+							<span  style="text-decoration:line-through;"><%=price.format(product.getPrice()) %>원</span>
 						</div>
 						<div class="text-end">
-							<span style="color: red; font-weight: bold; font-size: 17px;"><%=product.getDisPrice()%>원</span>
+							<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(product.getDisPrice())%>원</span>
 						</div>
 					</div>
 <%
 	} else {
 %>
 					<div class="col mt-4 text-end">
-						<span><%=product.getPrice() %>원</span>
+						<span><%=price.format(product.getPrice()) %>원</span>
 					</div>
 <%
 	}

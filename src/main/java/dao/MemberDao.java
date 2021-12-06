@@ -256,7 +256,8 @@ public class MemberDao {
 				   + "set "
 				   + " member_tel = ?, "
 				   + " member_email = ?, "
-				   + " member_address = ? "
+				   + " member_address = ?, "
+				   + " member_pct = ? "
 				   + "where member_no = ? ";
 		
 		Connection connection = getConnection();
@@ -264,7 +265,8 @@ public class MemberDao {
 		pstmt.setString(1, member.getTel());
 		pstmt.setString(2, member.getEmail());
 		pstmt.setString(3, member.getAddress());
-		pstmt.setInt(4, member.getNo());
+		pstmt.setInt(4, member.getPct());
+		pstmt.setInt(5, member.getNo());
 		
 		pstmt.executeUpdate();
 		

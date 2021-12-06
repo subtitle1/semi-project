@@ -20,6 +20,7 @@
 	
 	OrderDao orderDao = OrderDao.getInstance();
 	StockDao stockDao = StockDao.getInstance();
+	MemberDao memberDao = MemberDao.getInstance();
 	
 	// stockNo로 가져온 번호를 하나씩 조회한다
 	int stockNo = 0;
@@ -42,7 +43,16 @@
 	order.setCancelStatus("Y");
 	order.setCanceledDate(new Date());
 	
+	// 멤버의 현재 포인트보다 적립금액이 높으면 0으로 업데이트
+	int memberPct = (int)(order.getTotalPrice()*0.01);
+	if (member.getPct() < memberPct) {
+		member.setPct(0);
+	} else {
+		member.setPct(member.getPct() - memberPct);
+	}
+	
 	orderDao.updateOrder(order);
+	memberDao.updateMember(member);
 	
 	response.sendRedirect("../claim/claim-order-main.jsp?claimCancel=canceled");
 %>

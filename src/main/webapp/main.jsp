@@ -31,6 +31,14 @@ a{text-decoration:none; color:black;}
 	List<Product> newProductList = productDao.selectAllProducts(1, 8);
 	DecimalFormat price = new DecimalFormat("###,###");
 
+	String user = request.getParameter("user");
+	if ("deleted".equals(user)) {
+%>
+	<script type="text/javascript">
+		alert("탈퇴가 완료되었습니다.");
+	</script>
+<%
+	}
 %>
 	<!-- 
 		세일상품목록

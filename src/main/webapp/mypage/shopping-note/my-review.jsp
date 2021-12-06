@@ -20,10 +20,21 @@
 <%
 	MemberDao memberDao = MemberDao.getInstance();
 	Member member = memberDao.selectMemberByNo(loginUserInfo.getNo());
+	
+	String referer = request.getHeader("referer");
+	if (referer == null) {
 %>
+	<script>
+		alert("정상적인 경로를 통해 다시 접근해 주세요.");
+		history.back();
+	</script>
+<%
+	return;
+	}
+%>	
 	<div class="row">
 		<div class="col breadcrumb">
-			<ul class="nav"> 
+			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">마이페이지</li>
 				<li class="crumb">마이페이지</li>
@@ -42,11 +53,11 @@
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">마이페이지</a></li>
-				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
-				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
+				<li class=""><a href="../info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
+				<li class=""><a href="../info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">주문 취소</a></li>
-				<li class=""><a href="" class="nav-link p-0">회원 탈퇴</a></li>
+				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
+				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="../shopping-note/my-review.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">나의 상품후기</a></li>
@@ -81,7 +92,6 @@
 	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(member.getNo());
 	Pagination pagination = new Pagination(pageNo, totalRecords);
 	
-
 	List<ReviewDetailDto> reviewDetails = reviewDao.getReviewListByMemberNo(pagination.getBegin(), pagination.getEnd(), member.getNo());
 
 	if (reviewDetails.isEmpty()) {
@@ -107,7 +117,7 @@
 			                <div class="accordion accordion-flush" id="faqlist">
 			                    <div class="accordion-item">
 			                   	    <div class="row p-2">
-										<div class="col-3">
+										<div class="col-5">
 											<img class="order-img me-2" src="../../resources/images/products/<%=detail.getPhoto()%>">
 											<div>
 												<div>
@@ -124,8 +134,8 @@
 										<div class="col mt-4 text-end">
 											<span style="font-weight: bold;"><%=detail.getReviewDate() %></span>
 										</div>
-										<div class="col-1 mt-4 text-center">
-											<button type=button class="btn-close " arial-label="Close" onclick="deleteMyReview(<%=detail.getReviewNo()%>)"></button>
+										<div class="col-1 mt-4 text-end">
+											<button type="button" class="btn-close" onclick="deleteReview(<%=detail.getReviewNo()%>)"></button>
 										</div>										
 										<div class="col mt-3 text-end">
 										<h2 class="accordion-header" id="faq-heading-<%=detail.getReviewNo()%>">
@@ -152,13 +162,37 @@
 %>
 				</div>
 			</div>
+			<div class="row mb-3">
+				<div class="col-6 offset-3">
+					<nav>
+						<ul class="pagination justify-content-center">
+							<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=pagination.getPrevPage()%>" >이전</a></li>
+<%
+	if (totalRecords == 0) {
+%>
+							<li class="page-item <%=pagination.getPageNo() == 1 ? "active" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=1">1</a></li>
+<% 
+	} else {
+		for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+%>					
+							<li class="page-item <%=pagination.getPageNo() == num ? "active" : "" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=num%>"><%=num %></a></li>
+<%
+		}
+	}
+%>					
+
+							<li class="page-item <%=!pagination.isExistNext() ? "disabled" :"" %>"><a class="page-link" href="my-review.jsp?pageNo=<%=pagination.getNextPage()%>" >다음</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-function deleteMyReview(reviewNo){
-	location.href="deleteMypageReview.jsp?reviewNo="+reviewNo;
+function deleteReview(reviewNo){
+	location.href="/semi-project/mypage/shopping-note/deleteMypageReview.jsp?reviewNo="+reviewNo;
 }
 </script>
 <%@ include file="/common/footer.jsp" %>

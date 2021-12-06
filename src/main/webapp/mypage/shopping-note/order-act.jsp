@@ -1,3 +1,4 @@
+<%@page import="dao.MemberDao"%>
 <%@page import="vo.Stock"%>
 <%@page import="vo.OrderItem"%>
 <%@page import="dao.OrderItemDao"%>
@@ -15,6 +16,7 @@
 	OrderDao orderDao = OrderDao.getInstance();
 	OrderItemDao orderItemDao = OrderItemDao.getInstance();
 	ProductDao productDao = ProductDao.getInstance();
+	MemberDao memberDao = MemberDao.getInstance();
 	
 	// 세션이 파기됐을 때 오류창을 방지하기 위해 loginedUser가 null일 때 로그인창으로 이동한다
 	if (loginedUser == null) {
@@ -62,10 +64,13 @@
 	Stock stock = stockDao.selectStockByProductDetailNo(stockNo);
 	stock.setStock(stock.getStock() - orderItem.getAmount());
 
+	loginedUser.setPct((int)(totalPrice * 0.01));
+	
 	// 변경한 객체를 업데이트 및 추가시킨다
 	orderDao.insertOrder(order);
 	orderItemDao.insertOrderItem(orderItem);
 	stockDao.updateStock(stock);
+	memberDao.updateMember(loginedUser);
 	
 	// 주문이 완료되면 주문완료창으로 이동
 	response.sendRedirect("completeorder.jsp?orderNo="+orderNo+"&productNo="+productNo+"&amount="+amount+"&size="+size);
