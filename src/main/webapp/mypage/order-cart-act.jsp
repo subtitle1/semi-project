@@ -66,4 +66,6 @@
 		// 카트 삭제
 		cartDao.deletedCartByNo(no);
 	}
+	
+	response.sendRedirect("completeorder.jsp?no=" + orderNumber);
 %>
