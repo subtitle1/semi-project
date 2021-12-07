@@ -18,7 +18,14 @@
     <title></title>
 <style>
 #answer {color: white;  padding: 4px 8px; border:none; background-color : black; }
-
+ #qna-container .style{padding:2px 0 !important; text-align:center;}
+ #qna-container .style-1{padding:2px 4px !important;}
+ #qna-container th.style{padding:6px 0 !important;}
+ #qna-container .select-box{margin-left:auto; width:120px;}
+ #qna-container .select-box select{padding:0 10px;}
+ .accordion .btn {
+  white-space: normal;
+}
 </style>
 
 </head>
@@ -53,16 +60,7 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(criteria);
 
 
 %>
-<div class="container">    
-	<div class="row">
-		<div class="col breadcrumb">
-			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
-				<li class="crumb">관리자페이지</li>
-				<li class="crumb">관리자페이지</li>
-			</ul>
-		</div>
-	</div>
+<div class="container" id="qna-container">    
 	<div class="row">
 		<div class="col p-0 page-title">
 			<h1>관리자페이지</h1>
@@ -84,35 +82,37 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(criteria);
 		</div>	
 		<div class="col-9">
 			<div class="row mb-3">
-			<div class="col-2"><h4>QnA 목록</h4></div>
-			<div>
-			<form id="form-search" class="row" method="get" action="qna-list.jsp">
-					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
-					<div class="col-4" style="height: 31px; line-height: 31px;">
-						총 <strong><%=totalRows %></strong> 개의 QnA가 있습니다.
-					</div>			
-					<div class="col-2 offset-2">
-						<div class="input-group">
-							<select class="form-select" id="search-option" name="option"
-								style="height: 31px; font-size: 14px;">
-								<option value="productName" <%="productName".equals(option) ? "selected" : ""%>>상품이름</option>
-								<option value="id" <%="id".equals(option) ? "selected" : ""%>>회원아이디</option>
-							</select>
-						</div>
+				<div class="col">
+					<div><h4>QnA 목록</h4></div>
+					<div>
+						<form id="form-search" class="row" method="get" action="qna-list.jsp">
+							<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
+							<div class="col-4" style="height: 31px; line-height: 31px;">
+								총 <strong><%=totalRows %></strong> 개의 QnA가 있습니다.
+							</div>			
+							<div class="col-4">
+								<div class="input-group select-box">
+									<select class="form-select" id="search-option" name="option"
+										style="height: 31px; font-size: 14px;">
+										<option value="productName" <%="productName".equals(option) ? "selected" : ""%>>상품이름</option>
+										<option value="id" <%="id".equals(option) ? "selected" : ""%>>회원아이디</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-3">
+								<div class="input-group">
+									<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요"
+									style="height: 31px; font-size: 14px;">
+								</div>
+							</div>
+							<div class="col-1">
+								<div class="input-group justify-content-end">
+									<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
+								</div>
+							</div>
+						</form>
 					</div>
-					<div class="col-3">
-						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요"
-							style="height: 31px; font-size: 14px;">
-						</div>
-					</div>
-					<div class="col-1">
-						<div class="input-group justify-content-end">
-							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
-						</div>
-					</div>
-				</form>
-			</div>
+				</div>
 			</div>
 			
 				
@@ -120,23 +120,34 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(criteria);
 <% 
 	for (QnADetailDto qnaDetail : qnaDetailList) {
 %>						
-				<table class="table table-hover mb-0" style="border-top: 2px solid #000">
+				<table class="table table-hover mb-0 align-middle" style="border-top: 2px solid #000">
+					<colgroup>
+						<col width="70px">
+						<col width="20%">
+						<col width="10%">
+						<col width="">
+					</colgroup>
 					<tbody>
-						<tr class="d-flex">
-							<td class="col-4">
-							<img src = "/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %> " width="50" height="50">
-							<a href="product-detail.jsp?no=<%=qnaDetail.getProductNo()%>"><%=qnaDetail.getProductName() %></a>
-						    <small class="text-muted"><%=qnaDetail.getProductBrand() %></small></td>
-							<td class="col-2"><%=qnaDetail.getMemberName() %>(<%=qnaDetail.getMemberId() %>)</td>
-								<td class="col-6 table-active"><strong>Q.</strong><%=" "+qnaDetail.getTitle() %>
-								<%=" - "+ qnaDetail.getQuestionContent()+"  "%><small>(<%=qnaDetail.getQuestionDate() %>)</small></td>						
+						<tr>
+							<td class="style">
+								<img src = "/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %> " width="50" height="50">
+							</td>
+							<td class="style">
+								<a href="product-detail.jsp?no=<%=qnaDetail.getProductNo()%>"><%=qnaDetail.getProductName() %></a><br>
+						    	<small class="text-muted"><%=qnaDetail.getProductBrand() %></small>
+						    </td>
+							<td class="style"><%=qnaDetail.getMemberName() %>(<%=qnaDetail.getMemberId() %>)</td>
+							<td class="table-active style-1">
+								<strong>Q.</strong><%=" "+qnaDetail.getTitle() %> <%=" - "+ qnaDetail.getQuestionContent()+"  "%>
+								<small>(<%=qnaDetail.getQuestionDate() %>)</small>
+							</td>						
 						</tr>
 <% if (qnaDetail.getQuestionAnswered().equals("Y")) { %>	
-						<tr class="d-flex">
-							<td class="col-12"><strong>A.</strong><%=" "+qnaDetail.getAnswerContent()+"  " %><small>(<%=qnaDetail.getAnswerDate() %>)</small></td>
+						<tr>
+							<td colspan="4"><strong>A.</strong><%=" "+qnaDetail.getAnswerContent()+"  " %><small>(<%=qnaDetail.getAnswerDate() %>)</small></td>
 						</tr>
 					</tbody>				
-			</table>							
+				</table>							
 <% 
 	} else {  
 %>			            
@@ -208,8 +219,8 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(criteria);
 		</div>
 	</div>
 		
-	</div>	
-</div>
+</div>	
+
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">

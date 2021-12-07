@@ -20,15 +20,6 @@
 
 %>
 <div class="container">    
-<div class="row">
-		<div class="col breadcrumb">
-			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
-				<li class="crumb">관리자페이지</li>
-				<li class="crumb">신규 상품 등록</li>
-			</ul>
-		</div>
-	</div>
 	<div class="row">
 		<div class="col p-0 page-title">
 			<h1>관리자페이지</h1>

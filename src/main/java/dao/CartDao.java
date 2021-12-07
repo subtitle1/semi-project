@@ -20,6 +20,24 @@ public class CartDao {
 		return self;
 	}
 	
+	
+	public int selectCartCountbymemberNo(int memberNo) throws SQLException {
+		String sql = "select count(*) cnt "
+				+ "from tb_carts "
+				+ "where member_no = ? ";
+				
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+
+		return totalRecords;
+		
+	}
+	
 	/**
 	 * 장바구니 번호를 조회하여 해당 장바구니 정보를 삭제한다.
 	 * @param no 장바구니 번호

@@ -141,11 +141,11 @@ public class QnaDao {
 	public List<QnADetailDto> selectQnAListByMemberNo(int begin, int end, int memberNo) throws SQLException{
 		String sql = "select question_no, product_no, member_no, question_title, question_content, "
 	            + "question_date, question_answered, answer_content, "
-	            + "answer_date, member_name, member_id, product_name, product_img "
+	            + "answer_date, member_name, member_id, product_name, product_img, product_brand "
 	            + "    from (select row_number() over (order by q.question_date desc) rn, q.question_no, "
 	            + "    q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
 	            + "    q. question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
-	            + "    p.product_name, p.product_img "
+	            + "    p.product_name, p.product_img, p.product_brand "
 	            + "    from tb_qna q, tb_members m, tb_products p "
 	            + "    where q.member_no = m.member_no "
 	            + "    and p.product_no = q.product_no) "
@@ -178,6 +178,7 @@ public class QnaDao {
 			qnADetail.setAnswerDate(rs.getDate("answer_date"));
 			qnADetail.setPhoto(rs.getString("product_img"));
 			qnADetail.setProductName(rs.getString("product_name"));
+			qnADetail.setProductBrand(rs.getString("product_brand"));
 			
 			qnADetailList.add(qnADetail);
 		}

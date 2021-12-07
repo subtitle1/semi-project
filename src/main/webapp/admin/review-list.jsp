@@ -22,6 +22,12 @@
 #complete {color: white;  padding: 4px 8px;  border:none; background-color : rgb(57, 209, 146); }
 #answer {color: white;  padding: 4px 8px; border:none; background-color : rgb(126, 181, 245); }
 
+ #review-container .style{padding:2px 0 !important; text-align:center;}
+ #review-container .style-1{padding:2px 0 !important;}
+ #review-container th.style{padding:6px 0 !important;}
+ #review-container .select-box{margin-left:auto; width:120px;}
+ #review-container .select-box select{padding:0 10px;}
+
 </style>
 
 </head>
@@ -58,16 +64,7 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 	
 	
 %>
-<div class="container">    
-	<div class="row">
-		<div class="col breadcrumb">
-			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
-				<li class="crumb">관리자페이지</li>
-				<li class="crumb">관리자페이지</li>
-			</ul>
-		</div>
-	</div>
+<div class="container" id="review-container">    
 	<div class="row">
 		<div class="col p-0 page-title">
 			<h1>관리자페이지</h1>
@@ -88,12 +85,19 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>	</ul>
 		</div>	
 		<div class="col-9">
-			<h4>REVIEW 목록</h4>
-			<form id="form-search" class="row row-cols-lg-auto g-3" method="get" action="review-list.jsp">
+		<div class="row mb-3">
+			<div class="col">
+			<div><h4>REVIEW 목록</h4></div>
+			<div>
+			<form id="form-search" class="row" method="get" action="review-list.jsp">
 					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
-					<div class="col-2 offset-3">
-						<div class="input-group">
-							<select class="form-select" id="search-option" name="option">
+					<div class="col-4" style="height: 31px; line-height: 31px;">
+					총 <strong><%=totalRows %></strong> 건의 상품후기가 있습니다.
+					</div>	
+					<div class="col-4">
+						<div class="input-group select-box">
+							<select class="form-select" id="search-option" name="option"
+								style="height: 31px; font-size: 14px;">
 								<option value="productName" <%="productName".equals(option) ? "selected" : ""%>>상품이름</option>
 								<option value="id" <%="id".equals(option) ? "selected" : ""%>>회원아이디</option>
 							</select>
@@ -101,35 +105,36 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 					</div>
 					<div class="col-3">
 						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
+							<input type="text" class="form-control" id="search-keyword" 
+							name="keyword" 
+							value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	
+							placeholder="검색어를 입력하세요" style="height: 31px; font-size: 14px;">
 						</div>
 					</div>
-					<div class="col-2">
-						<div class="input-group">
+					<div class="col-1">
+						<div class="input-group justify-content-end">
 							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
 						</div>
 					</div>
 				</form>
-				<div class="row">
-						<div class="col mt-2 mb-2">
-							<span style="margin-left:5px;">총 <%= totalRows%>개의 상품 후기가 있습니다.</span>
-						</div>
-					</div>
+				</div>
+			</div>
+			</div>
 				<table class="table table-hover align-middle table-striped">
 		<colgroup>
-			<col width="25%">
-			<col width="8%">
-			<col width="8%">
-			<col width="38%">
-			<col width="9%">
+			<col width="65px">
+			<col width="160px">
+			<col width="15%">
+			<col width="">
+			<col width="95px">
 		</colgroup>
 		<thead>
 			<tr>
-				<th>상품정보</th>
-				<th>회원아이디</th>
-				<th>회원이름</th>
-				<th>리뷰내용</th>
-				<th>등록일</th>
+				<th class="style"></th>
+				<th class="style">상품정보</th>
+				<th class="style">작성자</th>
+				<th class="style">리뷰내용</th>
+				<th class="style">등록일</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -138,15 +143,14 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 	for (ReviewDetailDto reviewDetail : reviewDetailList) {
 %>	
 			<tr>
-				<td>
-				<img src = "/semi-project/resources/images/products/<%=reviewDetail.getPhoto() %> " width="50" height="50">
-				<a href="product-detail.jsp?no=<%=reviewDetail.getProductNo()%>"><%=reviewDetail.getProductName() %></a>
-				<small>(<%=reviewDetail.getSize() %>) </small>
-				<small class="text-muted"><%=reviewDetail.getBrand() %></small></td>
-				<td><%=reviewDetail.getId() %></td>
-				<td><%=reviewDetail.getName() %></td>
-				<td><strong><%=reviewDetail.getContent() %></strong></td>
-				<td><small class="text-muted"><%=reviewDetail.getReviewDate() %></small></td>
+				<td class="style"><img src = "/semi-project/resources/images/products/<%=reviewDetail.getPhoto() %> " width="50" height="50"></td>
+				<td class="style">
+				<a href="product-detail.jsp?no=<%=reviewDetail.getProductNo()%>"><%=reviewDetail.getProductName() %></a><br>
+				<small class="text-muted"><%=reviewDetail.getBrand() %></small>
+				<small>(<%=reviewDetail.getSize() %>) </small></td>
+				<td class="style"><%=reviewDetail.getName() %>(<%=reviewDetail.getId() %>)</td>
+				<td class="style-1"><strong><%=reviewDetail.getContent() %></strong></td>
+				<td class="style"><small class="text-muted"><%=reviewDetail.getReviewDate() %></small></td>
 			</tr>			
 <% 
 	}
@@ -186,6 +190,7 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 	</div>
 
 	</div>	
+</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

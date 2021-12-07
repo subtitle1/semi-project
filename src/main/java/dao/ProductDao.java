@@ -24,6 +24,136 @@ public class ProductDao {
 		return self;
 	}
 
+	public int selectNameCount(String name) throws SQLException {
+	      
+	      int count = 0;
+	      
+	      String sql = "select count(*) cnt "
+	            + "from tb_products "
+	            + "where product_name like '%' || ? || '%' ";
+	      
+	      Connection connection = getConnection();
+	      PreparedStatement pstmt = connection.prepareStatement(sql);
+	      pstmt.setString(1, name);
+	      ResultSet rs = pstmt.executeQuery();
+	      
+	      rs.next();
+	      count = rs.getInt("cnt");
+	      
+	      return count;
+	   }
+
+	   public int selectBrandCount(String brand) throws SQLException {
+	      
+	      int count = 0;
+	      
+	      String sql = "select count(*) cnt "
+	            + "from tb_products "
+	            + "where product_brand like '%' || ? || '%' ";
+	      
+	      Connection connection = getConnection();
+	      PreparedStatement pstmt = connection.prepareStatement(sql);
+	      pstmt.setString(1, brand);
+	      ResultSet rs = pstmt.executeQuery();
+	      
+	      rs.next();
+	      count = rs.getInt("cnt");
+	      
+	      return count;
+	   }
+	   
+	   public List<Product> selectProductByName(int begin, int end, String name) throws SQLException {
+
+	      String sql = "select product_no, product_name, product_img, product_price, "
+	            + "product_disprice, product_brand, "
+	            + "product_category, product_created_date, product_gender "
+	            + "from (select row_number() over (order by product_no desc) rn, "
+	            + "      product_no, product_name, product_img, product_price, "
+	            + "      product_disprice, product_brand, "
+	            + "      product_category, product_created_date, product_gender "
+	            + "      from tb_products "
+	            + "where product_name like '%' || ? || '%' ) "
+	            + "where rn >= ? and rn <= ? "
+	            + "order by product_no desc ";
+	   
+	      List<Product> productList = new ArrayList<>();
+	      Connection connection = getConnection();
+	      PreparedStatement pstmt = connection.prepareStatement(sql.toString());
+	      pstmt.setString(1, name);
+	      pstmt.setInt(2, begin);
+	      pstmt.setInt(3, end);
+	      ResultSet rs = pstmt.executeQuery();   
+	      
+	      while (rs.next()) {
+	         Product product = new Product();
+	         
+	         product.setNo(rs.getInt("product_no"));
+	         product.setName(rs.getString("product_name"));
+	         product.setPhoto(rs.getString("product_img"));
+	         product.setPrice(rs.getInt("product_price"));
+	         product.setDisPrice(rs.getInt("product_disprice"));
+	         product.setBrand(rs.getString("product_brand"));
+	         product.setCategory(rs.getString("product_category"));
+	         product.setCreatedDate(rs.getDate("product_created_date"));
+	         product.setGender(rs.getString("product_gender"));
+	         
+	         productList.add(product);
+	      }
+	      
+	      rs.close();
+	      pstmt.close();
+	      connection.close();
+	      
+	      return productList;
+	   }
+
+	   public List<Product> selectProductByBrand(int begin, int end, String brand) throws SQLException {
+	      
+	         String sql = "select product_no, product_name, product_img, product_price, "
+	               + "product_disprice, product_brand, "
+	               + "product_category, product_created_date, product_gender "
+	               + "from (select row_number() over (order by product_no desc) rn, "
+	               + "      product_no, product_name, product_img, product_price, "
+	               + "      product_disprice, product_brand, "
+	               + "      product_category, product_created_date, product_gender "
+	               + "      from tb_products "
+	               + "where product_brand like '%' || ? || '%' ) "
+	               + "where rn >= ? and rn <= ? "
+	               + "order by product_no desc ";
+	      
+	         List<Product> productList = new ArrayList<>();
+	         Connection connection = getConnection();
+	         PreparedStatement pstmt = connection.prepareStatement(sql.toString());
+	         pstmt.setString(1, brand);
+	         pstmt.setInt(2, begin);
+	         pstmt.setInt(3, end);
+	         ResultSet rs = pstmt.executeQuery();   
+	         
+	         while (rs.next()) {
+	            Product product = new Product();
+	            
+	            product.setNo(rs.getInt("product_no"));
+	            product.setName(rs.getString("product_name"));
+	            product.setPhoto(rs.getString("product_img"));
+	            product.setPrice(rs.getInt("product_price"));
+	            product.setDisPrice(rs.getInt("product_disprice"));
+	            product.setBrand(rs.getString("product_brand"));
+	            product.setCategory(rs.getString("product_category"));
+	            product.setCreatedDate(rs.getDate("product_created_date"));
+	            product.setGender(rs.getString("product_gender"));
+	            
+	            productList.add(product);
+	         }
+	         
+	         rs.close();
+	         pstmt.close();
+	         connection.close();
+	         
+	         return productList;
+	   }
+	
+	
+	
 	   public void updateProduct(Product product) throws SQLException {
 	         String sql = "update tb_products "
 	                  + "set "
@@ -238,7 +368,7 @@ public class ProductDao {
 		}
 				sql += "            ) "	
 				   + "where rn >= ? and rn <= ? "
-				   + "order by product_no desc ";
+				   + "order by product_no desc, product_size asc ";
 		
 		List<ProductDetailDto> productDetails = new ArrayList<>();
 		

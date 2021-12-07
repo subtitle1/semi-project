@@ -152,41 +152,46 @@ public class OrderDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Order> selectCanceledOrderByMemberNo(int memberNo) throws SQLException {
-		
-		String sql = "select order_no, order_status, "
-				   + "order_date, order_total_price, cancel_reason, canceled_date "
-				   + "from tb_orders "
-				   + "where member_no = ? "
-				   + "and cancel_status = 'Y' ";
-		
-		List<Order> canceledOrders = new ArrayList<>();
-		
-		Connection connection = getConnection();
-	    PreparedStatement pstmt = connection.prepareStatement(sql);
-	    pstmt.setInt(1, memberNo);
-	    ResultSet rs = pstmt.executeQuery();
-	    
-	    while (rs.next()) {
-	    	Order order = new Order();
-	    	
-	    	order.setNo(rs.getInt("order_no"));
-	    	order.setStatus(rs.getString("order_status"));
-	    	order.setOrderDate(rs.getDate("order_date"));
-	    	order.setTotalPrice(rs.getInt("order_total_price"));
-	    	order.setCancelReason(rs.getString("cancel_reason"));
-	    	order.setCanceledDate(rs.getDate("canceled_date"));
-	    	order.setCanceledDate(rs.getDate("canceled_date"));
-	    	
-	    	canceledOrders.add(order);
-	    }
-	    
-	    rs.close();
-		pstmt.close();
-		connection.close();
-		
-		return canceledOrders;
-	}
+	public List<Order> selectCanceledOrderByMemberNo(int begin, int end, int memberNo) throws SQLException {
+	      
+	      String sql = "select * "
+	            + "from (select row_number() over (order by order_no desc) rn, order_no, order_status, "
+	            + "      order_date, order_total_price, cancel_reason, canceled_date "
+	            + "      from tb_orders "
+	            + "      where cancel_status = 'Y' "
+	            + "      and member_no = ?) "
+	            + "where rn >= ? and rn <= ? "
+	            + "order by order_no desc ";
+	      
+	      List<Order> canceledOrders = new ArrayList<>();
+	      
+	      Connection connection = getConnection();
+	       PreparedStatement pstmt = connection.prepareStatement(sql);
+	       pstmt.setInt(1, memberNo);
+	       pstmt.setInt(2, begin);
+	       pstmt.setInt(3, end);
+	       ResultSet rs = pstmt.executeQuery();
+	       
+	       while (rs.next()) {
+	          Order order = new Order();
+	          
+	          order.setNo(rs.getInt("order_no"));
+	          order.setStatus(rs.getString("order_status"));
+	          order.setOrderDate(rs.getDate("order_date"));
+	          order.setTotalPrice(rs.getInt("order_total_price"));
+	          order.setCancelReason(rs.getString("cancel_reason"));
+	          order.setCanceledDate(rs.getDate("canceled_date"));
+	          order.setCanceledDate(rs.getDate("canceled_date"));
+	          
+	          canceledOrders.add(order);
+	       }
+	       
+	       rs.close();
+	      pstmt.close();
+	      connection.close();
+	      
+	      return canceledOrders;
+	   }
 	
 	/**
 	 * 지정된 주문번호로 주문상태를 반환한다.
@@ -332,7 +337,7 @@ public class OrderDao {
 		if ("no".equals(criteria.getOption())) {
 			sql += "  and o.order_no = ? ";
 	} else if ("memberName".equals(criteria.getOption())) {
-			sql += "  and m.member_name = like '%' || ? || '%' ";
+			sql += "  and m.member_name like '%' || ? || '%' ";
 	} else if ("productName".equals(criteria.getOption())) {
 		sql += "      and o.order_no in ("
 				+ "                       select order_no "
@@ -375,7 +380,7 @@ public class OrderDao {
 		if ("no".equals(criteria.getOption())) {
 				sql += "    and o.order_no = ? ";
 		} else if ("memberName".equals(criteria.getOption())) {
-				sql += "    and m.member_name = like '%' || ? || '%' ";
+				sql += "    and m.member_name like '%' || ? || '%' ";
 		} else if ("productName".equals(criteria.getOption())) {
 			sql += "       and o.order_no in ("
 					+ "                       select order_no "
@@ -605,7 +610,8 @@ public class OrderDao {
 			       + "order_date, order_total_price, cancel_reason,"
 				   + "cancel_status, canceled_date, member_no "
 				   + "from tb_orders "
-				   + "where member_no = ? ";
+				   + "where member_no = ? "
+				   + "order by order_no desc";
 		
 		List<Order> orders = new ArrayList<>();
 		

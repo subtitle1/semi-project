@@ -30,7 +30,11 @@ Product product = productDao.selectProductbyNo(no);
 	int price = Integer.parseInt(mr.getParameter("price"));
 	
 	// 업로드된 파일이름 조회하기
-	String photo = mr.getFilename("photo");
+	String photo = product.getPhoto();
+	
+	if (mr.getFilename("photo") != null) {
+	
+	photo = mr.getFilename("photo"); } 
 	
 	int stock230 = Integer.parseInt(mr.getParameter("stock-230"));
 	int stock240 = Integer.parseInt(mr.getParameter("stock-240"));

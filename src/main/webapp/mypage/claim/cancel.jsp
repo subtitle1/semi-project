@@ -12,7 +12,7 @@
 <!doctype html>
 <%
 
-	Member member = (Member) session.getAttribute("LOGIN_USER_INFO");
+	Member loginedUser = (Member) session.getAttribute("LOGIN_USER_INFO");
 
 	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 	String values[] = request.getParameterValues("stockNo");
@@ -21,6 +21,8 @@
 	OrderDao orderDao = OrderDao.getInstance();
 	StockDao stockDao = StockDao.getInstance();
 	MemberDao memberDao = MemberDao.getInstance();
+	
+	Member member = memberDao.selectMemberByNo(loginedUser.getNo());
 	
 	// stockNo로 가져온 번호를 하나씩 조회한다
 	int stockNo = 0;

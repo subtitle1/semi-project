@@ -17,6 +17,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
    <link rel="stylesheet" href="../resources/css/style.css" />
+ <style>
+ #stock-container .style{padding:2px 0 !important; text-align:center;}
+ #stock-container th.style{padding:6px 0 !important;}
+ #stock-container .select-box{margin-left:auto; width:120px;}
+ #stock-container .select-box select{padding:0 10px;}
+ </style>   
+    
     <title></title>
 </head>
 <body>
@@ -55,16 +62,7 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 %>
 
 
-<div class="container">    
-<div class="row">
-		<div class="col breadcrumb">
-			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
-				<li class="crumb">관리자페이지</li>
-				<li class="crumb">관리자페이지</li>
-			</ul>
-		</div>
-	</div>
+<div class="container" id="stock-container">    
 	<div class="row">
 		<div class="col p-0 page-title">
 			<h1>관리자페이지</h1>
@@ -86,64 +84,60 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 		</div>	
 		<div class="col-9">
 		<div class="row mb-3">
-			<div class="col-2"><h4>재고 관리</h4></div>
-			<div>
-				<!--  
-					페이징처리와 검색에 필요한 값을 서버로 제출할 때 사용하는 폼이다.
-					페이지번호를 클릭하거나 검색버튼을 클릭하면 폼의 입력요소에 적절한 값을 설정하고, 폼 입력값을 제출한다.
-					
-					검색옵션과 검색어가 존재하면 해당 해당 옵션이 선택되고, 검색어가 입력필드에 표시된다.
-				-->
-				<form id="form-search" class="row" method="get" action="stock-management.jsp">
-					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
-					<div class="col-4" style="height: 31px; line-height: 31px;">
-						총 <strong><%=totalRows %></strong> 개의 상품이 있습니다.
-					</div>
-					<div class="col-2 offset-2">
-						<div class="input-group">
-							<select class="form-select" id="search-option" name="option"
+			<div class="col">
+				<div><h4>재고 관리</h4></div>
+				<div>
+					<form id="form-search" class="row" method="get" action="stock-management.jsp">
+						<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
+						<div class="col-4" style="height: 31px; line-height: 31px;">
+							총 <strong><%=totalRows %></strong> 개의 상품이 있습니다.
+						</div>
+						<div class="col-4">
+							<div class="input-group select-box">
+								<select class="form-select" id="search-option" name="option"
+									style="height: 31px; font-size: 14px;">
+									<option value="name" <%="name".equals(option) ? "selected" : "" %>>상품이름</option>
+									<option value="brand" <%="brand".equals(option) ? "selected" : "" %>>브랜드</option>
+									<option value="category" <%="category".equals(option) ? "selected" : "" %>>카테고리</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-3">
+							<div class="input-group">
+								<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>" placeholder="검색어를 입력하세요" 
 								style="height: 31px; font-size: 14px;">
-								<option value="name" <%="name".equals(option) ? "selected" : "" %>>상품이름</option>
-								<option value="brand" <%="brand".equals(option) ? "selected" : "" %>>브랜드</option>
-								<option value="category" <%="category".equals(option) ? "selected" : "" %>>카테고리</option>
-							</select>
+							</div>
 						</div>
-					</div>
-					<div class="col-3">
-						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>" placeholder="검색어를 입력하세요" 
-							style="height: 31px; font-size: 14px;">
+						<div class="col-1">
+							<div class="input-group justify-content-end">
+								<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
+							</div>
 						</div>
-					</div>
-					<div class="col-1">
-						<div class="input-group justify-content-end">
-							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
-						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</div>
-		<table class="table table-hover align-middle">
+		<table class="table table-hover align-middle table-striped">
 		<colgroup>
-			<col width="12%">
-			<col width="7%">
-			<col width="12%">
+			<col width="5%">
+			<col width="8%">
+			<col width="">
 			<col width="12%">
 			<col width="12%">
 			<col width="10%">
-			<col width="25%">
+			<col width="22%">
 			<col width="10%">
 		</colgroup>
 		<thead>
 			<tr>
-				<th>이미지</th>
-				<th>번호</th>
-				<th>이름</th>
-				<th>브랜드</th>
-				<th>카테고리</th>
-				<th>사이즈</th>
-				<th>재고관리</th>
-				<th></th>
+				<th class="style">번호</th>
+				<th class="style">이미지</th>
+				<th class="style">이름</th>
+				<th class="style">브랜드</th>
+				<th class="style">카테고리</th>
+				<th class="style">사이즈</th>
+				<th class="style">재고관리</th>
+				<th class="style"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -152,13 +146,13 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 	for (ProductDetailDto productDetail : productDetailList) {
 %>	
 			<tr>
-				<td><img src = "/semi-project/resources/images/products/<%=productDetail.getPhoto() %> " width="50" height="50"></td>		
-				<td><%=productDetail.getProductNo() %></td>		
-				<td><a href="product-detail.jsp?no=<%=productDetail.getProductNo()%>"></a><%=productDetail.getName() %></td>
-				<td><%=productDetail.getBrand() %></td>
-				<td><%=productDetail.getCategory() %></td>
-				<td><%=productDetail.getSize() %></td>
-				<td>
+				<td class="style"><%=productDetail.getProductNo() %></td>		
+				<td class="style"><img src = "/semi-project/resources/images/products/<%=productDetail.getPhoto() %> " width="50" height="50"></td>		
+				<td class="style"><a href="product-detail.jsp?no=<%=productDetail.getProductNo()%>"><%=productDetail.getName() %></td>
+				<td class="style"><%=productDetail.getBrand() %></td>
+				<td class="style"><%=productDetail.getCategory() %></td>
+				<td class="style"><%=productDetail.getSize() %></td>
+				<td class="style">
         		 <div class="row">
            			 <div class="col">
               			 <button style="margin-right:10px; vertical-align:top;" class="btn btn-outline-danger btn-sm"
@@ -231,7 +225,7 @@ function plus(id) {
  
 function save(no) {
 	var amount = Number(document.getElementById("stock-"+no).value);
-	location.href="save.jsp?no=" + no + "&amount=" + amount;
+	location.href="save.jsp?no=" + no + "&amount=" + amount + "&page=<%=pageNo%>&option=<%=option%>&keyword=<%=keyword%>";
 }
 
 

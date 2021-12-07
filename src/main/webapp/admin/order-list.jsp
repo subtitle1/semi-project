@@ -20,7 +20,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
    <link rel="stylesheet" href="../resources/css/style.css" />
+ <style>
+ #order-container .style{padding:2px 0 !important; text-align:center;}
+ #order-container th.style{padding:6px 0 !important;}
+ #order-container .select-box{margin-left:auto; width:120px;}
+ #order-container .select-box select{padding:0 10px;}
+   </style>
     <title></title>
+
 </head>
 <body>
 <%@ include file="admin-common.jsp" %>
@@ -65,16 +72,7 @@ OrderDao orderDao = OrderDao.getInstance();
 List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(criteria);
 
 %>
-<div class="container">    
-<div class="row">
-		<div class="col breadcrumb">
-			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
-				<li class="crumb">관리자페이지</li>
-				<li class="crumb">주문목록</li>
-			</ul>
-		</div>
-	</div>
+<div class="container" id="order-container">    
 	<div class="row">
 		<div class="col p-0 page-title">
 			<h1>관리자페이지</h1>
@@ -96,7 +94,44 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 			</ul>
 		</div>	
 		<div class="col-9">
-		<h4>주문 목록</h4>
+		<div class="row mb-3">
+			<div class="col">
+			<div><h4>주문 목록</h4></div>
+			<div>
+			<form id="form-search" class="row" method="get" action="order-list.jsp">
+					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
+					<div class="col-4" style="height: 31px; line-height: 31px;">
+						총 <strong><%=totalRows %></strong> 건의 주문이 있습니다.
+					</div>			
+					<div class="col-4">
+						<div class="input-group select-box">
+							<select class="form-select" id="search-option" name="option"
+								style="height: 31px; font-size: 14px;">
+								<option value="no" <%="no".equals(option) ? "selected" : ""%>>주문번호</option>
+								<option value="memberName" <%="memberName".equals(option) ? "selected" : ""%>>주문자이름</option>
+								<option value="productName" <%="productName".equals(option) ? "selected" : ""%>>상품이름</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="input-group">
+							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요"
+							style="height: 31px; font-size: 14px;">
+						</div>
+					</div>
+					<div class="col-1">
+						<div class="input-group justify-content-end">
+							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			</div>
+			</div>
+		
+		
+		
+		
 		<table class="table table-hover table-striped">
 		<colgroup>
 			<col width="3%">
@@ -109,13 +144,13 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 		</colgroup>
 		<thead>
 			<tr>
-				<th>No.</th>
-				<th>주문자</th>
-				<th>상품명</th>
-				<th>총액</th>
-				<th>주문일</th>
-				<th>주문상태</th>
-				<th>취소사유</th>
+				<th class="style">No.</th>
+				<th class="style">주문자</th>
+				<th class="style">상품명</th>
+				<th class="style">총액</th>
+				<th class="style">주문일</th>
+				<th class="style">주문상태</th>
+				<th class="style">취소사유</th>
 				
 			</tr>
 		</thead>
@@ -126,9 +161,9 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 %>	
 			<tr>
 			
-				<td><a href="order-detail.jsp?no=<%=order.getNo()%>"><%=order.getNo()%></td>		
-				<td><%=order.getMemberName() %></td>		
-				<td>
+				<td class="style"><a href="order-detail.jsp?no=<%=order.getNo()%>"><%=order.getNo()%></td>		
+				<td class="style"><%=order.getMemberName() %></td>		
+				<td class="style">
 <%					
 	for(OrderDetailDto orderItem : orderItemList)	{
 %>					
@@ -140,21 +175,21 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 %>					
 	
 				</td>
-				<td><%=order.getTotalPrice() %></td>
-				<td><small class="text-muted"><%=order.getOrderDate() %></small></td>
+				<td class="style"><%=order.getTotalPrice() %></td>
+				<td class="style"><small class="text-muted"><%=order.getOrderDate() %></small></td>
 <% if ("주문취소".equals(order.getStatus())) { 
 %>		
-				<td style="font-size: 14px; color: red;"><%=order.getStatus()%></td>
+				<td class="style" style="font-size: 14px; color: red;"><%=order.getStatus()%></td>
 				
 <% 
 } else if ("배송완료".equals(order.getStatus())) { 
 %>		
-				<td style="font-size: 14px; color: blue;"><%=order.getStatus()%></td>
+				<td class="style" style="font-size: 14px; color: blue;"><%=order.getStatus()%></td>
 				
 <% 
 } else {
 %>
-				<td>
+				<td class="style">
 				<select name="status" style="height: 29px; font-size: 14px;" id="status-<%=order.getNo()%>" onchange="change(<%=order.getNo() %>)">
 						 <option selected disabled value=<%=order.getStatus()%>><%=order.getStatus()%></option>
 						 <option value="주문완료">주문완료</option>
@@ -167,7 +202,7 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 } 
 %>				
 				
-				<td><small><%=StringUtils.defaultString(order.getCancelReason(), "") %></small>
+				<td class="style"><small><%=StringUtils.defaultString(order.getCancelReason(), "") %></small>
 				<small class="text-muted"><%=order.getCanceledDate() != null ? "("+order.getCanceledDate()+")" : ""%></small></td>
 				
 				
@@ -209,38 +244,7 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 		</div>
 	</div>
 		</div>
-		<div class="row mb-3">
-			<div class="col">
-				<!--  
-					페이징처리와 검색에 필요한 값을 서버로 제출할 때 사용하는 폼이다.
-					페이지번호를 클릭하거나 검색버튼을 클릭하면 폼의 입력요소에 적절한 값을 설정하고, 폼 입력값을 제출한다.
-					
-					검색옵션과 검색어가 존재하면 해당 해당 옵션이 선택되고, 검색어가 입력필드에 표시된다.
-				-->
-				<form id="form-search" class="row row-cols-lg-auto g-3" method="get" action="order-list.jsp">
-					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
-					<div class="col-2 offset-3">
-						<div class="input-group">
-							<select class="form-select" id="search-option" name="option">
-								<option value="no" <%="no".equals(option) ? "selected" : ""%>>주문번호</option>
-								<option value="memberName" <%="memberName".equals(option) ? "selected" : ""%>>주문자이름</option>
-								<option value="productName" <%="productName".equals(option) ? "selected" : ""%>>상품이름</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-3">
-						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
-						</div>
-					</div>
-					<div class="col-2">
-						<div class="input-group">
-							<button class="btn btn-primary" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
+		
 </div>	
 </div>
 <%@ include file="../common/footer.jsp" %>
