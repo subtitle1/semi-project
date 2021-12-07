@@ -1,3 +1,5 @@
+        
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dto.QnADetailDto"%>
 <%@page import="dao.QnaDao"%>
 <%@page import="dao.MemberDao"%>
@@ -26,8 +28,8 @@
 <body data-spy='scroll' data-target='.navbar' data-offset='50'>
 	<%@ include file="common/navbar.jsp"%>
 	<div class="container">
-		<% 
-
+		<%
+		DecimalFormat price = new DecimalFormat("###,###,###");
 		int productNo = Integer.parseInt(request.getParameter("no"));
 
 		ProductDao productDao = ProductDao.getInstance();
@@ -42,35 +44,51 @@
 
 			<form id="product-form" method="get" action="">
 				<table style="border-top: 2px solid #000">
+					<colgroup>
+						<col width="30%">
+						<col width="40%">
+						<col width="30%">
+					</colgroup>
 					<tbody>
 						<tr>
 							<th>판매가</th>
-							<td class="price"><%=product.getPrice()%></td>
+	<%
+		if(product.getDisPrice() > 0){
+	%>
+							<td class="price" id="price"><%=price.format(product.getDisPrice())%></td>
+	<%		
+		} else {
+	%>						
+							<td class="price" id="price"><%=price.format(product.getPrice())%></td>
+	<%
+			}
+	%>
+
 						</tr>
 						<tr>
 							<th>상품코드</th>
-							<td>
+							<td colspan="2">
 							<input type="hidden" name="no" value="<%=product.getNo()%>"> 
 							<%=product.getNo()%>
 							</td>
 						</tr>
 						<tr>
 							<th>브랜드</th>
-							<td><%=product.getBrand()%></td>
+							<td colspan="2"><%=product.getBrand()%></td>
 						</tr>
 						<tr>
 							<th>구매수량</th>
-							<td>
+							<td colspan="2">
 								<div class="length">
-									<input name="amount" id="count" type="number" min="1" max="20" value="1">
-										<a href="#" onclick="plus()">증가</a> 
-										<a href="#" onclick="minus()">감소</a>
+									<input name="amount" id="count" type="number" min="1" max="20" value="1" onchange="change();">
+										<a href="#" onclick="plus(event)">증가</a> 
+										<a href="#" onclick="minus(event)">감소</a>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<th style="border-bottom: 1px solid #000">사이즈</th>
-							<td style="border-bottom: 1px solid #000"><select
+							<td colspan="2" style="border-bottom: 1px solid #000"><select
 								name="size">
 									<%
 									for (Stock stock : stockList) {
@@ -83,7 +101,17 @@
 						</tr>
 						<tr>
 							<th>결제금액</th>
-							<td class="total text-end"><b><%=product.getPrice()%></b>원</td>
+	<%
+		if(product.getDisPrice() > 0){
+	%>
+							<td colspan="2" class="total text-end"><b id="total-price"><%=price.format(product.getDisPrice())%></b>원</td>
+	<%		
+		} else {
+	%>						
+							<td colspan="2" class="total text-end"><b id="total-price"><%=price.format(product.getPrice())%></b>원</td>
+	<%
+			}
+	%>
 						</tr>
 					</tbody>
 				</table>
@@ -111,7 +139,7 @@
 <%
 	ReviewDao reviewDao = ReviewDao.getInstance();
 	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByProductNo(productNo);
-	int totalRecords = reviewDao.selectTotalReviewCountByProductNo(productNo);
+//	int totalRecords = reviewDao.selectTotalReviewCountByMemberNo(loginUserInfo.getNo());
 	
 	if (reviewDetails.isEmpty()) {
 %>
@@ -122,7 +150,7 @@
 	} else {
 %>
 					<div class="col mt-2 mb-3s">
-						<span style="margin-left: 5px;">총<%=totalRecords%>건의
+						<span style="margin-left: 5px;">총 건의
 							상품 후기가 있습니다.
 						</span>
 					</div>
@@ -222,7 +250,6 @@
 				<div class="row">
 <%
 	QnaDao qnaDao = QnaDao.getInstance();
-
 	List<QnADetailDto> qnaDetails = qnaDao.selectQnAListByProductNo(1, 10,productNo);
 	if (qnaDetails.isEmpty()) {
 %>
@@ -339,7 +366,7 @@
 
 		</div>
 <%
-	}
+	} 
 %>			
 	</div>
 
@@ -347,16 +374,33 @@
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
-		function plus() {
+		function getPrice() {
+			var price = document.querySelector('#price').textContent.replace(/,/g, '');
+			return parseInt(price);
+		}
+		
+		function changeTotalPrice() {
+			var price = getPrice();
+			var count = document.getElementById('count').value;
+			var totalPrice = price*count;
+			var formattedTotalPrice = new Number(totalPrice).toLocaleString()
+			document.querySelector("#total-price").textContent = formattedTotalPrice;
+		}
+	
+		function plus(event) {
+			event.preventDefault();
 			var count = document.getElementById('count').value;
 			if (count < 20) {
 				count++;
 			}
 			document.getElementById('count').value = count;
-			return false;
+			
+			changeTotalPrice()
+			
 		}
 
-		function minus() {
+		function minus(event) {
+			event.preventDefault();
 			var count = document.getElementById('count').value;
 			if (count > 1) {
 				count--;
@@ -364,7 +408,12 @@
 				count;
 			}
 			document.getElementById('count').value = count;
-			return false;
+			
+			changeTotalPrice()
+		}
+		
+		function change() {
+			changeTotalPrice() 
 		}
 
 		function goCart() {
@@ -385,10 +434,9 @@
 		function deleteReview(reviewNo,productNo){
 			location.href="/semi-project/deleteReview.jsp?productNo="+productNo+"&reviewNo="+reviewNo;
 		}
-		function needLogin(){
+		function needLogin(productNo){
 			alert('로그인이 필요한 기능입니다.'); 
 		}
-
 		function likeCount(reviewNo,productNo){
 			location.href="/semi-project/likeCount.jsp?productNo="+productNo+"&reviewNo="+reviewNo;
 		}
@@ -396,3 +444,5 @@
 </body>
 </html>
 
+
+    
