@@ -25,8 +25,23 @@ public class QnADetailDto {
 	private Date answerDate;
 	private String photo;
 	private String productName;
+	private String productBrand;
 
 	public QnADetailDto() {}
+
+	
+	
+	public String getProductBrand() {
+		return productBrand;
+	}
+
+
+
+	public void setProductBrand(String productBrand) {
+		this.productBrand = productBrand;
+	}
+
+
 
 	public int getMemberNo() {
 		return MemberNo;

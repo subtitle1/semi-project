@@ -85,8 +85,45 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>	</ul>
 		</div>	
 		<div class="col-9">
-		<h4>재고 관리</h4>
-		<table class="table table-hover">
+		<div class="row mb-3">
+			<div class="col-2"><h4>재고 관리</h4></div>
+			<div>
+				<!--  
+					페이징처리와 검색에 필요한 값을 서버로 제출할 때 사용하는 폼이다.
+					페이지번호를 클릭하거나 검색버튼을 클릭하면 폼의 입력요소에 적절한 값을 설정하고, 폼 입력값을 제출한다.
+					
+					검색옵션과 검색어가 존재하면 해당 해당 옵션이 선택되고, 검색어가 입력필드에 표시된다.
+				-->
+				<form id="form-search" class="row" method="get" action="stock-management.jsp">
+					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
+					<div class="col-4" style="height: 31px; line-height: 31px;">
+						총 <strong><%=totalRows %></strong> 개의 상품이 있습니다.
+					</div>
+					<div class="col-2 offset-2">
+						<div class="input-group">
+							<select class="form-select" id="search-option" name="option"
+								style="height: 31px; font-size: 14px;">
+								<option value="name" <%="name".equals(option) ? "selected" : "" %>>상품이름</option>
+								<option value="brand" <%="brand".equals(option) ? "selected" : "" %>>브랜드</option>
+								<option value="category" <%="category".equals(option) ? "selected" : "" %>>카테고리</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="input-group">
+							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>" placeholder="검색어를 입력하세요" 
+							style="height: 31px; font-size: 14px;">
+						</div>
+					</div>
+					<div class="col-1">
+						<div class="input-group justify-content-end">
+							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<table class="table table-hover align-middle">
 		<colgroup>
 			<col width="12%">
 			<col width="7%">
@@ -115,7 +152,7 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 	for (ProductDetailDto productDetail : productDetailList) {
 %>	
 			<tr>
-				<td><img src = "/semi-project/resources/images/products/<%=productDetail.getPhoto() %> " width="60" height="60"></td>		
+				<td><img src = "/semi-project/resources/images/products/<%=productDetail.getPhoto() %> " width="50" height="50"></td>		
 				<td><%=productDetail.getProductNo() %></td>		
 				<td><a href="product-detail.jsp?no=<%=productDetail.getProductNo()%>"></a><%=productDetail.getName() %></td>
 				<td><%=productDetail.getBrand() %></td>
@@ -124,21 +161,20 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 				<td>
         		 <div class="row">
            			 <div class="col">
-              			 <button style="margin-right:10px; background-color:rgb(255, 71, 111); border:1px solid rgb(255, 71, 111);" class="btn btn-danger btn-sm"
+              			 <button style="margin-right:10px; vertical-align:top;" class="btn btn-outline-danger btn-sm"
                						onclick="minus('stock-<%=productDetail.getProductStockNo()%>')">-10
                			 </button>
-              		 	 <input style="width:50px; text-align:center;" type="text" name="stock"
+              		 	 <input style="width:50px; height:31px; text-align:center;" type="text" name="stock"
                 					  id="stock-<%=productDetail.getProductStockNo()%>"
                 					  value=<%=productDetail.getStock()%>>
-             		  	 <button style="margin-left:10px; background-color:rgb(255, 71, 111); 
-             		  	 border:1px solid rgb(255, 71, 111); " class="btn btn-danger btn-sm"
+             		  	 <button style="margin-left:10px; vertical-align:top;" class="btn btn-outline-danger btn-sm"
                  				 onclick="plus('stock-<%=productDetail.getProductStockNo()%>');">+10
                   	 	 </button>
             		</div>
             	</div>
  			    </td>
-      			<td>
-         			<button class="btn btn-sm" style="color:white; background-color: rgb(57, 209, 146);" 
+      			<td class="text-end p-0">
+         			<button class="btn btn-sm" style="color:white; background-color: black;" 
          			onclick="save(<%=productDetail.getProductStockNo()%>)">저장</button>
      			</td>
 			</tr>			
@@ -179,38 +215,7 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 		</div>
 	</div>
 </div>
-		<div class="row mb-3">
-			<div class="col">
-				<!--  
-					페이징처리와 검색에 필요한 값을 서버로 제출할 때 사용하는 폼이다.
-					페이지번호를 클릭하거나 검색버튼을 클릭하면 폼의 입력요소에 적절한 값을 설정하고, 폼 입력값을 제출한다.
-					
-					검색옵션과 검색어가 존재하면 해당 해당 옵션이 선택되고, 검색어가 입력필드에 표시된다.
-				-->
-				<form id="form-search" class="row row-cols-lg-auto g-3" method="get" action="stock-management.jsp">
-					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
-					<div class="col-2 offset-3">
-						<div class="input-group">
-							<select class="form-select" id="search-option" name="option">
-								<option value="name" <%="name".equals(option) ? "selected" : ""%>>상품이름</option>
-								<option value="brand" <%="brand".equals(option) ? "selected" : ""%>>브랜드</option>
-								<option value="category" <%="category".equals(option) ? "selected" : ""%>>카테고리</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-3">
-						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
-						</div>
-					</div>
-					<div class="col-2">
-						<div class="input-group">
-							<button class="btn btn-primary" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
+		
 </div>	
 </div>
 <%@ include file="../common/footer.jsp" %>

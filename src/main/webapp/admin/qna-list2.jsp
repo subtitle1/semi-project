@@ -2,8 +2,6 @@
 <%@page import="vo.Criteria2"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>
-<%@page import="dto.ReviewDetailDto"%>
-<%@page import="dao.ReviewDao"%>
 <%@page import="dto.QnADetailDto"%>
 <%@page import="dao.QnaDao"%>
 <%@page import="java.util.List"%>
@@ -19,8 +17,7 @@
    <link rel="stylesheet" href="../resources/css/style.css" />
     <title></title>
 <style>
-#complete {color: white;  padding: 4px 8px;  border:none; background-color : rgb(57, 209, 146); }
-#answer {color: white;  padding: 4px 8px; border:none; background-color : rgb(126, 181, 245); }
+#answer {color: white;  padding: 4px 8px; border:none; background-color : black; }
 
 </style>
 
@@ -29,8 +26,7 @@
 <%@ include file="admin-common.jsp" %>
 
 <% 
-ReviewDao reviewDao = ReviewDao.getInstance();
-
+QnaDao qnaDao = QnaDao.getInstance();
 //요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
 	int pageNo = NumberUtils.toInt(request.getParameter("page"), 1);
 	String option = StringUtils.defaultString(request.getParameter("option"), "");
@@ -39,24 +35,23 @@ ReviewDao reviewDao = ReviewDao.getInstance();
 	Criteria2 criteria = new Criteria2();
 
 	// 검색옵션과 검색키워드가 모두 있는 경우에만 Criteria객체에 검색옵션과 검색 키워드를 저장한다.
-    if (!StringUtils.isEmpty(option) && !StringUtils.isEmpty(keyword)) {
-      	criteria.setOption(option);
-      	criteria.setKeyword(keyword);
-    }
- // 검색조건에 맞는 게시글의 총 갯수를 조회한다.
-    int totalRows = reviewDao.selectTotalReviewDetailRows(criteria);
-    // 페이징처리에 필요한 정보를 제공하는 Pagination객체를 생성한다.
-    Pagination2 pagination = new Pagination2(pageNo, totalRows);
-    
-    // 게시글 리스틀 조회할 때 필요한 조회범위를 Criteria객체에 저장한다.
-    criteria.setBeginIndex(pagination.getBeginIndex());
-    criteria.setEndIndex(pagination.getEndIndex());
-	
-    
-	// 현재 페이지번호에 해당하는 게시글 목록을 조회한다.
-List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
-	
-	
+  if (!StringUtils.isEmpty(option) && !StringUtils.isEmpty(keyword)) {
+    	criteria.setOption(option);
+    	criteria.setKeyword(keyword);
+  }
+    	
+    	// 검색조건에 맞는 게시글의 총 갯수를 조회한다.
+        int totalRows = qnaDao.selectTotalQnADetailRows(criteria);
+        // 페이징처리에 필요한 정보를 제공하는 Pagination객체를 생성한다.
+        Pagination2 pagination = new Pagination2(pageNo, totalRows);
+        
+        // 게시글 리스틀 조회할 때 필요한 조회범위를 Criteria객체에 저장한다.
+        criteria.setBeginIndex(pagination.getBeginIndex());
+        criteria.setEndIndex(pagination.getEndIndex());
+    	
+List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(criteria);
+
+
 %>
 <div class="container">    
 	<div class="row">
@@ -88,12 +83,18 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>	</ul>
 		</div>	
 		<div class="col-9">
-			<h4>REVIEW 목록</h4>
-			<form id="form-search" class="row row-cols-lg-auto g-3" method="get" action="review-list.jsp">
+			<div class="row mb-3">
+			<div class="col-2"><h4>QnA 목록</h4></div>
+			<div>
+			<form id="form-search" class="row" method="get" action="qna-list.jsp">
 					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
-					<div class="col-2 offset-3">
+					<div class="col-4" style="height: 31px; line-height: 31px;">
+						총 <strong><%=totalRows %></strong> 개의 QnA가 있습니다.
+					</div>			
+					<div class="col-2 offset-2">
 						<div class="input-group">
-							<select class="form-select" id="search-option" name="option">
+							<select class="form-select" id="search-option" name="option"
+								style="height: 31px; font-size: 14px;">
 								<option value="productName" <%="productName".equals(option) ? "selected" : ""%>>상품이름</option>
 								<option value="id" <%="id".equals(option) ? "selected" : ""%>>회원아이디</option>
 							</select>
@@ -101,59 +102,93 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 					</div>
 					<div class="col-3">
 						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
+							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요"
+							style="height: 31px; font-size: 14px;">
 						</div>
 					</div>
-					<div class="col-2">
-						<div class="input-group">
+					<div class="col-1">
+						<div class="input-group justify-content-end">
 							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
 						</div>
 					</div>
 				</form>
-				<div class="row">
-						<div class="col mt-2 mb-2">
-							<span style="margin-left:5px;">총 <%= totalRows%>개의 상품 후기가 있습니다.</span>
-						</div>
-					</div>
-				<table class="table table-hover align-middle table-striped">
-		<colgroup>
-			<col width="25%">
-			<col width="8%">
-			<col width="8%">
-			<col width="38%">
-			<col width="9%">
-		</colgroup>
-		<thead>
-			<tr>
-				<th>상품정보</th>
-				<th>회원아이디</th>
-				<th>회원이름</th>
-				<th>리뷰내용</th>
-				<th>등록일</th>
-			</tr>
-		</thead>
-		<tbody>
-		
-			<% 
-	for (ReviewDetailDto reviewDetail : reviewDetailList) {
-%>	
-			<tr>
-				<td>
-				<img src = "/semi-project/resources/images/products/<%=reviewDetail.getPhoto() %> " width="50" height="50">
-				<a href="product-detail.jsp?no=<%=reviewDetail.getProductNo()%>"><%=reviewDetail.getProductName() %></a>
-				<small>(<%=reviewDetail.getSize() %>) </small>
-				<small class="text-muted"><%=reviewDetail.getBrand() %></small></td>
-				<td><%=reviewDetail.getId() %></td>
-				<td><%=reviewDetail.getName() %></td>
-				<td><strong><%=reviewDetail.getContent() %></strong></td>
-				<td><small class="text-muted"><%=reviewDetail.getReviewDate() %></small></td>
-			</tr>			
+			</div>
+			</div>
+			
+				
+					
+<% 
+	for (QnADetailDto qnaDetail : qnaDetailList) {
+%>						
+				<table class="table table-hover mb-0" style="border-top: 2px solid #000">
+					<tbody>
+						<tr class="d-flex">
+							<td class="col-4">
+							<img src = "/semi-project/resources/images/products/<%=qnaDetail.getPhoto() %> " width="50" height="50">
+							<a href="product-detail.jsp?no=<%=qnaDetail.getProductNo()%>"><%=qnaDetail.getProductName() %></a>
+						    <small class="text-muted"><%=qnaDetail.getProductBrand() %></small></td>
+							<th class="col-1 mt-2">ID</th>
+							<td class="col-1 mt-2"><%=qnaDetail.getMemberId() %></td>
+							<th class="col-1 mt-2">회원이름</th>
+							<td class="col-2 mt-2"><%=qnaDetail.getMemberName() %></td>
+							<th class="col-1 mt-2">등록일</th>
+							<td class="col-2 mt-2"><%=qnaDetail.getQuestionDate() %></td>						
+						</tr>
+						<tr class="d-flex">
+							<th class="col-1 table-active">제목</th>
+							<td class="col-3 table-active"><%=qnaDetail.getTitle() %></td>
+							<th class="col-1 table-active">내용</th>
+							<td class="col-7 table-active"><%=qnaDetail.getQuestionContent() %></td>
+						</tr>
+<% if (qnaDetail.getQuestionAnswered().equals("Y")) { %>	
+						<tr class="d-flex">
+							<th class="col-1">답변</th>
+							<td class="col-7"><%=qnaDetail.getAnswerContent() %></td>
+							<th class="col-2">답변등록일</th>
+							<td class="col-2"><%=qnaDetail.getAnswerDate() %></td>
+						</tr>
+					</tbody>				
+			</table>							
+<% 
+	} else {
+%>			            
+					</tbody>				
+			</table>   		
+					<div class="row">
+						<div class="col mt-1 accordion accordion-flush" id="faqlist">
+	                    	<div class="accordion-item">
+								<h2 class="accordion-header" id="faq-heading-<%=qnaDetail.getQnANo()%>">
+		                    		<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-<%=qnaDetail.getQnANo()%>">
+		                        		<small id="answer">답변하기</small>
+		                    		</button>
+	                     		</h2>
+							</div>
+	                       	<div id="faq-content-<%=qnaDetail.getQnANo()%>" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+								<div class="accordion-body">          
+			                		<form class="well row g-3" method="post" action="qna-answer.jsp">
+			                			<input type="hidden" name="qnANo" value="<%=qnaDetail.getQnANo()%>"/>
+	   			 						<div class="col-11">
+	   			 							<textarea class="form-control" aria-label="With textarea" name="content"></textarea> 
+	   			 						</div>
+	   			 						<div class="text-right col-1" >
+	   			 						    <button class="btn btn-dark btn-sm" type="submit">등록</button>
+										</div>
+	  			 					</form>
+	     			 			</div>
+	     			 			</div>
+				      	</div>
+			       	</div>	
 <% 
 	}
-%>			
-		</tbody>
-	</table>
-	<div class="row mb-3">
+%>	        	       			 						
+
+<% 
+}
+%>	       
+				</div>
+			
+		</div>
+		<div class="row mt-3 mb-3">
 		<div class="col-6 offset-3">
 			<nav>
 				<ul class="pagination justify-content-center">
@@ -184,7 +219,7 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 			</nav>
 		</div>
 	</div>
-
+		
 	</div>	
 </div>
 <%@ include file="../common/footer.jsp" %>
@@ -203,6 +238,5 @@ function searchBoards(page) {
 	var form = document.getElementById("form-search");
 	form.submit();
 }  </script>
-
 </body>
 </html>

@@ -15,6 +15,7 @@ import dto.ReviewDetailDto;
 import vo.Product;
 import vo.Review;
 import vo.ReviewLiker;
+import vo.Criteria2;
 import vo.Member;
 
 /**
@@ -235,14 +236,32 @@ public class ReviewDao {
 		 * @return 리뷰 정보 갯수
 		 * @throws SQLException
 		 */
-		public int selectTotalReviewCount() throws SQLException {
+		public int selectTotalReviewDetailRows(Criteria2 criteria) throws SQLException {
 			String sql = "select count(*) cnt "
-					   + "from tb_reviews";
+					   + "from (SELECT R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
+					   + "R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
+					   + "M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
+					   + "P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
+					   + "S.PRODUCT_SIZE "
+					   + "FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
+					   + "WHERE R.MEMBER_NO = M.MEMBER_NO "
+					   + "AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
+					   + "AND S.PRODUCT_NO = P.PRODUCT_NO ";
+					 if ("productName".equals(criteria.getOption())) {
+					   sql += "        and product_name like '%' || ? || '%' ";
+					 } else if ("id".equals(criteria.getOption())) {
+					   sql += "        and MEMBER_ID like '%' || ? || '%' ";
+			 		} 
+					 	sql += "           )";
+					  
 			
 			int totalRecords = 0;
 			
 			Connection connection = getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(sql);
+			if (criteria.getOption() != null) {
+				pstmt.setString(1, criteria.getKeyword());
+			} 
 			ResultSet rs = pstmt.executeQuery();
 			rs.next();
 			totalRecords = rs.getInt("cnt");
@@ -325,7 +344,7 @@ public class ReviewDao {
 		 * @return 게시글 목록
 		 * @throws SQLException
 		 */
-		public List<ReviewDetailDto> getReviewList(int begin, int end) throws SQLException {
+		public List<ReviewDetailDto> getReviewList(Criteria2 criteria) throws SQLException {
 			String sql = "SELECT REVIEW_NO, PRODUCT_NO, PRODUCT_DETAIL_NO, PRODUCT_SIZE, PRODUCT_BRAND, "
 					   + "MEMBER_NO, MEMBER_ID, MEMBER_NAME, REVIEW_CONTENT, "
 					   + "       REVIEW_LIKE_COUNT, REVIEW_DELETED, REVIEW_DATE, PRODUCT_NAME, PRODUCT_IMG "
@@ -338,7 +357,13 @@ public class ReviewDao {
 					   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
 					   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
 					   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
-					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO) "
+					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO ";
+			if ("productName".equals(criteria.getOption())) {
+				sql += "        and product_name like '%' || ? || '%' ";
+		} else if ("id".equals(criteria.getOption())) {
+				sql += "        and MEMBER_ID like '%' || ? || '%' ";
+		} 
+				sql += "            ) "	
 					   + "WHERE RN >= ? AND RN <= ? "
 					   + "ORDER BY REVIEW_NO DESC ";
 			
@@ -346,8 +371,14 @@ public class ReviewDao {
 			
 			Connection connection = getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, begin);
-			pstmt.setInt(2, end);
+			if (criteria.getOption() != null) {
+				pstmt.setString(1, criteria.getKeyword());
+				pstmt.setInt(2, criteria.getBeginIndex());
+				pstmt.setInt(3, criteria.getEndIndex());
+			} else {
+				pstmt.setInt(1, criteria.getBeginIndex());
+				pstmt.setInt(2, criteria.getEndIndex());
+			}
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				ReviewDetailDto reviewDetailDto = new ReviewDetailDto();

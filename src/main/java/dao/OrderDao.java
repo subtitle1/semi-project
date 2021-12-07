@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.OrderDetailDto;
+import dto.OrderMemberInfoDto;
 import dto.ProductDetailDto;
 import vo.Criteria2;
 import vo.Order;
@@ -323,7 +324,112 @@ public class OrderDao {
 			
 		}
 	
+	public int getTotalOrderMemberInfoRows(Criteria2 criteria) throws SQLException {
+		int totalRows = 0;
+		String sql = "select count(*) cnt "
+				+ "   from tb_orders o, tb_members m "
+				+ "   where o.member_no = m.member_no ";
+		if ("no".equals(criteria.getOption())) {
+			sql += "  and o.order_no = ? ";
+	} else if ("memberName".equals(criteria.getOption())) {
+			sql += "  and m.member_name = like '%' || ? || '%' ";
+	} else if ("productName".equals(criteria.getOption())) {
+		sql += "      and o.order_no in ("
+				+ "                       select order_no "
+               + "                        from tb_order_item A, tb_products B, tb_product_stocks c "
+               + "                        where A.product_detail_no = c.product_detail_no "
+               + "                        and c.product_no = b.product_no "
+               + "                        and B.product_name like '%' || ? || '%' "
+               + "                       ) ";
+	}
+			
+			Connection connection = getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			if (criteria.getOption() != null) {
+				pstmt.setString(1, criteria.getKeyword());
+			} 
+			
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			totalRows = rs.getInt("cnt");
+			
+			rs.close();
+			pstmt.close();
+			connection.close();
+
+			return totalRows;
+			
+		}
 	
+	public List<OrderMemberInfoDto> selectAllOrderMemberInfo(Criteria2 criteria) throws SQLException{
+		String sql = "select order_no, order_status, order_date, order_total_price,  "
+				+ "			 cancel_reason, canceled_date, cancel_status, "
+				+ "          member_no, member_id, member_name "
+				+ "   from ("
+				+ "         select row_number() over (order by o.order_no desc) rn, "
+				+ "                o.order_no, o.order_status, o.order_date, o.order_total_price,  "
+				+ "			       o.cancel_reason, o.canceled_date, o.cancel_status, "
+			+ "                    m.member_no, m.member_id, m.member_name "
+			+ "             from tb_orders o, tb_members m "
+			+ "             where o.member_no = m.member_no ";
+		if ("no".equals(criteria.getOption())) {
+				sql += "    and o.order_no = ? ";
+		} else if ("memberName".equals(criteria.getOption())) {
+				sql += "    and m.member_name = like '%' || ? || '%' ";
+		} else if ("productName".equals(criteria.getOption())) {
+			sql += "       and o.order_no in ("
+					+ "                       select order_no "
+	               + "                        from tb_order_item A, tb_products B, tb_product_stocks c "
+	               + "                        where A.product_detail_no = c.product_detail_no "
+	               + "                        and c.product_no = b.product_no "
+	               + "                        and B.product_name like '%' || ? || '%' "
+	               + "                       ) ";
+		}
+				sql += "    ) "
+				+ "   where rn >= ? and rn <= ? "
+				+ "   order by order_no desc ";
+				  
+		
+		List<OrderMemberInfoDto> orderDetails = new ArrayList<>();
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql.toString());
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+			pstmt.setInt(2, criteria.getBeginIndex());
+			pstmt.setInt(3, criteria.getEndIndex());
+		} else {
+			pstmt.setInt(1, criteria.getBeginIndex());
+			pstmt.setInt(2, criteria.getEndIndex());
+		}
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			OrderMemberInfoDto orderDetail = new OrderMemberInfoDto();
+				
+				orderDetail.setNo(rs.getInt("order_no"));
+				orderDetail.setStatus(rs.getString("order_status"));
+				orderDetail.setOrderDate(rs.getDate("order_date"));
+				orderDetail.setTotalPrice(rs.getInt("order_total_price"));
+				orderDetail.setCanceledDate(rs.getDate("canceled_date"));
+				
+				
+				orderDetail.setCancelReason(rs.getString("cancel_reason"));
+				orderDetail.setCancelStatus(rs.getString("cancel_status"));
+				
+				orderDetail.setMemberNo(rs.getInt("member_no"));
+				orderDetail.setMemberId(rs.getString("member_id"));
+				orderDetail.setMemberName(rs.getString("member_name"));
+				
+				orderDetails.add(orderDetail);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return orderDetails;
+	}
 	
 	public List<OrderDetailDto> selectAllOrderDetail(Criteria2 criteria) throws SQLException{
 		String sql = "select order_no, order_status, order_date, order_total_price, review_status, "
@@ -351,7 +457,7 @@ public class OrderDao {
 		} else if ("productName".equals(criteria.getOption())) {
 				sql += "        and p.product_name like '%' || ? || '%' ";
 		}
-				sql += "            ) where rn >= ? and rn <= ? order by product_no desc ";
+				sql += "            ) where rn >= ? and rn <= ? order by order_no desc ";
 				  
 		
 		List<OrderDetailDto> orderDetails = new ArrayList<>();
@@ -638,6 +744,24 @@ public class OrderDao {
 		pstmt.close();
 		connection.close();
 	}
+	
+	public void updateOrderStatus(Order order) throws SQLException {
+		String sql = "update tb_orders "
+				   + "set "
+				   + "	order_status = ? "
+				   + "where order_no = ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setString(1, order.getStatus());
+		pstmt.setInt(2, order.getNo());
+		
+		pstmt.executeUpdate();
+		
+		pstmt.close();
+		connection.close();
+	}
+	
 	
 	/**
 	 * 새 주문번호를 반환한다.

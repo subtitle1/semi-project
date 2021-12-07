@@ -1,3 +1,7 @@
+<%@page import="vo.Stock"%>
+<%@page import="dao.StockDao"%>
+<%@page import="vo.Product"%>
+<%@page import="dao.ProductDao"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.MemberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -15,9 +19,12 @@
 <%@ include file="admin-common.jsp" %>
 
 <% 
+int no = Integer.parseInt(request.getParameter("no"));
+ProductDao productDao = ProductDao.getInstance();
+StockDao stockDao = StockDao.getInstance();
 
-
-
+Product product = productDao.selectProductbyNo(no);
+List<Stock> stockList = stockDao.selectStocksbyProductNo(no);
 %>
 <div class="container">    
 <div class="row">
@@ -25,7 +32,7 @@
 			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">관리자페이지</li>
-				<li class="crumb">신규 상품 등록</li>
+				<li class="crumb">상품 정보 수정</li>
 			</ul>
 		</div>
 	</div>
@@ -50,7 +57,7 @@
 				</ul>
 		</div>	
 		<div class="col-9">
-		<h4>신규 상품 등록</h4>
+		<h4>상품 정보 수정</h4>
 			<!-- 파일을 업로드 하는 폼 - method는 반드시 post로 지정한다.
 			- enctype을 multipart/form-data로 지정한다.
 			 *enctype는 폼 입력값을 어떤 형식으로 서버로 전달할지 지정하는 속성이다. 
@@ -63,12 +70,13 @@
 			 		- 첨부파일을 서버로 전달할 수 있다.
 			 		- 서버로 전달되는 형식이 위의 형식과 다름.
 			 -->
-			<form method="post" action="register.jsp" enctype="multipart/form-data">
-				<div class="register-box">
+			<form method="post" action="modify.jsp" enctype="multipart/form-data">
+				<input type="hidden" name="no" value="<%=product.getNo()%>">
+				<div class="register-box mb-3">
 					<div>
 					<label class="form-label" for="product-category">카테고리<span>*</span></label>
-					<select name="category" id="product-category">
-						 <option selected disabled>==선택==</option>
+					<select name="category" id="product-category" >
+						 <option selected value="<%=product.getCategory()%>"><%=product.getCategory()%></option>
 						 <option value="SNEAKERS">SNEAKERS</option>
 						 <option value="SPORTS">SPORTS</option>
 						 <option value="SANDALS">SANDALS</option>
@@ -78,7 +86,7 @@
 					<div>
 					<label class="form-label" for="product-brand">브랜드<span>*</span></label>
 					<select name="brand" id="product-brand">
-						<option selected disabled>==선택==</option>
+						<option selected value="<%=product.getBrand()%>"><%=product.getBrand()%></option>
 						 <option value="아디다스">아디다스</option>
 						 <option value="아키클래식">아키클래식</option>
 						 <option value="리복">리복</option>
@@ -87,70 +95,55 @@
   					<div>
 					<label class="form-label" for="product-gender">성별<span>*</span></label>
 					<select name="gender" id="product-gender">
-						<option selected disabled>==선택==</option>
+						<option selected value="<%=product.getGender()%>"><%=product.getGender()%></option>
 						 <option value="F">여성용</option>
 						 <option value="M">남성용</option>
   					</select>
   					</div>
   					<!-- 파일업로드 -->
   					<div>
-						<label class="form-label" for="product-img">상품이미지<span>*</span></label>
-						<input type="file" class="form-control" name="photo" id="product-img">
+  						<div class="row">
+						<label class="form-label col-3" for="product-img">상품이미지<span>*</span></label>
+						<div class="col-6"><input type="file" class="form-control" name="photo" id="product-img"></div>
+						<div class="col-3">현재 등록된 이미지 : <img src = "/semi-project/resources/images/products/<%=product.getPhoto() %> " width="50" height="50">
+						</div>
+						</div>
 					</div>
   					
   					
 					<div>
 						<label class="form-label" for="product-name">상품이름<span>*</span></label>
-						<input type="text" class="form-control" name="name" id="product-name">
+						<input type="text" class="form-control" name="name" id="product-name" value="<%=product.getName()%>">
 					</div>
 					<div class="row">
 						<div class="col-6">
 							<label class="form-label" for="product-price">가격<span>*</span></label>
-							<input type="text" class="form-control" name="price" id="product-price">
+							<input type="text" class="form-control" name="price" id="product-price" value="<%=product.getPrice()%>">
 						</div>
 						<div class="col-6">
 							<label class="form-label" for="product-disprice">할인가격<span>*</span></label>
-							<input type="text" class="form-control" name="disPrice" id="product-disprice">
+							<input type="text" class="form-control" name="disPrice" id="product-disprice" value="<%=product.getDisPrice()%>">
 						</div>
 					</div>
-					<div class="row">
+						<div class="row mb-5">
+<%
+ 	for (Stock stock : stockList) {
+%>					
 						<div class="col-4">
-							<label class="form-label" for="stock-230">230 입고량<span>*</span></label>
-							<input style="width:50px;" type="text" class="form-control" name="stock230" id="stock-230">
+							<label class="form-label" for="stock-<%=stock.getSize() %>>"><%=stock.getSize() %> 입고량<span>*</span></label>
+							<input style="width:50px;" type="text" class="form-control" 
+							name="stock-<%=stock.getSize() %>" id="stock-<%=stock.getSize() %>"
+							value="<%=stock.getStock() %>">
 						</div>
-						<div class="col-4">
-							<label class="form-label" for="stock-240">240 입고량<span>*</span></label>
-							<input style="width:50px;" type="text" class="form-control" name="stock240" id="stock-240">
-						</div>
-						<div class="col-4">
-							<label class="form-label" for="stock-250">250 입고량<span>*</span></label>
-							<input style="width:50px;" type="text" class="form-control" name="stock250" id="stock-250">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-4">
-							<label class="form-label" for="stock-260">260 입고량<span>*</span></label>
-							<input style="width:50px;" type="text" class="form-control" name="stock260" id="stock-260">
-						</div>
-						<div class="col-4">
-							<label class="form-label" for="stock-270">270 입고량<span>*</span></label>
-							<input style="width:50px;" type="text" class="form-control" name="stock270" id="stock-270">
-						</div>
+					
+<%
+ 	}
+%>							
 						
-						<div class="col-4">
-							<label class="form-label" for="stock-280">280 입고량<span>*</span></label>
-							<input style="width:50px;" type="text" class="form-control" name="stock280" id="stock-280">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-4">
-							<label class="form-label" for="stock-290">290 입고량<span>*</span></label>
-							<input style="width:50px;" type="text" class="form-control" name="stock290" id="stock-290">
-						</div>
 					</div>
 				</div>
 				<div class="btn-box text-center">
-					<button type="submit" class="btn btn-lg btn-dark">등록</button>
+					<button type="submit" class="btn btn-lg btn-dark">변경하기</button>
 				</div>
 			</form>
 		</div>

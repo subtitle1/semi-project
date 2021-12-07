@@ -97,7 +97,7 @@ List<Stock> stockList = stockDao.selectStocksbyProductNo(no);
 					<tbody>
 						<tr>
 							<th>상품 이름</th>
-							<th>by</th>
+							<th>브랜드</th>
 							<th>판매가</th>
 							<th>할인가격</th>
 							<th>상품번호</th>
@@ -136,7 +136,9 @@ List<Stock> stockList = stockDao.selectStocksbyProductNo(no);
 					</tr>
 					<tbody>
 				</table>
-		
+			<div class="btn-box text-center">
+					<button type="button" onclick="location.href ='modifyform.jsp?no=<%=no %>'" class="btn btn-lg btn-dark">수정</button>
+				</div>
 			</div>
 		
 		</div>

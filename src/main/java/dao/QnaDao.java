@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import dto.QnADetailDto;
+import vo.Criteria2;
 import vo.Member;
 import vo.Order;
 import vo.QnA;
@@ -188,6 +189,40 @@ public class QnaDao {
 		return qnADetailList;
 	}
 	
+	public int selectTotalQnADetailRows(Criteria2 criteria) throws SQLException {
+		String sql = "select count(*) cnt "
+				+ "from (select q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
+				+ "q.question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
+				+ "p.product_name, p.product_img, p.product_brand "
+				+ "from tb_qna q, tb_members m, tb_products p "
+				+ "where q.member_no = m.member_no "
+				+ "and p.product_no = q.product_no ";
+		if ("productName".equals(criteria.getOption())) {
+			sql += "        and p.product_name like '%' || ? || '%' ";
+		} else if ("id".equals(criteria.getOption())) {
+			sql += "        and m.MEMBER_ID like '%' || ? || '%' ";
+		} 
+			sql += "            ) "	;
+				
+				  
+		
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+		} 
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return totalRecords;
+	}
+	
 	/**
 	 * 회원, 상품, 큐엔에이 테이블 조인하여 모든 큐엔에이 정보 조회
 	 * @param begin
@@ -195,27 +230,39 @@ public class QnaDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<QnADetailDto> selectAllQnADetail(int begin, int end) throws SQLException{
-		String sql = "select question_no, product_no, member_no, question_title, question_content, "
-				+ "question_date, question_answered, answer_content, "
-				+ "answer_date, member_name, member_id, product_name, product_img "
-				+ "from (select row_number() over (order by q.question_date desc) rn, q.question_no, "
-				+ "q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
-				+ "q.question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
-				+ "p.product_name, p.product_img "
-				+ "from tb_qna q, tb_members m, tb_products p "
-				+ "where q.member_no = m.member_no "
-				+ "and p.product_no = q.product_no) "
+	public List<QnADetailDto> selectAllQnADetail(Criteria2 criteria) throws SQLException{
+		String sql = "SELECT QUESTION_NO, PRODUCT_NO, MEMBER_NO, QUESTION_TITLE, QUESTION_CONTENT, "
+				+ "QUESTION_DATE, QUESTION_ANSWERED, ANSWER_CONTENT, "
+				+ "ANSWER_DATE, MEMBER_NAME, MEMBER_ID, PRODUCT_NAME, PRODUCT_IMG, product_brand "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY Q.QUESTION_DATE DESC) RN, Q.QUESTION_NO, "
+				+ "Q.PRODUCT_NO, Q.MEMBER_NO, Q.QUESTION_TITLE, Q.QUESTION_CONTENT, Q.QUESTION_DATE, "
+				+ "Q.QUESTION_ANSWERED, Q.ANSWER_CONTENT, Q.ANSWER_DATE, M.MEMBER_NAME, M.MEMBER_ID, "
+				+ "P.PRODUCT_NAME, P.PRODUCT_IMG, p.product_brand "
+				+ "FROM TB_QNA Q, TB_MEMBERS M, TB_PRODUCTS P "
+				+ "WHERE Q.MEMBER_NO = M.MEMBER_NO "
+				+ "AND P.PRODUCT_NO = Q.PRODUCT_NO ";
+		if ("productName".equals(criteria.getOption())) {
+			sql += "        and p.product_name like '%' || ? || '%' ";
+		} else if ("id".equals(criteria.getOption())) {
+			sql += "        and m.MEMBER_ID like '%' || ? || '%' ";
+		} 
+			sql += "            ) "	
 				+ "where rn >= ? and rn <= ? "
-				+ "	order by question_date desc ";
+				+ "order by question_date desc ";
 					
 		
 		List<QnADetailDto> qnADetailList = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, begin);
-		pstmt.setInt(2, end);
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+			pstmt.setInt(2, criteria.getBeginIndex());
+			pstmt.setInt(3, criteria.getEndIndex());
+		} else {
+			pstmt.setInt(1, criteria.getBeginIndex());
+			pstmt.setInt(2, criteria.getEndIndex());
+		}
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
@@ -234,6 +281,7 @@ public class QnaDao {
 			qnADetail.setAnswerDate(rs.getDate("answer_date"));
 			qnADetail.setPhoto(rs.getString("product_img"));
 			qnADetail.setProductName(rs.getString("product_name"));
+			qnADetail.setProductBrand(rs.getString("product_brand"));
 			
 			qnADetailList.add(qnADetail);
 		}
