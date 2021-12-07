@@ -1,3 +1,7 @@
+<%@page import="dao.CartDao"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="org.apache.commons.lang3.math.NumberUtils"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
@@ -50,11 +54,16 @@
 					</li>
 				</ul>
 			</div>
+			<%
+				int mainPageNo = NumberUtils.toInt(request.getParameter("pno"), 1);
+				String mainKeyword = StringUtils.defaultString(request.getParameter("keyword"), "");
+			%>
 			<div class="col search-box">
-				<form>
-	     		 	<input class="form-control" type="search" placeholder="아디다스 오젤리아" aria-label="Search">
-	      			<button class="btn btn-outline-success btn-sm" type="submit"></button>
-	    		</form>				
+				<form method="get" id="main-search" action="search-list.jsp">
+					<input type="hidden" id="main-page-field" name="pno" value="<%=mainPageNo%>">
+	     		 	<input class="form-control" type="search" name="keyword" value="<%=StringUtils.isBlank(mainKeyword) ? "" : mainKeyword %>" placeholder="아디다스 오젤리아" aria-label="Search">
+	      			<button onclick="searchProducts(1);" class="btn btn-outline-success btn-sm" type="button"></button>
+	    		</form>
 			</div>
 			<div class="col">
 				<ul class="navbar-nav util-list">
@@ -79,7 +88,12 @@
 <%
 	} else {
 %>
-						<a href="/semi-project/mypage/cart.jsp?memberNo=<%=loginUserInfo.getNo() %>" class="nav-link util-cart" ></a>
+
+<%
+	CartDao cartDao = CartDao.getInstance();	
+	int countCart = cartDao.selectCartCountbymemberNo(loginUserInfo.getNo());
+%>
+						<a href="/semi-project/mypage/cart.jsp?memberNo=<%=loginUserInfo.getNo() %>" class="nav-link util-cart" ><div class="count-box"><%=countCart %></div></a>
 <%
 	}
 %>
@@ -103,3 +117,11 @@
 		</div>
 	</div>
 </nav>
+<script>
+	function searchProducts(page) {
+		document.getElementById("main-page-field").value = page;
+		var form = document.getElementById("main-search");
+		
+		form.submit();
+	}
+</script>
