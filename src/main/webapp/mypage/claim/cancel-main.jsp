@@ -1,3 +1,5 @@
+<%@page import="vo.Pagination"%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dao.OrderDao"%>
 <%@page import="vo.Order"%>
 <%@page import="java.util.List"%>
@@ -16,10 +18,11 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
-int memberNo = loginUserInfo.getNo();
+	int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
 	
+	DecimalFormat price = new DecimalFormat("###,###");
 	Member member = memberDao.selectMemberByNo(memberNo);
 	String claimCancel = request.getParameter("claimCancel");
 	if ("canceled".equals(claimCancel)) {
@@ -52,8 +55,8 @@ int memberNo = loginUserInfo.getNo();
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
-				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
-				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
+				<li class=""><a href="../info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
+				<li class=""><a href="../info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
 				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
@@ -84,7 +87,11 @@ int memberNo = loginUserInfo.getNo();
 			<div class="buy-list mb-3">
 				<p>취소 현황 조회</p>
 <%
-	List<Order> canceledOrder = orderDao.selectCanceledOrderByMemberNo(memberNo);
+	String pageNo = request.getParameter("pageNo");
+	int totalCount = orderDao.selectOrderCount(memberNo, "주문취소");
+	Pagination pagination = new Pagination(pageNo, totalCount);
+	
+	List<Order> canceledOrder = orderDao.selectCanceledOrderByMemberNo(pagination.getBegin(), pagination.getEnd(), memberNo);
 	if (canceledOrder.isEmpty()) {
 %>
 			<div class="order-list-box p-5">
@@ -104,12 +111,12 @@ int memberNo = loginUserInfo.getNo();
 							<span style="font-weight: bold;">취소일시</span>
 							<span style="font-weight: bold;"><%=order.getCanceledDate() %></span>
 						</div>
-						<div class="col text-end mt-2">
+						<div class="col text-center mt-2">
 							<span style="font-weight: bold;"><%=order.getStatus() %></span>
 						</div>
 						<div class="col text-end mt-2">
 							<span style="font-weight: bold;">취소금액</span>
-							<span style="color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
+							<span style="color:red; font-weight: bold;"><%=price.format(order.getTotalPrice()) %>원</span>
 						</div>
 					</div>
 				</div>
@@ -117,6 +124,30 @@ int memberNo = loginUserInfo.getNo();
 		}
 	}
 %>
+			</div>
+			<div class="row mb-3">
+				<div class="col-6 offset-3">
+					<nav>
+						<ul class="pagination justify-content-center">
+							<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>"><a class="page-link" href="cancel-main.jsp?pageNo=<%=pagination.getPrevPage()%>" >이전</a></li>
+<%
+	if (totalCount == 0) {
+%>
+							<li class="page-item <%=pagination.getPageNo() == 1 ? "active" : "" %>"><a class="page-link" href="cancel-main.jsp?pageNo=1">1</a></li>
+<% 
+	} else {
+		for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+%>					
+							<li class="page-item <%=pagination.getPageNo() == num ? "active" : "" %>"><a class="page-link" href="cancel-main.jsp?pageNo=<%=num%>"><%=num %></a></li>
+<%
+		}
+	}
+%>					
+
+							<li class="page-item <%=!pagination.isExistNext() ? "disabled" :"" %>"><a class="page-link" href="cancel-main.jsp?pageNo=<%=pagination.getNextPage()%>" >다음</a></li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 		</div>
 	</div>

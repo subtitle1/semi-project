@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dao.OrderDao"%>
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.List"%>
@@ -24,6 +25,7 @@
    		MemberDao memberDao = MemberDao.getInstance();
    		Member member = memberDao.selectMemberByNo(memberNo);
    		
+   		DecimalFormat price = new DecimalFormat("###,###");
    		OrderDao orderDao = OrderDao.getInstance();
    		Order order = orderDao.selectOrderByOrderNo(orderNo);
    	%>
@@ -48,10 +50,10 @@
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
-				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
-				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
+				<li class=""><a href="../info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
+				<li class=""><a href="../info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
-				<li class=""><a href="" class="nav-link p-0">주문 취소</a></li>
+				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
 			<ul class="nav flex-column p-0">
@@ -136,10 +138,10 @@
 %>									<td>
 									<div class="col">
 										<div class="text-end me-2">
-											<span  style="text-decoration:line-through;"><%=orderDetail.getPrice() %>원</span>
+											<span  style="text-decoration:line-through;"><%=price.format(orderDetail.getPrice()) %>원</span>
 										</div>
 										<div class="text-end me-2">
-											<span style="color: red; font-weight: bold; font-size: 17px;"><%=orderDetail.getDisPrice() %>원</span>
+											<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()) %>원</span>
 										</div>
 									</div>
 									</td>
@@ -149,7 +151,7 @@
 									<td>
 										<div class="col text-end me-2">
 											<span><%=orderDetail.getPrice() %>원</span>
-											<input type="hidden" name="price" value="<%=orderDetail.getPrice()%>"/>
+											<input type="hidden" name="price" value="<%=price.format(orderDetail.getPrice())%>"/>
 										</div>
 									</td>
 								</tr>
@@ -194,7 +196,7 @@
 								<span style="margin-left:5px;">상품금액</span>
 							</div>
 							<div class="col text-end">
-								<span style="margin-right:5px; color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=price.format(order.getTotalPrice()) %>원</span>
 							</div>
 							<div class="col-2">
 								<span style="margin-left:5px;">배송비</span>
@@ -206,7 +208,7 @@
 								<span style="margin-left:5px;">환불 예상 금액</span>
 							</div>
 							<div class="col text-end">
-								<span style="margin-right:5px; color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=price.format(order.getTotalPrice()) %>원</span>
 							</div>
 						</div>
 					</div>

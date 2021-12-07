@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="vo.Order"%>
 <%@page import="dao.OrderItemDao"%>
 <%@page import="vo.OrderItem"%>
@@ -29,7 +30,6 @@
 	OrderItemDao orderItem = OrderItemDao.getInstance();
 	
 	Order orderInfo = orderDao.selectOrderByOrderNo(orderNo);
-	
 	List<OrderDetailDto> orderList = orderDao.selectAllOrderDetailsByOrderNo(orderNo);
 	
 %>

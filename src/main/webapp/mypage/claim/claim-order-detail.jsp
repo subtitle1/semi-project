@@ -1,4 +1,5 @@
         
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dto.OrderDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Order"%>
@@ -17,7 +18,6 @@
 </head>
 <body>
 <%@ include file="/common/navbar.jsp" %>
-<div class="container">    
 <%
 	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 
@@ -25,9 +25,11 @@
 	MemberDao memberDao = MemberDao.getInstance();
 	Member member = memberDao.selectMemberByNo(memberNo);
 	
+	DecimalFormat price = new DecimalFormat("###,###");
 	OrderDao orderDao = OrderDao.getInstance();
 	Order order = orderDao.selectOrderByOrderNo(orderNo);
 %>
+<div class="container">    
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">
@@ -49,13 +51,10 @@
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
-				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
-				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
+				<li class=""><a href="../info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
+				<li class=""><a href="../info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
-
-
 				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
-
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 			</ul>
 			<ul class="nav flex-column p-0">
@@ -147,17 +146,17 @@
 %>						
 							<div class="col mt-3">
 								<div class="text-center">
-									<span  style="text-decoration:line-through;"><%=orderDetail.getPrice() %>원</span>
+									<span  style="text-decoration:line-through;"><%=price.format(orderDetail.getPrice()) %>원</span>
 								</div>
 								<div class="text-center">
-									<span style="color: red; font-weight: bold; font-size: 17px;"><%=orderDetail.getDisPrice() %>원</span>
+									<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()) %>원</span>
 								</div>
 							</div>
 <%
 	} else {
 %>
 							<div class="col mt-4 text-end">
-								<span><%=orderDetail.getPrice() %>원</span>
+								<span><%=price.format(orderDetail.getPrice()) %>원</span>
 							</div>
 <%		
 	}	
@@ -183,55 +182,54 @@
 		}
 	}
 %>
-					
-				</div>
-				<div class="order-list">
-				<p>주문자 정보</p>s
-					<div class="order-list-box p-3">
-						<div class="row mb-3 mt-3 order-font">
-							<div class="col-2">
-								<span style="font-weight: bold;">이름</span>
-							</div>
-							<div class="col">
-								<span><%=member.getName() %></span>
-							</div>
-						</div>
-						<div class="row mb-3 order-font">
-							<div class="col-2">
-								<span style="font-weight: bold;">휴대폰 번호</span>
-							</div>
-							<div class="col">
-								<span><%=member.getTel() %></span>
-							</div>
-						</div>
-						<div class="row mb-3 order-font">
-							<div class="col-2">
-								<span style="font-weight: bold;">이메일 주소</span>
-							</div>
-							<div class="col">
-								<span><%=member.getEmail() %></span>
-							</div>
-						</div>
-						<div class="row mb-3 order-font">
-							<div class="col-2">
-								<span style="font-weight: bold;">배송 주소</span>
-							</div>
-							<div class="col">
-								<span><%=member.getAddress() %></span>
-							</div>
-						</div>
+			</div>
+		</div>
+		<div class="order-list">
+		<p>주문자 정보</p>
+			<div class="order-list-box p-3">
+				<div class="row mb-3 mt-3 order-font">
+					<div class="col-2">
+						<span style="font-weight: bold;">이름</span>
+					</div>
+					<div class="col">
+						<span><%=member.getName() %></span>
 					</div>
 				</div>
-				<div class="order-list">
-					<p>결제 정보</p>
-					<div class="order-list-box p-3">
-						<div class="row">
-							<div class="col-2">
-								<span style="margin-left:5px;">총 결제금액</span>
-							</div>
-							<div class="col text-end">
-								<span style="margin-right:5px; color:red; font-weight: bold;"><%= order.getTotalPrice() %>원</span>
-							</div>
+				<div class="row mb-3 order-font">
+					<div class="col-2">
+						<span style="font-weight: bold;">휴대폰 번호</span>
+					</div>
+					<div class="col">
+						<span><%=member.getTel() %></span>
+					</div>
+				</div>
+				<div class="row mb-3 order-font">
+					<div class="col-2">
+						<span style="font-weight: bold;">이메일 주소</span>
+					</div>
+					<div class="col">
+						<span><%=member.getEmail() %></span>
+					</div>
+				</div>
+				<div class="row mb-3 order-font">
+					<div class="col-2">
+						<span style="font-weight: bold;">배송 주소</span>
+					</div>
+					<div class="col">
+						<span><%=member.getAddress() %></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="order-list">
+			<p>결제 정보</p>
+			<div class="order-list-box p-3">
+				<div class="row">
+					<div class="col-2">
+						<span style="margin-left:5px;">총 결제금액</span>
+					</div>
+					<div class="col text-end">
+						<span style="margin-right:5px; color:red; font-weight: bold;"><%= price.format(order.getTotalPrice()) %>원</span>
 						</div>
 					</div>
 				</div>
