@@ -626,13 +626,13 @@ public class OrderDao {
     return totalRecords;
 	}
 	
-	
+		
 	/**
 	 * 멤버번호로 지정한 전체 주문내역을 반환한다.
 	 * @param memberNo
 	 * @return
 	 * @throws SQLException
-	 */
+	 */     
 	public List<Order> selectAllOrdersByMemberNo(int begin, int end, int memberNo) throws SQLException {
 		String sql = "select order_no, order_status, order_date, order_total_price, cancel_reason,"
 				+ "cancel_status, canceled_date, member_no "

@@ -54,7 +54,7 @@
 				<div class="col text-end mt-2">
 					<span style="margin-right:5px;">무료배송</span>
 				</div>
-			</div>
+			</div>      
 			<hr>
 			<div class="row p-2">
 				<div class="col-6">
