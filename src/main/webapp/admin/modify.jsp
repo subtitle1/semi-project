@@ -1,6 +1,6 @@
 <%@page import="vo.Stock"%>
 <%@page import="utils.MultipartRequest"%>
-<%@page import="vo.Product"%>
+<%@page import="vo.Product"%> 
 <%@page import="dao.ProductDao"%>
 <%@page import="dao.StockDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"

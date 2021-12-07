@@ -1,5 +1,5 @@
 <%@page import="vo.Stock"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.List"%> 
 <%@page import="dao.StockDao"%>
 <%@page import="vo.Product"%>
 <%@page import="dao.ProductDao"%>

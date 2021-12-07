@@ -1,6 +1,6 @@
 <%@page import="vo.Member"%>
 <%@page import="vo.Order"%>
-<%@page import="dao.OrderDao"%>
+<%@page import="dao.OrderDao"%> 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%

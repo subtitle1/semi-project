@@ -1,4 +1,4 @@
-<%@page import="vo.Criteria2"%>
+<%@page import="vo.Criteria2"%> 
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>
 <%@page import="vo.Pagination2"%>
