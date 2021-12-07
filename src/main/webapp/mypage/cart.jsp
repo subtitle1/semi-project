@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.List"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="dto.CartDetailDto"%>
@@ -62,7 +63,7 @@
 	
 	List<CartDetailDto> cartList = cartDao.selectCartList(memberNo);
 	
-	//response.sendRedirect("cartform.jsp?no=" + no);
+	DecimalFormat price = new DecimalFormat("###,###");
 	
 %>
 	<div class="row">
@@ -80,13 +81,28 @@
 	</div>
 	<div class="row">
 		<div class="col">
+<%
+	if (cartList.isEmpty()) {
+%>
+			<!-- 만약 장바구니에 들어있는 정보가 없으면(어떤 정보든 관계없으므로 null 조건이 가능한 이름으로 진행) -->
+			<table class="table cart-table">
+				<tr>
+					<td class="text-center">
+						<h4>장바구니에 담긴 상품이 없습니다.</h4>
+					</td>
+				</tr>
+			</table>
+<%
+	} else {
+%>			
+			<!-- 장바구니 form 시작 -->
 			<form id="cart-form" action="order-cart.jsp">
 			<div class="check-total">
 				<input type="checkbox" id="ck-all" onchange="toggleCheckbox()" /> 전체선택
 			</div>
-<%
-	for (CartDetailDto cart : cartList) {
-%>
+	<%
+		for (CartDetailDto cart : cartList) {
+	%>
 				<table class="table cart-table">
 					<colgroup>
 						<col width="50px" />
@@ -127,19 +143,19 @@
 								
 							</td>
 							<td class="text-end">
-	<%
-		if (cart.getProductDisprice() > 0) {
-			
-	%>							
-								<span class="text-price-line-through"><%=cart.getProductPrice()*cart.getAmount() %> 원</span><br>
-								<span class="text-disprice fw-bolder"><%=cart.getProductDisprice()*cart.getAmount() %></span> <span class="unit">원</span>
-	<%
-		} else {
-	%>
-								<span class="text-price fw-bolder"><%=cart.getProductPrice()*cart.getAmount() %></span>  <span class="unit">원</span>
-	<%
-		}
-	%>
+		<%
+			if (cart.getProductDisprice() > 0) {
+				
+		%>							
+								<span class="text-price-line-through"><%=price.format(cart.getProductPrice()*cart.getAmount()) %> 원</span><br>
+								<span class="text-disprice fw-bolder"><%=price.format(cart.getProductDisprice()*cart.getAmount()) %></span> <span class="unit">원</span>
+		<%
+			} else {
+		%>
+								<span class="text-price fw-bolder"><%=price.format(cart.getProductPrice()*cart.getAmount()) %></span>  <span class="unit">원</span>
+		<%
+			}
+		%>
 							</td>
 							<td>
 								<button class="btn btn-dark" type="button" onclick="thisOrder(<%=cart.getNo() %>)">바로구매</button><br>
@@ -148,13 +164,17 @@
 						</tr>
 					</tbody>
 				</table>
-<%
-	}
-%>
+	<%
+		}
+	%>
 				<div class="text-center">
 					<button class="btn btn-lg btn-dark" type="button" onclick="checkOrder()">상품 주문하기</button>
 				</div>		
 			</form>
+			<!-- 장바구니 form 끝 -->
+<%
+	}
+%>
 		</div>
 	</div>
 </div>

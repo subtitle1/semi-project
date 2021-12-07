@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dto.CartDetailDto"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.CartDao"%>
@@ -32,6 +33,8 @@
 	String values[] = request.getParameterValues("no");
 	
 	CartDao cartDao = CartDao.getInstance();
+	
+	DecimalFormat price = new DecimalFormat("###,###");
 %>
 	<div class="row mt-5">
 		<div class="col p-0 page-title">
@@ -63,7 +66,7 @@
 						</colgroup>
 						<thead>
 							<tr>
-								<th colspan="3">
+								<th colspan="4">
 									<span>ABC_MART 상품</span> / <span>무료배송</span>
 								</th>
 							</tr>
@@ -84,17 +87,33 @@
 										<span><%=cart.getProductSize() %> / <%=cart.getAmount() %> 개</span>
 									</div>
 								</td>
+								<td class="text-center">
+									<div class="text-center">적립포인트</div>
+									<div class="text-center">
+										<%
+											if (cart.getProductDisprice() > 0) {
+										%>
+											<%=price.format(cart.getProductDisprice()*cart.getAmount()*0.01) %><i>P</i>
+										<%
+											} else {
+										%>
+											<%=price.format(cart.getProductPrice()*cart.getAmount()*0.01) %><i>P</i>
+										<%
+											}
+										%>
+									</div>
+								</td>
 								<td class="text-end">
 	<%
 		if (cart.getProductDisprice() > 0) {
 	%>
-											<span style="text-decoration:line-through; font-size:14px; color:#666;"><%=cart.getProductPrice()*cart.getAmount() %> 원</span><br>
-											<span style="color: red; font-weight: bold; font-size: 16px;"><%=cart.getProductDisprice()*cart.getAmount() %>원</span>
+											<span style="text-decoration:line-through; font-size:14px; color:#666;"><%=price.format(cart.getProductPrice()*cart.getAmount()) %> 원</span><br>
+											<span style="color: red; font-weight: bold; font-size: 16px;"><%=price.format(cart.getProductDisprice()*cart.getAmount()) %>원</span>
 	<%
 		} else {
 	%>
 										
-										<span><%=cart.getProductPrice()*cart.getAmount() %> 원</span>	
+										<span><%=price.format(cart.getProductPrice()*cart.getAmount()) %> 원</span>	
 	<%
 		}
 	%>
