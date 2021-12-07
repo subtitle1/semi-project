@@ -40,7 +40,7 @@ public class Pagination3 {
 
 		public int getPage() {
 			return page;
-		}
+		} 
 		public int getCurrentBlock() {
 			return (int)(Math.ceil((double)this.page/pagesPerBlock));
 		}

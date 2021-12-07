@@ -20,8 +20,6 @@
 <style>
 .title {font-family:'Montserrat', Noto Sans KR; font-weight:500; color:black; font-size:50px; text-align:center; }
 a{text-decoration:none; color:black;}
-
-
 </style>
 <body>
 <%@ include file = "common/navbar.jsp" %>
@@ -30,22 +28,19 @@ a{text-decoration:none; color:black;}
 //요청파라미터에서 pageNo값을 조회한다.
 	// 요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
 //	String pageNo = request.getParameter("pageNo");
-
 	// 가격표 천단위로 콤마 표시하기
 	DecimalFormat price = new DecimalFormat("###,###");	
 	
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
-
 	// 페이지번호, 검색옵션, 검색키워드를 요청파라미터에서 조회한다.
-    int pageNo = NumberUtils.toInt(request.getParameter("page"), 1);
+    int pageNo = NumberUtils.toInt(request.getParameter("page"), 1); 
 	// select할 속성 요청.
 	String brand = request.getParameter("brand");
 	String gender = request.getParameter("gender");
 	String sort = request.getParameter("sort");
 	 
 	Criteria c = new Criteria();
-
 	if( brand != null && !brand.isEmpty()){
 		c.setBrand (brand);
 	} 
@@ -61,12 +56,11 @@ a{text-decoration:none; color:black;}
 	Pagination3 pagination = new Pagination3(pageNo, totalRows);
 	
 	// 상품리스트를 조회할때 필요한 조회범위를 Criteria객체에 저장한다.
-	c.setBegin(pagination.getBegin());
-	c.setEnd(pagination.getEnd());
+	c.setBegin(pagination.getBeginIndex());
+	c.setEnd(pagination.getEndIndex());
 	
 	// 검색조건에 맞는 게시글 목록을 조회한다.
 	List<Product> products = productDao.selectProductsBrandAllByOption(c);
-
 %>
     
 
@@ -143,6 +137,7 @@ a{text-decoration:none; color:black;}
  }
 %>
 </div>
+
 		<div class="row mb-3">
 			<div class="col">
 				<ul class="pagination justify-content-center">
@@ -170,17 +165,17 @@ a{text-decoration:none; color:black;}
 <%@ include file ="common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
-	function searchProducts(){
-		var form = document.getElementById("search-form");
-		form.submit();
-	}
 	//페이지번호를 클릭했을 때 실행되는 함수
 	function moveToPage(event, page) {
 		event.preventDefault();	// a태그에서 onclick이벤트가 발생하면 href에 정의된 주소로 이동하는 기본동작이 일어나지 않게 함.
-		searchBoards(page);
+		searchProducts(page);
+	}
+	function searchProducts(page){
+		document.getElementById("page-field").value = page;
+		var form = document.getElementById("search-form");
+		form.submit();
 	}
 	
-
 </script>
 </body>
 </html>

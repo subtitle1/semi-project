@@ -22,18 +22,17 @@ a{text-decoration:none; color:black;}
 
 </style>
 <body>
-<%@ include file = "common/navbar.jsp" %>
+<%@ include file = "common/navbar.jsp" %> 
 <div class="container">
 <%
 //요청파라미터에서 pageNo값을 조회한다.
 	// 요청파라미터에 pageNo값이 존재하지 않으면 Pagination객체에서 1페이지로 설정한다.
 //	String pageNo = request.getParameter("pageNo");
 
-	// 가격표 천단위로 콤마 표시하기
 	DecimalFormat price = new DecimalFormat("###,###");
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
- 
+
 	// select할 속성 요청.
 	String brand = request.getParameter("brand");
 	String gender = request.getParameter("gender");
@@ -114,7 +113,7 @@ a{text-decoration:none; color:black;}
         <p class="card-text"><%=product.getName() %></p>
 <%
 	if (product.getDisPrice() > 0) {
-%>
+%> 
       	  <div class="d-flex justify-content-between">
 
 	        <span class="col card-text p-1 p"><%=price.format(product.getPrice()) %> 원</span>
