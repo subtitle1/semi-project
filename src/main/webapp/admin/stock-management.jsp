@@ -57,7 +57,7 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 
 <div class="container">    
 <div class="row">
-		<div class="col breadcrumb">
+		<div class="col breadc1">
 			<ul class="nav">
 				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
 				<li class="crumb">관리자페이지</li>

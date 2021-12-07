@@ -12,17 +12,19 @@
 <!doctype html>
 <%
 	Member loginedUser = (Member) session.getAttribute("LOGIN_USER_INFO");
-	StockDao stockDao = StockDao.getInstance();
-	OrderDao orderDao = OrderDao.getInstance();
-	OrderItemDao orderItemDao = OrderItemDao.getInstance();
-	ProductDao productDao = ProductDao.getInstance();
-	MemberDao memberDao = MemberDao.getInstance();
-	
 	// 세션이 파기됐을 때 오류창을 방지하기 위해 loginedUser가 null일 때 로그인창으로 이동한다
 	if (loginedUser == null) {
 		response.sendRedirect("../../loginform.jsp?user=undefined");
 		return;
 	}
+	StockDao stockDao = StockDao.getInstance();
+	OrderDao orderDao = OrderDao.getInstance();
+	OrderItemDao orderItemDao = OrderItemDao.getInstance();
+	ProductDao productDao = ProductDao.getInstance();
+	MemberDao memberDao = MemberDao.getInstance();
+
+	
+	Member member = memberDao.selectMemberByNo(loginedUser.getNo());
 	
 	// order-confirm.jsp에서 상품번호, amount, size를 조회한다
 	int productNo = Integer.parseInt(request.getParameter("productNo"));
@@ -56,7 +58,7 @@
 	// Order 객체를 생성해 주문번호, 멤버번호, totalPrice를 저장한다
 	Order order = new Order();
 	order.setNo(orderNo);
-	order.setMemberNo(loginedUser.getNo());
+	order.setMemberNo(member.getNo());
 	order.setTotalPrice(totalPrice);
 	
 	// 선택한 상품의 재고를 조정한다
@@ -64,13 +66,13 @@
 	Stock stock = stockDao.selectStockByProductDetailNo(stockNo);
 	stock.setStock(stock.getStock() - orderItem.getAmount());
 
-	loginedUser.setPct((int)(totalPrice * 0.01));
+	member.setPct(member.getPct() + (int)(totalPrice * 0.01));
 	
 	// 변경한 객체를 업데이트 및 추가시킨다
 	orderDao.insertOrder(order);
 	orderItemDao.insertOrderItem(orderItem);
 	stockDao.updateStock(stock);
-	memberDao.updateMember(loginedUser);
+	memberDao.updateMember(member);
 	
 	// 주문이 완료되면 주문완료창으로 이동
 	response.sendRedirect("completeorder.jsp?orderNo="+orderNo+"&productNo="+productNo+"&amount="+amount+"&size="+size);

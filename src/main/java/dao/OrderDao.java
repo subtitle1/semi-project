@@ -147,7 +147,7 @@ public class OrderDao {
 	}
 	
 	/**
-	 * 지정된 주문번호로 주문 개수를 반환한다.
+	 * 지정된 멤버번호로 주문 개수를 반환한다.
 	 * @param memberNo
 	 * @return
 	 * @throws SQLException
@@ -365,7 +365,7 @@ public class OrderDao {
 		if ("no".equals(criteria.getOption())) {
 			sql += "  and o.order_no = ? ";
 	} else if ("memberName".equals(criteria.getOption())) {
-			sql += "  and m.member_name = like '%' || ? || '%' ";
+			sql += "  and m.member_name like '%' || ? || '%' ";
 	} else if ("productName".equals(criteria.getOption())) {
 		sql += "      and o.order_no in ("
 				+ "                       select order_no "
@@ -408,7 +408,7 @@ public class OrderDao {
 		if ("no".equals(criteria.getOption())) {
 				sql += "    and o.order_no = ? ";
 		} else if ("memberName".equals(criteria.getOption())) {
-				sql += "    and m.member_name = like '%' || ? || '%' ";
+				sql += "    and m.member_name like '%' || ? || '%' ";
 		} else if ("productName".equals(criteria.getOption())) {
 			sql += "       and o.order_no in ("
 					+ "                       select order_no "
@@ -626,13 +626,13 @@ public class OrderDao {
     return totalRecords;
 	}
 	
-		
+	
 	/**
 	 * 멤버번호로 지정한 전체 주문내역을 반환한다.
 	 * @param memberNo
 	 * @return
 	 * @throws SQLException
-	 */     
+	 */
 	public List<Order> selectAllOrdersByMemberNo(int begin, int end, int memberNo) throws SQLException {
 		String sql = "select order_no, order_status, order_date, order_total_price, cancel_reason,"
 				+ "cancel_status, canceled_date, member_no "

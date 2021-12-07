@@ -20,7 +20,7 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <div class="container">
-<%
+<%		
 	OrderDao orderDao = OrderDao.getInstance();
 	StockDao stockDao = StockDao.getInstance();
 	
