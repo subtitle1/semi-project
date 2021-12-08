@@ -356,6 +356,7 @@ a {
     color: #000;
 }
 
+.member-box .icon-grade{display:block; margin:0 auto; transform:translateY(-9px); background:url(../images/mypage_icon_grade.png) no-repeat; background-position:-164px 0; width:82px; height:96px;}
 .member-box .middle-box {
     height: 100px;
 }
@@ -383,6 +384,8 @@ a {
 .member-box .right-box span {
     width: 100%;
 }
+
+.member-box .icon-point{display:inline-block; background:url(../images/mypage_icon_info.png) no-repeat; width:25px; height:28px; margin-right:4px; vertical-align:-7px;}
 
 .member-box .right-box .point {
     font-family: 'Montserrat', Noto Sans KR, sans-serif;
@@ -441,6 +444,9 @@ a {
 .img-box .img1{width:100%;}
 .img1:hover{transform:scale(1.1); transition:2s;}
 .sub-title h1{width: 360px; padding-bottom: 5px; border-bottom: 5px solid red;}
+
+.swiper-img-box{width:100%; height:100%; overflow:hidden;}
+.swiper-img-box .img1{width:100%;}
 /* //이미지 동적 hover 기능 */
 
 /* footer 상단 */
