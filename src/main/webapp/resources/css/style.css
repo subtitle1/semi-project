@@ -443,6 +443,8 @@ a {
 /* 이미지 동적 hover 기능 */
 
 .img-box{height:285px; width:285px; overflow:hidden;}
+.detail-img-box{width:100%; overflow:hidden}
+.detail-img-box:hover img{transform:scale(1.1); transition:2s;}
 .img-box .img1{width:100%;}
 .img1:hover{transform:scale(1.1); transition:2s;}
 .sub-title h1{width: 360px; padding-bottom: 5px; border-bottom: 5px solid red;}

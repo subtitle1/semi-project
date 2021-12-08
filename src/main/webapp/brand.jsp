@@ -114,7 +114,9 @@ a{text-decoration:none; color:black;}
 	<div class="col-3">
     	<div class="card h-100 border-white rounded-0">
 	 		<a href="detail.jsp?no=<%=product.getNo() %>&page=<%=pageNo%>&brand=<%=brand%>&gender=<%=gender%>&sort=<%=sort%>">
-      			<img src="resources/images/products/<%=product.getPhoto() %>" class="card-img-top" alt="...">
+      			<div class="detail-img-box">
+      				<img src="resources/images/products/<%=product.getPhoto() %>" class="card-img-top" alt="...">
+      			</div>
       <div class="card-body">
         <h6 class="card-title"><strong><%=product.getBrand() %></strong></h6>
         <p class="card-text"><%=product.getName() %></p>
