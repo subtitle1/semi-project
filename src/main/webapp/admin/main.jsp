@@ -298,7 +298,7 @@
 	  
   <div class="row">
   	<div class="col">
-  	 	<p>총 매출액 : <span style="margin-right:8px; font-size:25px; color:red; font-weight: 
+  	 	<p class="text-end">총 매출액 : <span style="margin-right:8px; font-size:25px; color:red; font-weight: 
 							bold;"><%=priceDF.format(sum-cancelSum) %></span>원</p>
   	</div>
   </div>
