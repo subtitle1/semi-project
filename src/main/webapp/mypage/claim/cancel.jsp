@@ -11,6 +11,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <%
+
 	Member loginedUser = (Member) session.getAttribute("LOGIN_USER_INFO");
 
 	int orderNo = Integer.parseInt(request.getParameter("orderNo"));

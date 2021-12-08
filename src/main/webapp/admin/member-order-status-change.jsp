@@ -5,11 +5,11 @@
     pageEncoding="UTF-8"%>
 <%
 
-Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");
-int memberNo = loginUserInfo.getNo();
+
 
 String status = request.getParameter("status");
 int orderNo = Integer.parseInt(request.getParameter("no"));
+int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 
 OrderDao orderDao = OrderDao.getInstance();
 Order order = orderDao.selectOrderByOrderNo(orderNo);

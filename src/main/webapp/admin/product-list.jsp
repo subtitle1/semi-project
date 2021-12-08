@@ -14,7 +14,13 @@
    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
-   <link rel="stylesheet" href="../resources/css/style.css" />
+   <link rel="stylesheet" href="../resources/css/style.css" /> 
+   <style>
+ #product-container .style{padding:2px 0 !important; text-align:center;}
+ #product-container th.style{padding:6px 0 !important;}
+ #product-container .select-box{margin-left:auto; width:120px;}
+ #product-container .select-box select{padding:0 10px;}
+   </style>
     <title></title>
 </head>
 <body>
@@ -52,16 +58,7 @@ ProductDao productDao = ProductDao.getInstance();
 	// 현재 페이지번호에 해당하는 게시글 목록을 조회한다.
 	List<Product> productList = productDao.selectAllProductsByCriteria(criteria);
 %>	
-<div class="container">    
-<div class="row">
-		<div class="col breadcrumb">
-			<ul class="nav">
-				<li class="crumb home"><a href="" class="nav-link p-0">HOME</a></li>
-				<li class="crumb">관리자페이지</li>
-				<li class="crumb">상품목록</li>
-			</ul>
-		</div>
-	</div>
+<div class="container" id="product-container">    
 	<div class="row">
 		<div class="col p-0 page-title">
 			<h1>관리자페이지</h1>
@@ -80,33 +77,67 @@ ProductDao productDao = ProductDao.getInstance();
 				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
 				<li class=""><a href="qna-list.jsp" class="nav-link p-0">QnA 목록</a></li>
 				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>
-				</ul>
+			</ul>
 		</div>	
 		<div class="col-9">
-		<h4>상품 목록</h4>
-		<table class="table table-hover table-striped">
+		<div class="row mb-3">
+			<div class="col">
+				<div><h4>상품 목록</h4></div>
+				<div>
+					<form id="form-search" class="row" method="get" action="product-list.jsp">
+					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
+					<div class="col-4" style="height: 31px; line-height: 31px;">
+						총 <strong><%=totalRecords %></strong> 개의 상품이 있습니다.
+					</div>			
+					<div class="col-4">
+						<div class="input-group select-box">
+							<select class="form-select" id="search-option" name="option"
+								style="height: 31px; font-size: 14px;">
+								<option value="name" <%="name".equals(option) ? "selected" : ""%>>상품이름</option>
+								<option value="brand" <%="brand".equals(option) ? "selected" : ""%>>브랜드</option>
+								<option value="category" <%="category".equals(option) ? "selected" : ""%>>카테고리</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="input-group">
+							<input type="text" class="form-control" id="search-keyword" name="keyword" value="<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요"
+							style="height: 31px; font-size: 14px;">
+						</div>
+					</div>
+					<div class="col-1">
+						<div class="input-group justify-content-end">
+							<button class="btn btn-sm btn-outline-dark" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
+						</div>
+					</div>
+				</form>
+				</div>
+		
+			</div>
+			</div>
+		<table class="table table-hover table-striped align-middle">
 		<colgroup>
 			<col width="5%">
-			<col width="5%">
-			<col width="12%">
+			<col width="10%">
+			<col width="">
 			<col width="10%">
 			<col width="10%">
-			<col width="5%">
-			<col width="8%">
-			<col width="8%">
+			<col width="10%">
+			<col width="10%">
+			<col width="10%">
 			<col width="10%">
 		</colgroup>
 		<thead>
 			<tr>
-				<th>이미지</th>
-				<th>No.</th>
-				<th>이름</th>
-				<th>카테고리</th>
-				<th>브랜드</th>
-				<th>성별</th>
-				<th>가격</th>
-				<th>할인가격</th>
-				<th>등록일</th>
+				<th class="style">No.</th>
+				<th class="style">이미지</th>
+				<th class="style">이름</th>
+				<th class="style">카테고리</th>
+				<th class="style">브랜드</th>
+				<th class="style">성별</th>
+				<th class="style">가격</th>
+				<th class="style">할인가격</th>
+				<th class="style">등록일</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -114,14 +145,13 @@ ProductDao productDao = ProductDao.getInstance();
 	for (Product product : productList) {
 %>	
 			<tr>
-			
-				<td><img src = "/semi-project/resources/images/products/<%=product.getPhoto() %> " width="50" height="50"></td>		
-				<td><%=product.getNo() %></td>		
-				<td><a href="product-detail.jsp?no=<%=product.getNo()%>"><%=product.getName() %></td>
-				<td><%=product.getCategory() %></td>
-				<td><%=product.getBrand() %></td>
-				<td><%=product.getGender() %></td>
-				<td><%=priceDF.format(product.getPrice())  %></td>   
+				<td class="style"><%=product.getNo() %></td>
+				<td class="style"><img src = "/semi-project/resources/images/products/<%=product.getPhoto() %> " width="50" height="50"></td>				
+				<td class="style"><a href="product-detail.jsp?no=<%=product.getNo()%>"><%=product.getName() %></td>
+				<td class="style"><%=product.getCategory() %></td>
+				<td class="style"><%=product.getBrand() %></td>
+				<td class="style"><%=product.getGender() %></td>
+				<td class="style"><%=priceDF.format(product.getPrice())  %></td>   
 <%
 if (product.getDisPrice() == 0) {
 %> 				
@@ -175,39 +205,6 @@ if (product.getDisPrice() == 0) {
 		</div>
 	</div>
 </div>
-		<div class="row mb-3">
-			<div class="col">
-				<!--  
-					페이징처리와 검색에 필요한 값을 서버로 제출할 때 사용하는 폼이다.
-					페이지번호를 클릭하거나 검색버튼을 클릭하면 폼의 입력요소에 적절한 값을 설정하고, 폼 입력값을 제출한다.
-					
-					검색옵션과 검색어가 존재하면 해당 해당 옵션이 선택되고, 검색어가 입력필드에 표시된다.
-				-->
-				<form id="form-search" class="row row-cols-lg-auto g-3" method="get" action="product-list.jsp">
-					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
-					<div class="col-2 offset-3">
-						<div class="input-group">
-							<select class="form-select" id="search-option" name="option">
-								<option value="name" <%="name".equals(option) ? "selected" : ""%>>상품이름</option>
-								<option value="brand" <%="brand".equals(option) ? "selected" : ""%>>브랜드</option>
-								<option value="category" <%="category".equals(option) ? "selected" : ""%>>카테고리</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-3">
-						<div class="input-group">
-							<input type="text" class="form-control" id="search-keyword" name="keyword" value=
-							"<%=StringUtils.isBlank(keyword) ? "" : keyword%>"	placeholder="검색어를 입력하세요">
-						</div>
-					</div>
-					<div class="col-2">
-						<div class="input-group">
-							<button class="btn btn-primary" type="button" id="btn-search" onclick="searchBoards(1)">검색</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
 </div>	
 </div>
 <%@ include file="../common/footer.jsp" %>

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import vo.Criteria2;
 import vo.Member;
 
 
@@ -29,25 +29,37 @@ public class MemberDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Member> selectAllLeftMembers(int begin, int end) throws SQLException  {
+	public List<Member> selectAllLeftMembers(Criteria2 criteria) throws SQLException  {
 		
-		String sql = "select member_no, member_id, member_pwd, member_name, member_tel, member_email, "
-						 + "member_address, member_pct, member_registered_date, "
-						 + "member_deleted, member_deleted_date "
+		String sql = "select * "
 				   + "from (select row_number() over (order by member_registered_date desc) rn, "
 				   + "             member_no, member_id, member_pwd, member_name, member_tel, member_email,  "
 				   + "             member_address, member_pct, member_registered_date, "
 				   + "			   member_deleted, member_deleted_date "
 				   + "      from tb_members "
-				   + "		where member_deleted = 'Y' )"
-				   + "where rn >= ? and rn <= ? "
-				   + "order by member_registered_date desc ";
+				   + "		where member_deleted = 'Y' ";
+				   if ("id".equals(criteria.getOption())) {	
+						sql += "        and member_id like '%' || ? || '%' ";
+					} else if ("name".equals(criteria.getOption())) {
+						sql += "        and member_name like '%' || ? || '%' ";
+					} else if ("email".equals(criteria.getOption())) {
+						sql += "        and member_email like '%' || ? || '%' ";
+					} else if ("tel".equals(criteria.getOption())) {
+						sql += "        and member_tel like '%' || ? || '%' ";
+					}	sql += "    ) where rn >= ? and rn <= ? order by member_registered_date desc ";
+				  
 		List<Member> memberList = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, begin);
-		pstmt.setInt(2, end);
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+			pstmt.setInt(2, criteria.getBeginIndex());
+			pstmt.setInt(3, criteria.getEndIndex());
+		} else {
+			pstmt.setInt(1, criteria.getBeginIndex());
+			pstmt.setInt(2, criteria.getEndIndex());
+		}
 		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
 			Member member = new Member();
@@ -72,6 +84,63 @@ public class MemberDao {
 		return memberList;
 	}
 	
+	public int selectTotalLeftMembersCountByCriteria(Criteria2 criteria) throws SQLException {
+		String sql = "select count(*) cnt "
+				 + "from (select * from tb_members "
+				   + "		where member_deleted = 'Y' ";
+				   if ("id".equals(criteria.getOption())) {	
+						sql += "        and member_id like '%' || ? || '%' ";
+					} else if ("name".equals(criteria.getOption())) {
+						sql += "        and member_name like '%' || ? || '%' ";
+					} else if ("email".equals(criteria.getOption())) {
+						sql += "        and member_email like '%' || ? || '%' ";
+					} else if ("tel".equals(criteria.getOption())) {
+						sql += "        and member_tel like '%' || ? || '%' ";
+					}	sql += "    ) order by member_registered_date desc ";
+		
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+		} 
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+
+    return totalRecords;
+	}
+	
+	public int selectTotalMembersCountByCriteria(Criteria2 criteria) throws SQLException {
+		String sql = "select count(*) cnt "
+				 + "from (select * from tb_members "
+				   + "		where member_deleted = 'N' ";
+				   if ("id".equals(criteria.getOption())) {	
+						sql += "        and member_id like '%' || ? || '%' ";
+					} else if ("name".equals(criteria.getOption())) {
+						sql += "        and member_name like '%' || ? || '%' ";
+					} else if ("email".equals(criteria.getOption())) {
+						sql += "        and member_email like '%' || ? || '%' ";
+					} else if ("tel".equals(criteria.getOption())) {
+						sql += "        and member_tel like '%' || ? || '%' ";
+					}	sql += "    ) order by member_registered_date desc ";
+		
+		int totalRecords = 0;
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		if (criteria.getOption() != null) {
+			pstmt.setString(1, criteria.getKeyword());
+		} 
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRecords = rs.getInt("cnt");
+
+    return totalRecords;
+	}
+	
+	
 	/**
 	 * 탈퇴한 회원들을 제외하고 조회
 	 * @param begin
@@ -79,25 +148,37 @@ public class MemberDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<Member> selectAllMembers(int begin, int end) throws SQLException  {
+	public List<Member> selectAllMembers(Criteria2 criteria) throws SQLException  {
 	
-	String sql = "select member_no, member_id, member_pwd, member_name, member_tel, member_email, "
-					 + "member_address, member_pct, member_registered_date, "
-					 + "member_deleted, member_deleted_date "
-			   + "from (select row_number() over (order by member_registered_date desc) rn, "
+	String sql = "select * "
+			   + "from (select row_number() over (order by member_no desc) rn, "
 			   + "             member_no, member_id, member_pwd, member_name, member_tel, member_email,  "
 			   + "             member_address, member_pct, member_registered_date, "
 			   + "			   member_deleted, member_deleted_date "
 			   + "      from tb_members "
-			   + "		where member_deleted = 'N' )"
-			   + "where rn >= ? and rn <= ? "
-			   + "order by member_registered_date desc ";
+			   + "		where member_deleted = 'N' ";
+			   if ("id".equals(criteria.getOption())) {	
+					sql += "        and member_id like '%' || ? || '%' ";
+				} else if ("name".equals(criteria.getOption())) {
+					sql += "        and member_name like '%' || ? || '%' ";
+				} else if ("email".equals(criteria.getOption())) {
+					sql += "        and member_email like '%' || ? || '%' ";
+				} else if ("tel".equals(criteria.getOption())) {
+					sql += "        and member_tel like '%' || ? || '%' ";
+				}	sql += "    ) where rn >= ? and rn <= ? order by member_no desc ";
+			  
 	List<Member> memberList = new ArrayList<>();
 	
 	Connection connection = getConnection();
 	PreparedStatement pstmt = connection.prepareStatement(sql);
-	pstmt.setInt(1, begin);
-	pstmt.setInt(2, end);
+	if (criteria.getOption() != null) {
+		pstmt.setString(1, criteria.getKeyword());
+		pstmt.setInt(2, criteria.getBeginIndex());
+		pstmt.setInt(3, criteria.getEndIndex());
+	} else {
+		pstmt.setInt(1, criteria.getBeginIndex());
+		pstmt.setInt(2, criteria.getEndIndex());
+	}
 	ResultSet rs = pstmt.executeQuery();
 	while (rs.next()) {
 		Member member = new Member();

@@ -369,7 +369,7 @@ public class ProductDao {
 		}
 				sql += "            ) "	
 				   + "where rn >= ? and rn <= ? "
-				   + "order by product_no desc ";
+				   + "order by product_no desc, product_size asc ";
 		
 		List<ProductDetailDto> productDetails = new ArrayList<>();
 		

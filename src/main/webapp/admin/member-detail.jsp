@@ -1,3 +1,8 @@
+<%@page import="vo.QnA"%>
+<%@page import="dto.QnADetailDto"%>
+<%@page import="dao.QnaDao"%>
+<%@page import="dto.ReviewDetailDto"%>
+<%@page import="dao.ReviewDao"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="dto.OrderDetailDto"%>
@@ -36,10 +41,10 @@
 	
 	%>
 	<div class="row">
-			<div class="col p-0 page-title">
-				<h1>관리자페이지</h1>
-			</div>
+		<div class="col p-0 page-title">
+			<h1>관리자페이지</h1>
 		</div>
+	</div>
 	<div class="row mypage">
 	 	<div class="col-2 p-0 aside">
 				<span class="aside-title">관리자 페이지</span>
@@ -58,33 +63,121 @@
 		<div class="col-9">
 		<h4>상세 회원 정보</h4>
 		<table class="table table-hover mb-5" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
+					<colgroup>
+					<col width="12%">
+					<col width="38%">
+					<col width="12%">
+					<col width="38%">
+					</colgroup>
 					<tbody>
-						<tr class="d-flex">
-							<th class="col-2">회원번호</th>
-							<td class="col-4"><%=member.getNo() %></td>
-							<th class="col-2">이름</th>
-							<td class="col-4"><%=member.getName() %></td>
+						<tr>
+							<th>회원번호</th>
+							<td><%=member.getNo() %></td>
+							<th>이름</th>
+							<td><%=member.getName() %></td>
 						</tr>
-						<tr class="d-flex">
-							<th class="col-2">ID</th>
-							<td class="col-4"><%=member.getId() %></td>
-							<th class="col-2">연락처</th>
-							<td class="col-4"><%=member.getTel() %></td>
+						<tr>
+							<th>ID</th>
+							<td><%=member.getId() %></td>
+							<th>연락처</th>
+							<td><%=member.getTel() %></td>
 						</tr>
-						<tr class="d-flex">
-							<th class="col-2">이메일</th>
-							<td class="col-4"><%=member.getEmail() %></td>
-							<th class="col-2">주소</th>
-							<td class="col-4"><%=member.getAddress() %></td>
+						<tr>
+							<th>이메일</th>
+							<td><%=member.getEmail() %></td>
+							<th>주소</th>
+							<td><%=member.getAddress() %></td>
 						</tr>
-						<tr class="d-flex">
-							<th class="col-2">포인트</th>
-							<td class="col-4"><%=member.getPct() %></td>
-							<th class="col-2">가입일</th>
-							<td class="col-4"><%=member.getRegisteredDate() %></td>
+						<tr>
+							<th>포인트</th>
+							<td><%=member.getPct() %></td>
+							<th>가입일</th>
+							<td><%=member.getRegisteredDate() %></td>
 						</tr>
 					</tbody>				
 		</table>
+<%
+ReviewDao reviewDao =ReviewDao.getInstance();
+List<ReviewDetailDto> reviewList = reviewDao.getReviewListByMemberNo(1, 3, no);
+QnaDao qnADao =QnaDao.getInstance();
+List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
+%>
+
+		
+		
+		<div class="row">
+			<div class="col-6">
+			<h4>최근 작성한 REVIEW</h4>
+			<table class="table table-hover mb-5" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
+					<tbody>
+<%
+		if (reviewList.isEmpty()) { 
+%>			
+			<h6>상품 후기가 없습니다.</h6>
+				</tbody>				
+		</table>
+<%
+} else {
+
+	for (ReviewDetailDto review : reviewList) {
+			
+%>					
+						<tr>
+							<td>[<a href="product-detail.jsp?no=<%=review.getProductNo()%>"><%=review.getProductName() %></a>
+						    	<small class="text-muted"><%=review.getBrand() %></small>]
+						    <%=review.getContent() %><small class="text-muted">(<%=review.getReviewDate() %>)</small>	
+						    </td>
+						</tr>   	
+<% 
+	}
+%>						
+						
+					</tbody>				
+		</table>
+<% 
+	}
+%>						
+			
+			
+			</div>
+			<div class="col-6">
+			<h4>최근 작성한 QnA</h4>
+			<table class="table table-hover mb-5" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
+					<tbody>
+<%
+		if (qnAList.isEmpty()) { 
+%>			
+			<h6>상품 QnA가 없습니다.</h6>
+				</tbody>				
+		</table>
+<%
+} else {
+
+	for (QnADetailDto qnA : qnAList) {
+			
+%>					
+						<tr>
+							<td>[<a href="product-detail.jsp?no=<%=qnA.getProductNo()%>"><%=qnA.getProductName() %></a>
+						    	<small class="text-muted"><%=qnA.getProductBrand() %></small>]
+						    <%=qnA.getQuestionContent() %><small class="text-muted">(<%=qnA.getQuestionDate() %>)</small>	
+						    </td>
+						</tr>   	
+<% 
+	}
+%>						
+						
+					</tbody>				
+		</table>
+<% 
+	}
+%>						
+			
+			
+			</div>
+		</div>
+		
+		
+		
 		<h4>총 구매 내역</h4>
 		<table class="table table-hover table-striped">
 		<colgroup>
@@ -198,7 +291,7 @@ if	("주문취소".equals(order.getStatus())) {
 	
 	function change(orderNo) {
 		var status = document.getElementById("status-" + orderNo).value;
-		location.href="member-order-status-change.jsp?no=" + orderNo + "&status=" + status;
+		location.href="member-order-status-change.jsp?no=" + orderNo + "&status=" + status+"&memberNo=<%=no%>";
 	}
 	
 	</script>

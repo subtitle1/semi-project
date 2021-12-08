@@ -1,3 +1,4 @@
+
 <%@page import="dao.MemberDao"%>
 <%@page import="vo.Stock"%>
 <%@page import="dao.StockDao"%>
@@ -11,27 +12,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	Member loginUserInfo = (Member) session.getAttribute("LOGIN_USER_INFO");
-
-	int memberNo = loginUserInfo.getNo();
-
 	String values[] = request.getParameterValues("no");
 	
 	MemberDao memberDao = MemberDao.getInstance();
-
-	
-	Member member = memberDao.selectMemberByNo(memberNo);
-
-	
 	CartDao cartDao = CartDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
 	OrderItemDao orderItemDao = OrderItemDao.getInstance();
-	OrderItem orderItem = new OrderItem();
-	Order order = new Order();
 	StockDao stockDao = StockDao.getInstance();
+	
+	int memberNo = loginUserInfo.getNo();
+	
+	Member member = memberDao.selectMemberByNo(memberNo);
+	Order order = new Order();
 	
 	int orderNumber = orderDao.getOrderNo();
 	order.setNo(orderNumber);
-	order.setMemberNo(loginUserInfo.getNo());
+	order.setMemberNo(memberNo);
 	
 	int no = 0;
 	int sum = 0;
@@ -47,14 +43,16 @@
 			sum += cart.getProductPrice() * cart.getAmount();
 		}
 	}
-	order.setTotalPrice(sum);	
+	
+	order.setTotalPrice(sum);
 	orderDao.insertOrder(order);
 	
 	int pct = (int)(sum * 0.01);
 	
 	member.setPct(member.getPct() + pct);
 	memberDao.updateMember(member);
-
+	
+	OrderItem orderItem = new OrderItem();
 	
 	orderItem.setOrderNo(orderNumber);
 	for (int i = 0; i < values.length; i ++){
@@ -82,4 +80,5 @@
 	}
 	
 	response.sendRedirect("completeorder.jsp?no=" + orderNumber);
+
 %>
