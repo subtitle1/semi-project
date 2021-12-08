@@ -78,7 +78,7 @@
 						<span class="member-info">멤버십 회원 가입일 <span class="member-number"><%=member.getRegisteredDate() %></span></span> 
 					</div>
 					<div class="col-4 p-0 right-box">
-						<span class="text-center"><img src="" alt="" />포인트</span>
+						<span class="text-center"><i class="icon-point"></i>포인트</span>
 						<span class="point"><%=member.getPct() %><span class="unit">p</span></span>
 					</div>
 				</div>
@@ -168,19 +168,31 @@
 								<span style="font-weight: bold;"><%=orderDetail.getStatus() %></span>
 							</div>
 	<%
-		if("주문완료".equals(order.getStatus()) && "N".equals(orderDetail.getReviewStatus())) {
+		if("배송완료".equals(order.getStatus()) && "N".equals(orderDetail.getReviewStatus())) {
 	%>
 							<div class="col mt-4 text-end ">
 								<button type="button" class="btn btn-dark btn-sm " 
                          onclick="goReview(<%=orderDetail.getOrderNo() %>,<%=orderDetail.getProductNo() %>,<%=orderDetail.getSize()%>)">리뷰 작성</button>
 							</div>
 	<%
-		} else {
+		} else if ("주문취소".equals(order.getStatus())) {
+	%>		
+							<div class="col mt-4 text-end">
+								<button type="button" class="btn btn-dark btn-sm disabled" >리뷰 불가</button>
+							</div>
+	<%
+		} else if ("Y".equals(orderDetail.getReviewStatus())) {
 	%>
 							<div class="col mt-4 text-end">
-								<button type="button" class="btn btn-dark btn-sm disabled" >작성완료</button>
+								<button type="button" class="btn btn-dark btn-sm disabled" >작성 완료</button>
 							</div>
 <%			
+		} else {		
+%>
+							<div class="col mt-4 text-end">
+								<button type="button" class="btn btn-dark btn-sm disabled text-center" >리뷰 불가</button>
+							</div>
+<%
 		}
 %>
 						</div>							

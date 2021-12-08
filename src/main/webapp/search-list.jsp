@@ -35,8 +35,15 @@
 	String keyword = StringUtils.defaultString(request.getParameter("keyword"), "");
 	
 	// name, brand명으로 검색된 개수 조회
-	int nameCount = productDao.selectNameCount(keyword);
-	int brandCount = productDao.selectBrandCount(keyword);
+int nameCount = 0;
+if (keyword != "") {	
+	nameCount = productDao.selectNameCount(keyword);
+}	
+
+	int brandCount = 0;
+if (keyword != "") {	
+	brandCount = productDao.selectBrandCount(keyword);
+}	
 	
 	// pagination 생성
 	Pagination3 pagination1 = new Pagination3(pageNo, nameCount);
@@ -59,17 +66,10 @@
 			<p class=" mb-2" style="font-weight: bold; font-color:gray;"><%=keyword %> 브랜드상품</p>
 			<div class="inquiry-box">
 <%	
-	if (brandCount == 0) {
+	if (keyword == "" || brandCount == 0) {
 %>
 <div>
 	<p>"<%=keyword %>"로 검색된 결과가 존재하지 않습니다.</p>
-</div>
-<%	
-	}
-	if (keyword == "") {
-%>
-<div>
-	<p>""로 검색된 결과가 존재하지 않습니다.</p>
 </div>
 <%	
 	} else {
@@ -141,16 +141,11 @@
 			<p class=" mb-2" style="font-weight: bold; font-color:gray;"><%=keyword %> 상품</p>
 			<div class="inquiry-box">
 <%	
-	if (nameCount == 0) {
+	if (keyword == "" || nameCount == 0) {
 %>
-			<p>"<%=keyword %>"로 검색된 결과가 존재하지 않습니다.</p>
-<%	
-	}
-	if (keyword == "") {
-%>
-			<div>
-				<p>""로 검색된 결과가 존재하지 않습니다.</p>
-			</div>
+<div>
+	<p>"<%=keyword %>"로 검색된 결과가 존재하지 않습니다.</p>
+</div>
 <%	
 	} else {
 %>
