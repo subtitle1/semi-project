@@ -147,51 +147,81 @@ public class OrderDao {
 	}
 	
 	/**
+	 * 지정된 멤버번호로 주문 개수를 반환한다.
+	 * @param memberNo
+	 * @return
+	 * @throws SQLException
+	 */
+	public int selectOrderCountByMemberNo(int memberNo) throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_orders "
+				+ "where member_no = ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, memberNo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	/**
 	 * 지정된 멤버번호로 취소된 주문상태를 반환한다.
 	 * @param orderNo
 	 * @return
 	 * @throws SQLException
 	 */
 	public List<Order> selectCanceledOrderByMemberNo(int begin, int end, int memberNo) throws SQLException {
-	      
-	      String sql = "select * "
-	            + "from (select row_number() over (order by order_no desc) rn, order_no, order_status, "
-	            + "      order_date, order_total_price, cancel_reason, canceled_date "
-	            + "      from tb_orders "
-	            + "      where cancel_status = 'Y' "
-	            + "      and member_no = ?) "
-	            + "where rn >= ? and rn <= ? "
-	            + "order by order_no desc ";
-	      
-	      List<Order> canceledOrders = new ArrayList<>();
-	      
-	      Connection connection = getConnection();
-	       PreparedStatement pstmt = connection.prepareStatement(sql);
-	       pstmt.setInt(1, memberNo);
-	       pstmt.setInt(2, begin);
-	       pstmt.setInt(3, end);
-	       ResultSet rs = pstmt.executeQuery();
-	       
-	       while (rs.next()) {
-	          Order order = new Order();
-	          
-	          order.setNo(rs.getInt("order_no"));
-	          order.setStatus(rs.getString("order_status"));
-	          order.setOrderDate(rs.getDate("order_date"));
-	          order.setTotalPrice(rs.getInt("order_total_price"));
-	          order.setCancelReason(rs.getString("cancel_reason"));
-	          order.setCanceledDate(rs.getDate("canceled_date"));
-	          order.setCanceledDate(rs.getDate("canceled_date"));
-	          
-	          canceledOrders.add(order);
-	       }
-	       
-	       rs.close();
-	      pstmt.close();
-	      connection.close();
-	      
-	      return canceledOrders;
-	   }
+
+
+		String sql = "select * "
+				+ "from (select row_number() over (order by order_no desc) rn, order_no, order_status, "
+				+ "      order_date, order_total_price, cancel_reason, canceled_date "
+				+ "      from tb_orders "
+				+ "      where cancel_status = 'Y' "
+				+ "      and member_no = ?) "
+				+ "where rn >= ? and rn <= ? "
+				+ "order by order_no desc ";
+		
+		List<Order> canceledOrders = new ArrayList<>();
+		
+		Connection connection = getConnection();
+	    PreparedStatement pstmt = connection.prepareStatement(sql);
+	    pstmt.setInt(1, memberNo);
+	    pstmt.setInt(2, begin);
+	    pstmt.setInt(3, end);
+	    ResultSet rs = pstmt.executeQuery();
+	    
+	    while (rs.next()) {
+	    	Order order = new Order();
+	    	
+	    	order.setNo(rs.getInt("order_no"));
+	    	order.setStatus(rs.getString("order_status"));
+	    	order.setOrderDate(rs.getDate("order_date"));
+	    	order.setTotalPrice(rs.getInt("order_total_price"));
+	    	order.setCancelReason(rs.getString("cancel_reason"));
+	    	order.setCanceledDate(rs.getDate("canceled_date"));
+	    	order.setCanceledDate(rs.getDate("canceled_date"));
+	    	
+	    	canceledOrders.add(order);
+	    }
+	    
+	    rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return canceledOrders;
+	}
+
 	
 	/**
 	 * 지정된 주문번호로 주문상태를 반환한다.
@@ -612,12 +642,58 @@ public class OrderDao {
 				   + "from tb_orders "
 				   + "where member_no = ? "
 				   + "order by order_no desc";
+  
+  
+  	List<Order> orders = new ArrayList<>();
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, begin);
+		pstmt.setInt(2, end);
+		pstmt.setInt(3, memberNo);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			Order order = new Order();
+			
+			order.setMemberNo(rs.getInt("member_no"));
+			order.setNo(rs.getInt("order_no"));
+			order.setStatus(rs.getString("order_status"));
+			order.setOrderDate(rs.getDate("order_date"));
+			order.setTotalPrice(rs.getInt("order_total_price"));
+			order.setCancelReason(rs.getString("cancel_reason"));
+			order.setCancelStatus(rs.getString("cancel_status"));
+			order.setCanceledDate(rs.getDate("canceled_date"));
+		
+			
+			orders.add(order);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return orders;
+	}
+
+	public List<Order> selectAllOrdersByMemberNoIndex(int begin, int end, int memberNo) throws SQLException {
+		String sql = "select order_no, order_status, order_date, order_total_price, cancel_reason,"
+				+ "cancel_status, canceled_date, member_no "
+				+ "from (select row_number() over (order by order_no desc) rn, order_no, order_status, "
+				+ "      order_date, order_total_price, cancel_reason, "
+				+ "      cancel_status, canceled_date, member_no "
+				+ "      from tb_orders) "
+				+ "where rn >= ? and rn <= ? "
+				+ "and member_no = ? "
+				+ "order by order_no desc ";
 		
 		List<Order> orders = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, memberNo);
+		pstmt.setInt(1, begin);
+		pstmt.setInt(2, end);
+		pstmt.setInt(3, memberNo);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {

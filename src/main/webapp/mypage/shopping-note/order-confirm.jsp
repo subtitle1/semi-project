@@ -77,14 +77,14 @@
 							<span  style="text-decoration:line-through;"><%=price.format(product.getPrice()) %>원</span>
 						</div>
 						<div class="text-end">
-							<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(product.getDisPrice())%>원</span>
+							<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(product.getDisPrice()*amount)%>원</span>
 						</div>
 					</div>
 <%
 	} else {
 %>
 					<div class="col mt-4 text-end">
-						<span><%=price.format(product.getPrice()) %>원</span>
+						<span><%=price.format(product.getPrice()*amount) %>원</span>
 					</div>
 <%
 	}

@@ -63,6 +63,7 @@ List<ProductDetailDto> productDetailList = productDao.selectAllProductDetail(cri
 
 
 <div class="container" id="stock-container">    
+
 	<div class="row">
 		<div class="col p-0 page-title">
 			<h1>관리자페이지</h1>

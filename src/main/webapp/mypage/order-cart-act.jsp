@@ -1,3 +1,4 @@
+
 <%@page import="dao.MemberDao"%>
 <%@page import="vo.Stock"%>
 <%@page import="dao.StockDao"%>
@@ -79,4 +80,5 @@
 	}
 	
 	response.sendRedirect("completeorder.jsp?no=" + orderNumber);
+
 %>

@@ -19,6 +19,9 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
+	if (loginUserInfo == null) {
+		response.sendRedirect("../../loginform.jsp?user=undefined");	
+	}
 	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 
 	int memberNo = loginUserInfo.getNo();
@@ -141,9 +144,9 @@
 								</div>
 							</div>
 						
-<%
-	if (orderDetail.getDisPrice() > 0) {
-%>						
+	<%
+		if (orderDetail.getDisPrice() > 0) {
+	%>						
 							<div class="col mt-3">
 								<div class="text-center">
 									<span  style="text-decoration:line-through;"><%=price.format(orderDetail.getPrice()) %>원</span>
@@ -152,34 +155,36 @@
 									<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()) %>원</span>
 								</div>
 							</div>
-<%
-	} else {
-%>
+	<%
+		} else {
+	%>
 							<div class="col mt-4 text-end">
 								<span><%=price.format(orderDetail.getPrice()) %>원</span>
 							</div>
-<%		
-	}	
-%>
+	<%		
+		}	
+	%>
 							<div class="col mt-4 text-end">
 								<span style="font-weight: bold;"><%=orderDetail.getStatus() %></span>
 							</div>
-<%
-	if("주문완료".equals(order.getStatus()) && "N".equals(orderDetail.getReviewStatus())) {
-%>
+	<%
+		if("주문완료".equals(order.getStatus()) && "N".equals(orderDetail.getReviewStatus())) {
+	%>
 							<div class="col mt-4 text-end ">
 								<button type="button" class="btn btn-dark btn-sm " 
                          onclick="goReview(<%=orderDetail.getOrderNo() %>,<%=orderDetail.getProductNo() %>,<%=orderDetail.getSize()%>)">리뷰 작성</button>
 							</div>
-<%
+	<%
 		} else {
-%>
+	%>
 							<div class="col mt-4 text-end">
 								<button type="button" class="btn btn-dark btn-sm disabled" >작성완료</button>
 							</div>
-						</div>							
 <%			
 		}
+%>
+						</div>							
+<%
 	}
 %>
 			</div>

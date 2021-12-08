@@ -19,16 +19,20 @@
 <%@ include file="/common/navbar.jsp" %>
 <div class="container">    
 <%
+	if (loginUserInfo == null) {
+		response.sendRedirect("../../loginform.jsp?user=undefined");	
+	}
+
    	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
 
-   		int memberNo = loginUserInfo.getNo();
-   		MemberDao memberDao = MemberDao.getInstance();
-   		Member member = memberDao.selectMemberByNo(memberNo);
-   		
-   		DecimalFormat price = new DecimalFormat("###,###");
-   		OrderDao orderDao = OrderDao.getInstance();
-   		Order order = orderDao.selectOrderByOrderNo(orderNo);
-   	%>
+	int memberNo = loginUserInfo.getNo();
+	MemberDao memberDao = MemberDao.getInstance();
+ 	Member member = memberDao.selectMemberByNo(memberNo);
+ 		
+ 	DecimalFormat price = new DecimalFormat("###,###");
+ 	OrderDao orderDao = OrderDao.getInstance();
+ 	Order order = orderDao.selectOrderByOrderNo(orderNo);
+%>
 	<div class="row">
 		<div class="col breadcrumb">
 			<ul class="nav">
