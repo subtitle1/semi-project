@@ -353,6 +353,7 @@ a {
 }
 
 
+
 .member-box .icon-grade{display:block; margin:0 auto; transform:translateY(-9px); background:url(../images/mypage_icon_grade.png) no-repeat; background-position:-164px 0; width:82px; height:96px;}
 
 .member-box .middle-box {
@@ -382,6 +383,7 @@ a {
 .member-box .right-box span {
     width: 100%;
 }
+
 
 
 .member-box .icon-point{display:inline-block; background:url(../images/mypage_icon_info.png) no-repeat; width:25px; height:28px; margin-right:4px; vertical-align:-7px;}

@@ -1,4 +1,4 @@
-
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.StringJoiner"%>
 <%@page import="dto.OrderMemberInfoDto"%>
 <%@page import="org.apache.commons.lang3.ObjectUtils"%>
@@ -26,7 +26,7 @@
  #order-container .select-box{margin-left:auto; width:120px;}
  #order-container .select-box select{padding:0 10px;}
    </style>
-    <title></title>
+    <title>ABC마트 관리자페이지</title>
 
 </head>
 <body>
@@ -56,7 +56,7 @@ OrderDao orderDao = OrderDao.getInstance();
       	criteria.setKeyword(keyword);
     }
 	
-	
+    DecimalFormat priceDF = new DecimalFormat("###,###");
  // 검색조건에 맞는 게시글의 총 갯수를 조회한다.
     int totalRows = orderDao.getTotalOrderMemberInfoRows(criteria);
  
@@ -83,7 +83,8 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 		<div class="col-2 p-0 aside">
 			<span class="aside-title">관리자 페이지</span>
 			<ul class="nav flex-column p-0">
-					<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
+				<li class=""><a href="main.jsp" class="nav-link p-0">관리자페이지</a></li>
+				<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
 				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
 				<li class=""><a href="registerform.jsp" class="nav-link p-0">신규 상품 등록</a></li>
@@ -161,8 +162,10 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 %>	
 			<tr>
 			
-				<td class="style"><a href="order-detail.jsp?orderNo=<%=order.getNo()%>&memberNo=<%=order.getMemberNo() %>"><%=order.getNo()%></a></td>		
-				<td class="style"><%=order.getMemberName() %></td>		
+
+				<td class="style"><a href="order-detail.jsp?no=<%=order.getNo()%>"><%=order.getNo()%></a></td>		
+				<td class="style"><a href="member-detail.jsp?no=<%=order.getMemberNo()%>"><%=order.getMemberName() %></td>		
+
 				<td class="style">
 <%					
 	for(OrderDetailDto orderItem : orderItemList)	{
@@ -175,7 +178,7 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 %>					
 
 				</td>
-				<td class="style"><%=order.getTotalPrice() %></td>
+				<td class="style"><%=priceDF.format(order.getTotalPrice()) %>원</td>
 				<td class="style"><small class="text-muted"><%=order.getOrderDate() %></small></td>
 <% if ("주문취소".equals(order.getStatus())) { 
 %>		
@@ -265,7 +268,7 @@ function searchBoards(page) {
 
 function change(orderNo) {
 	var status = document.getElementById("status-" + orderNo).value;
-	location.href="order-status-change.jsp?no=" + orderNo + "&status=" + status;
+	location.href="order-status-change.jsp?no=" + orderNo + "&status=" + status+"&page=<%=pageNo%>&option=<%=option%>&keyword=<%=keyword%>";
 }
 </script>
 </body>

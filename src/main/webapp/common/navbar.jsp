@@ -29,7 +29,7 @@
 <%
 	} else if ("admin".equals(loginUserInfo.getId())) {
 %>
-				<li class="nav-item"><a href="/semi-project/admin/member-list.jsp" class="nav-link ">관리자페이지</a></li>
+				<li class="nav-item"><a href="/semi-project/admin/main.jsp" class="nav-link ">관리자페이지</a></li>
 				<li class="nav-item"><a href="/semi-project/logout.jsp" class="nav-link ">로그아웃</a></li>
 <%
 	} else {

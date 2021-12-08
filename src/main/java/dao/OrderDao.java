@@ -25,6 +25,195 @@ public class OrderDao {
 	}
 	
 	/**
+	 * 
+	 * @return 배송완료된 주문 개수
+	 * @throws SQLException
+	 */
+	public int selectdeliveredOrderCount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_orders "
+				+ "where order_status = '배송완료' ";
+				
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+
+	/**
+	 * 
+	 * @return 모든 주문 개수
+	 * @throws SQLException
+	 */
+	public int selectAllOrderCount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_orders ";
+				
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @return 오늘 취소된 주문 개수
+	 * @throws SQLException
+	 */
+	public int selectTodayOrderCount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_orders "
+				+ "where order_DATE >= TRUNC(SYSDATE) AND order_DATE < TRUNC(SYSDATE) + 1";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	/**
+	 * 
+	 * @return 오늘 취소된 주문 개수
+	 * @throws SQLException
+	 */
+	public int selectTodayCanceledOrderCount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_orders "
+				+ "where canceled_date >= TRUNC(SYSDATE) AND canceled_date < TRUNC(SYSDATE) + 1";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	public List<Order> selectAllCanceledOrdersToday() throws SQLException {
+		String sql = "select order_no, order_status, "
+			       + "order_date, order_total_price, cancel_reason,"
+				   + "cancel_status, canceled_date, member_no "
+				   + "from tb_orders "
+				   + "WHERE canceled_date >= TRUNC(SYSDATE) AND canceled_date < TRUNC(SYSDATE) + 1"
+				   + "order by order_no desc";
+  
+  
+  	List<Order> orders = new ArrayList<>();
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			Order order = new Order();
+			
+			order.setMemberNo(rs.getInt("member_no"));
+			order.setNo(rs.getInt("order_no"));
+			order.setStatus(rs.getString("order_status"));
+			order.setOrderDate(rs.getDate("order_date"));
+			order.setTotalPrice(rs.getInt("order_total_price"));
+			order.setCancelReason(rs.getString("cancel_reason"));
+			order.setCancelStatus(rs.getString("cancel_status"));
+			order.setCanceledDate(rs.getDate("canceled_date"));
+		
+			
+			orders.add(order);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return orders;
+	}
+	
+	
+	public List<Order> selectAllOrdersToday() throws SQLException {
+		String sql = "select order_no, order_status, "
+			       + "order_date, order_total_price, cancel_reason,"
+				   + "cancel_status, canceled_date, member_no "
+				   + "from tb_orders "
+				   + "WHERE order_DATE >= TRUNC(SYSDATE) AND order_DATE < TRUNC(SYSDATE) + 1"
+				   + "order by order_no desc";
+  
+  
+  	List<Order> orders = new ArrayList<>();
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			Order order = new Order();
+			
+			order.setMemberNo(rs.getInt("member_no"));
+			order.setNo(rs.getInt("order_no"));
+			order.setStatus(rs.getString("order_status"));
+			order.setOrderDate(rs.getDate("order_date"));
+			order.setTotalPrice(rs.getInt("order_total_price"));
+			order.setCancelReason(rs.getString("cancel_reason"));
+			order.setCancelStatus(rs.getString("cancel_status"));
+			order.setCanceledDate(rs.getDate("canceled_date"));
+		
+			
+			orders.add(order);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return orders;
+	}
+	
+	/**
 	 * 취소한 주문 목록들을 반환한다.
 	 * @param orderNo
 	 * @return
@@ -232,7 +421,7 @@ public class OrderDao {
 	public Order selectOrderByOrderNo(int orderNo) throws SQLException {
 		Order order = null;
 		
-		String sql = "select order_no, order_status, order_date, order_total_price, cancel_status, canceled_date "
+		String sql = "select order_no, member_no, order_status, order_date, order_total_price, cancel_status, canceled_date "
 				   + "from tb_orders "
 				   + "where order_no = ? ";
 		Connection connection = getConnection();
@@ -248,6 +437,7 @@ public class OrderDao {
 	    	order.setTotalPrice(rs.getInt("order_total_price"));
 	    	order.setCancelStatus(rs.getString("cancel_status"));
 	    	order.setCanceledDate(rs.getDate("canceled_date"));
+	    	order.setMemberNo(rs.getInt("member_no"));
 	    }
 	    
 	    rs.close();

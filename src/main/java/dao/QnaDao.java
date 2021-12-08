@@ -25,6 +25,135 @@ public class QnaDao {
 		return self;
 	}
 	
+	
+	
+	/**
+	 * 
+	 * @return 전체 QnA 수
+	 * @throws SQLException
+	 */
+	public int selectAnsweredQnACount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_qna "
+				+ "where question_answered = 'Y'  ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	/**
+	 * 
+	 * @return 전체 QnA 수
+	 * @throws SQLException
+	 */
+	public int selectAllQnACount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_qna ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @return 오늘 등록된 QnA 수
+	 * @throws SQLException
+	 */
+	public int selectTodayQnACount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_qna "
+				+ "where question_date >= TRUNC(SYSDATE) "
+				+ "AND question_date < TRUNC(SYSDATE) + 1";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	
+	public List<QnADetailDto> selectQnADetailNotAnswered()  throws SQLException {
+		String sql = "select q.question_no, q.product_no, q.member_no, q.question_title, "
+				+ "q.question_content, q.question_date, "
+				+ "q.question_answered, q.answer_content, q.answer_date, "
+				+ "m.member_name, m.member_id, "
+				+ "p.product_name, p.product_img "
+				+ "from tb_qna q, tb_members m, tb_products p "
+				+ "where q.member_no = m.member_no "
+				+ "and p.product_no = q.product_no "
+				+ "and q.question_answered = 'N'  ";
+		
+		List<QnADetailDto> qnADetailList = new ArrayList<>();
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			QnADetailDto qnADetail = new QnADetailDto();
+
+			qnADetail.setProductNo(rs.getInt("product_no"));
+			qnADetail.setMemberNo(rs.getInt("member_no"));
+			qnADetail.setMemberId(rs.getString("member_id"));
+			qnADetail.setQnANo(rs.getInt("question_no"));
+			qnADetail.setMemberName(rs.getString("member_name"));
+			qnADetail.setTitle(rs.getString("question_title"));
+			qnADetail.setQuestionContent(rs.getString("question_content"));
+			qnADetail.setAnswerContent(rs.getString("answer_content"));
+			qnADetail.setQuestionAnswered(rs.getString("question_answered"));
+			qnADetail.setQuestionDate(rs.getDate("question_date"));
+			qnADetail.setAnswerDate(rs.getDate("answer_date"));
+			qnADetail.setPhoto(rs.getString("product_img"));
+			qnADetail.setProductName(rs.getString("product_name"));
+			
+			qnADetailList.add(qnADetail);
+		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return qnADetailList;
+	}
+	
+	
 	public int selectQnACountByMemberNo(int memberNo) throws SQLException {
 		String sql = "select count(*) cnt from tb_qna where member_no = ? ";
 		int count = 0;

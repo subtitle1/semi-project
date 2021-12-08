@@ -18,7 +18,9 @@ String category = request.getParameter("category");
     <meta name="viewport" content="width=device-width, initial-scale=1">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
  	 <link rel="stylesheet" href="resources/css/style.css" />
+
     <title><%=category %> | ABC마트 온라인몰</title>
+
 </head>
 <style>
 .title {font-family:'Montserrat', Noto Sans KR; font-weight:500; color:black; font-size:50px; text-align:center; }

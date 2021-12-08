@@ -27,16 +27,19 @@
 <div class="container">   
 	
 <%
-	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
-	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 
+	int orderNo = Integer.parseInt(request.getParameter("no"));
+
+	OrderDao orderDao = OrderDao.getInstance();
+	Order order = orderDao.selectOrderByOrderNo(orderNo);
+	
+	int memberNo = order.getMemberNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	Member member = memberDao.selectMemberByNo(memberNo);
 	
 	DecimalFormat price = new DecimalFormat("###,###");
-	OrderDao orderDao = OrderDao.getInstance();
-	Order order = orderDao.selectOrderByOrderNo(orderNo);
 	
+
 	DecimalFormat priceDF = new DecimalFormat("###,###");
 	
 	List<OrderDetailDto> orderDetails = orderDao.selectAllOrderDetailsByOrderNo(orderNo);
@@ -64,8 +67,9 @@
 		</div>
 		
 		<div class="col-9">
-			<h4>상세 주문정보</h4>
-			<table class="table table-bordered mb-4" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
+			<h4>주문 상세 정보</h4>
+			<span style="margin-top :10px; font-weight:bold;">주문자 정보</span>
+			<table class="table table mb-5 table-sm" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
 				<colgroup>
 				<col width="12%">
 				<col width="38%">
@@ -99,45 +103,86 @@
 						</tr>
 					</tbody>				
 				</table>
+				
 			<div>
-			<h4>주문상품</h4>
-<%
-	for (OrderDetailDto orderDetail : orderDetails) {
-%>
-			<table class="table table-bordered" style="border-top: 2px solid #000">
+			<span style="margin-top :10px; font-weight:bold;">주문 정보</span>
+			<table class="table table mb-5 table-sm" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
 				<colgroup>
-				<col width="10%">
-				<col width="15%">
-				<col width="15%">
-				<col width="15%">
-				<col width="15%">
-				<col width="15%">
-				<col width="15%">
+				<col width="12%">
+				<col width="38%">
+				<col width="12%">
+				<col width="38%">
 				</colgroup>
 					<tbody>
 						<tr>
+							<th>주문일</th>
+							<td><%=order.getOrderDate() %></td>
+							<th>주문 상태</th>
+							<td><%=order.getStatus() %></td>
+						</tr>
+					</tbody>				
+				</table>	
+			</div>	
+				
+				
+			<div>
+			<span style="margin-top :10px; font-weight:bold;">상품 상세 정보</span>
+			<table class="table align-middle table-bordered" style="border-top: 2px solid #000; text-align:center;">
+				<colgroup>
+				<col width="10%">
+				<col width="10%">
+				<col width="">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+				<col width="10%">
+				</colgroup>
+					<tbody>
+						<tr>
+							<th>상품번호</th>
 							<th>상품 이미지</th>
 							<th>상품 이름</th>
 							<th>브랜드</th>
 							<th>판매가</th>
 							<th>할인가격</th>
-							<th>상품번호</th>
-							<th>카테고리</th>
+							<th>상품수량</th>
 						</tr>
+<%
+	for (OrderDetailDto orderDetail : orderDetails) {
+%>						
 						<tr>
-							<td><img class="order-img me-2" src="/semi-project/resources/images/products/<%=orderDetail.getPhoto()%>" width=100% /></td>
+							<td><%=orderDetail.getProductNo() %></td>
+							<td><img class="order-img me-2" src="/semi-project/resources/images/products/<%=orderDetail.getPhoto()%>" width=60px; /></td>
 							<td><%=orderDetail.getProductName() %></td>
 							<td><%=orderDetail.getBrand() %></td>
-							<td><%=price.format(orderDetail.getPrice()) %></td>
-							<td><%=price.format(orderDetail.getDisPrice()) %></td>
-							<td><%=orderDetail.getProductNo() %></td>
-							<td><%=orderDetail.getCategory() %></td>
+							<td><%=price.format(orderDetail.getPrice()) %>원</td>
+							<%
+if (orderDetail.getDisPrice() == 0) {
+%> 				
+				
+				<td>  </td>
+<% 
+	} else {
+%>	
+				<td><%=priceDF.format(orderDetail.getDisPrice()) %>원</td>
+<% 
+	}
+%>	
+							
+							<td><%=orderDetail.getAmount() %></td>
 						</tr>
-					</tbody>
-				</table>	
 <%
 	}
 %>
+						<tr>
+							<td colspan=7>총액 : <span style="margin-right:5px; color:red; font-weight: 
+							bold;"><%=price.format(order.getTotalPrice()) %>원</span>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>	
+
 			</div>
 		</div>
 	</div>	

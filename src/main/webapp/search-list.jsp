@@ -1,4 +1,3 @@
-        
 <%@page import="vo.Pagination3"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="vo.Pagination2"%>
@@ -19,7 +18,7 @@
 <link rel="stylesheet" href="resources/css/style.css" />
 <link rel="stylesheet" href="resources/css/style2.css" />
 <link rel="stylesheet" href="resources/css/default.css" />
-<title>ABC마트 온라인몰</title>
+<title></title>
 </head>
 <body data-spy='scroll' data-target='.navbar' data-offset='50'>
 <style>
@@ -62,7 +61,7 @@ if (keyword != "") {
 		</ul>
 	</div>
 	<div class="tab-content mt-4">
-		<div id="brand" class="container tab-pane fade active show">
+		<div id="brand" class="container tab-pane active">
 			<p class=" mb-2" style="font-weight: bold; font-color:gray;"><%=keyword %> 브랜드상품</p>
 			<div class="inquiry-box">
 <%	
