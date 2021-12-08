@@ -21,23 +21,7 @@ public class CartDao {
 	}
 	
 	
-	public int selectCartCountbymemberNo(int memberNo) throws SQLException {
-		String sql = "select count(*) cnt "
-				+ "from tb_carts "
-				+ "where member_no = ? ";
-				
-		int totalRecords = 0;
-		
-		Connection connection = getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
-		ResultSet rs = pstmt.executeQuery();
-		rs.next();
-		totalRecords = rs.getInt("cnt");
 
-		return totalRecords;
-		
-	}
-	
 	/**
 	 * 회원 번호로 장바구니 수량을 조회한다.
 	 * @param memberNo 회원 번호

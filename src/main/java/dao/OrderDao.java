@@ -648,9 +648,7 @@ public class OrderDao {
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, begin);
-		pstmt.setInt(2, end);
-		pstmt.setInt(3, memberNo);
+		pstmt.setInt(1, memberNo);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {

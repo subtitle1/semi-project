@@ -9,7 +9,7 @@
 body,dl,dt,dd,h1,h2,h3,h4,h5,h6,form,fieldset,p,th,td,input,textarea,select,pre,a{font-family:'Montserrat', Noto Sans KR; font-size:16px; color:#222;}
 
 #detail-container h2{
-	font-size:50px; 
+	font-size:37px; 
 	font-weight:700;
 }
 
@@ -22,7 +22,7 @@ body,dl,dt,dd,h1,h2,h3,h4,h5,h6,form,fieldset,p,th,td,input,textarea,select,pre,
 #detail-container a { color:#666; text-decoration:none;}
 #detail-container a:focus,
 #detail-container a:hover { text-decoration:none;}
-#detail-container fieldset, #detail-container img, #detail-container button{border:0;}
+#detail-container fieldset, #detail-container img {border:0;}
 
 #detail-container input[type=text]::-ms-clear {display: none;}
 
