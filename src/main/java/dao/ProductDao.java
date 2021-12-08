@@ -669,18 +669,21 @@ public class ProductDao {
 		
 		return products;
 	}
-	
+	 
 	/**
-	 * 모든 상품 중 옵션별로 분류된 데이터의 갯수를 반환한다.
+	 * 카테고리별 상품 중 옵션별로 분류된 데이터의 갯수를 반환한다.
 	 * @param c
 	 * @return 옵션별로 분류된 모든 상품.
 	 * @throws SQLException
 	 */
-	public int selectTotalRowsBrandAllProductsByOption(Criteria c) throws SQLException{
+	public int countTotalCategoryProductsByOption(Criteria c) throws SQLException{
 		int totalRows = 0;
 		String sql = "select count(*) cnt "
 				+ "from tb_products "
-				+ "where product_no is not null ";
+				+ "where 1=1 ";
+		if (c.getCategory()!= null) {
+			sql += "and product_category =  '"+ c.getCategory() +"' ";
+		}		   
 		if (c.getBrand()!= null) {
 			sql += "and product_brand =  '"+ c.getBrand() +"' ";
 		}		   
@@ -701,6 +704,132 @@ public class ProductDao {
 		
 		return totalRows;
 	}
+	/**
+	 * 모든 상품 중 옵션별로 분류된 데이터의 갯수를 반환한다.
+	 * @param c
+	 * @return 옵션별로 분류된 모든 상품.
+	 * @throws SQLException
+	 */
+	public int selectTotalRowsBrandAllProductsByOption(Criteria c) throws SQLException{
+		int totalRows = 0;
+		String sql = "select count(*) cnt "
+				+ "from tb_products "
+				+ "where 1=1 ";
+		if (c.getBrand()!= null) {
+			sql += "and product_brand =  '"+ c.getBrand() +"' ";
+		}		   
+		if (c.getGender()!= null) {
+			sql += "and product_gender =  '"+ c.getGender() +"' ";
+		}		   
+		
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRows = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return totalRows;
+	}
+	/**
+	 * 세일 상품 중 옵션별로 분류된 데이터의 갯수를 반환한다.
+	 * @param c
+	 * @return 옵션별로 분류된 모든 상품.
+	 * @throws SQLException
+	 */
+	public int selectTotalRowsBrandSaleProductsByOption(Criteria c) throws SQLException{
+		int totalRows = 0;
+		String sql = "select count(*) cnt "
+				+ "from tb_products "
+				+ "where product_disprice is not null ";
+		if (c.getBrand()!= null) {
+			sql += "and product_brand =  '"+ c.getBrand() +"' ";
+		}		   
+		if (c.getGender()!= null) {
+			sql += "and product_gender =  '"+ c.getGender() +"' ";
+		}		   
+		
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		rs.next();
+		totalRows = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return totalRows;
+	}
+	
+	/**
+	 * 세일 상품 중 옵션별로 분류된 데이터만 반영한다.
+	 * @param c
+	 * @return 옵션별로 분류된 모든 상품.
+	 * @throws SQLException
+	 */
+	public List<Product> selectSaleProductsAllByOption(Criteria c) throws SQLException{
+		List<Product> products =  new ArrayList<>();
+		
+		String sql = "select product_no, product_img, product_brand, "
+				+ "			product_name, product_price, product_disprice "
+				+ "	 from (select ";
+				if (c.getSort()!= null ) {
+					if ("new".equals(c.getSort())) {
+						sql += "row_number() over(order by product_no desc) rn,  ";
+					} else if ("low".equals(c.getSort())) {
+						sql += "row_number() over(order by product_price asc) rn, ";
+					} else if ("high".equals(c.getSort())) {
+						sql += "row_number() over(order by product_price desc) rn, ";				
+					}			 
+				} else {		   
+					   sql += "row_number() over(order by product_no desc) rn, "; 
+				}
+		
+				sql += "		  product_no, product_img, product_brand, "
+				+ "				  product_name, product_price, product_disprice "
+				+ "			from tb_products "
+				+ "         where product_disprice is not null ";
+		if (c.getBrand()!= null) { 
+			sql += "        and product_brand =  '"+ c.getBrand() +"' ";
+		}		   
+		if (c.getGender()!= null) {
+			sql += "        and product_gender =  '"+ c.getGender() +"' ";
+		}		   
+	
+			sql += "	) "	
+				+ "where rn >= ? and rn <= ? ";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setInt(1, c.getBegin());
+		pstmt.setInt(2, c.getEnd());
+		
+		ResultSet rs = pstmt.executeQuery();
+		while(rs.next()) {
+			Product product = new Product();
+			
+			product.setNo(rs.getInt("product_no"));
+			product.setPhoto(rs.getString("product_img"));
+			product.setBrand(rs.getString("product_brand"));
+			product.setName(rs.getString("product_name"));
+			product.setPrice(rs.getInt("product_price"));
+			product.setDisPrice(rs.getInt("product_disprice"));
+			
+			products.add(product);
+		}
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return products;
+	}
+
 	/**
 	 * 세일상품을 옵션으로 분류한 정보를 반영한다.
 	 * @param c
