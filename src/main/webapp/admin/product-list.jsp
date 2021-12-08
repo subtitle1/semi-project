@@ -21,7 +21,7 @@
  #product-container .select-box{margin-left:auto; width:120px;}
  #product-container .select-box select{padding:0 10px;}
    </style>
-    <title></title>
+    <title>ABC마트 관리자페이지</title>
 </head>
 <body>
 <%@ include file="admin-common.jsp" %>
@@ -69,6 +69,7 @@ ProductDao productDao = ProductDao.getInstance();
 		<div class="col-2 p-0 aside">
 			<span class="aside-title">관리자 페이지</span>
 			<ul class="nav flex-column p-0">
+				<li class=""><a href="main.jsp" class="nav-link p-0">관리자페이지</a></li>
 				<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
 				<li class=""><a href="product-list.jsp?pgno=1" class="nav-link p-0">전체 상품 조회</a></li>

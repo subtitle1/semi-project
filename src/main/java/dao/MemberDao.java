@@ -22,6 +22,130 @@ public class MemberDao {
 		return self;
 	}
 	
+	
+	/**
+	 * 
+	 * @return 오늘 탈퇴한 회원수
+	 * @throws SQLException
+	 */
+	public int selectTodayLeftCount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_members "
+				+ "where member_deleted_date >= TRUNC(SYSDATE) "
+				+ "AND member_deleted_date < TRUNC(SYSDATE) + 1";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	/**
+	 * 
+	 * @return 오늘 가입한 회원수
+	 * @throws SQLException
+	 */
+	public int selectTodayJoinCount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from tb_members "
+				+ "where member_registered_DATE >= TRUNC(SYSDATE) "
+				+ "AND member_registered_DATE < TRUNC(SYSDATE) + 1";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	
+	
+	
+	public List<Member> selectTodayLeftMember() throws SQLException {
+		String sql = "select * from tb_members "
+				+ "WHERE member_deleted_date >= TRUNC(SYSDATE) "
+				+ "AND member_deleted_date < TRUNC(SYSDATE) + 1";
+		List<Member> memberList = new ArrayList<>();
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		while (rs.next()) {
+			Member member = new Member();
+			member.setNo(rs.getInt("member_no"));
+			member.setId(rs.getString("member_id"));
+			member.setPwd(rs.getString("member_pwd"));
+			member.setName(rs.getString("member_name"));
+			member.setTel(rs.getString("member_tel"));
+			member.setEmail(rs.getString("member_email"));
+			member.setAddress(rs.getString("member_address"));
+			member.setPct(rs.getInt("member_pct"));
+			member.setRegisteredDate(rs.getDate("member_registered_date"));
+			member.setDeleted(rs.getString("member_deleted"));
+			member.setDeletedDate(rs.getDate("member_deleted_date"));
+			
+			memberList.add(member);
+		}
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return memberList;
+		}
+	
+	
+	public List<Member> selectTodayJoinMember() throws SQLException {
+		String sql = "select * from tb_members "
+				+ "WHERE member_registered_DATE >= TRUNC(SYSDATE) "
+				+ "AND member_registered_DATE < TRUNC(SYSDATE) + 1";
+		List<Member> memberList = new ArrayList<>();
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		while (rs.next()) {
+			Member member = new Member();
+			member.setNo(rs.getInt("member_no"));
+			member.setId(rs.getString("member_id"));
+			member.setPwd(rs.getString("member_pwd"));
+			member.setName(rs.getString("member_name"));
+			member.setTel(rs.getString("member_tel"));
+			member.setEmail(rs.getString("member_email"));
+			member.setAddress(rs.getString("member_address"));
+			member.setPct(rs.getInt("member_pct"));
+			member.setRegisteredDate(rs.getDate("member_registered_date"));
+			member.setDeleted(rs.getString("member_deleted"));
+			member.setDeletedDate(rs.getDate("member_deleted_date"));
+			
+			memberList.add(member);
+		}
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return memberList;
+		}
+	
+	
 	/**
 	 * 탈퇴한 회원들만 조회
 	 * @param begin

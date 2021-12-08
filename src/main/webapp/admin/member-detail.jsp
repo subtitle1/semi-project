@@ -19,7 +19,7 @@
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
 	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
 	 <link rel="stylesheet" href="../resources/css/style.css" />
-	 <title>관리자페이지</title>
+	 <title>ABC마트 관리자페이지</title>
 	</head>
 	
 	<body>
@@ -49,6 +49,7 @@
 	 	<div class="col-2 p-0 aside">
 				<span class="aside-title">관리자 페이지</span>
 				<ul class="nav flex-column p-0">
+					<li class=""><a href="main.jsp" class="nav-link p-0">관리자페이지 메인</a></li>
 					<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 					<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
 					<li class=""><a href="product-list.jsp?pgno=1" class="nav-link p-0">전체 상품 조회</a></li>
@@ -62,7 +63,7 @@
 	
 		<div class="col-9">
 		<h4>상세 회원 정보</h4>
-		<table class="table table-hover mb-5" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
+		<table class="table table-sm table-hover mb-5" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
 					<colgroup>
 					<col width="12%">
 					<col width="38%">
@@ -107,47 +108,52 @@ List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
 		
 		<div class="row">
 			<div class="col-6">
-			<h4>최근 작성한 REVIEW</h4>
-			<table class="table table-hover mb-5" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
-					<tbody>
+         <h6>최근 작성한 REVIEW</h6>
+         <table class="table table-hover align-middle mb-5" style="table-layout:fixed; border-top: 2px solid #000; border-bottom: 1px solid #000" >
+               <tbody>
 <%
-		if (reviewList.isEmpty()) { 
-%>			
-			<h6>상품 후기가 없습니다.</h6>
-				</tbody>				
-		</table>
+      if (reviewList.isEmpty()) { 
+%>         
+                  <tr>
+                     <td><h6>상품 후기가 없습니다.</h6></td>
+                  </tr>
+               </tbody>            
+         </table>
 <%
 } else {
 
-	for (ReviewDetailDto review : reviewList) {
-			
-%>					
-						<tr>
-							<td>[<a href="product-detail.jsp?no=<%=review.getProductNo()%>"><%=review.getProductName() %></a>
-						    	<small class="text-muted"><%=review.getBrand() %></small>]
-						    <%=review.getContent() %><small class="text-muted">(<%=review.getReviewDate() %>)</small>	
-						    </td>
-						</tr>   	
+   for (ReviewDetailDto review : reviewList) {
+         
+%>               
+                  <tr>
+                     <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"">
+                        <div style="position:relative; top:4px; display:inline-block; margin-right:8px; line-height:13px; font-size:13px;"">
+                           <a href="product-detail.jsp?no=<%=review.getProductNo()%>"><%=review.getProductName() %></a><br>
+                           <small class="text-muted" style="font-size:12px;">(<%=review.getReviewDate() %>)</small>       
+                        </div>
+                        <span><%=review.getContent() %></span>
+                      </td>
+                  </tr>
 <% 
-	}
-%>						
-						
-					</tbody>				
-		</table>
+   }
+%>                  
+                  
+               </tbody>            
+         </table>
 <% 
-	}
-%>						
-			
-			
-			</div>
+   }
+%>
+         </div>
 			<div class="col-6">
-			<h4>최근 작성한 QnA</h4>
-			<table class="table table-hover mb-5" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
+			<h6>최근 작성한 QnA</h6>
+			  <table class="table table-hover align-middle mb-5" style="table-layout:fixed; border-top: 2px solid #000; border-bottom: 1px solid #000" >
 					<tbody>
 <%
 		if (qnAList.isEmpty()) { 
 %>			
-			<h6>상품 QnA가 없습니다.</h6>
+			<tr>
+                     <td><h6>상품 QnA가 없습니다.</h6></td>
+                  </tr>
 				</tbody>				
 		</table>
 <%
@@ -156,12 +162,17 @@ List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
 	for (QnADetailDto qnA : qnAList) {
 			
 %>					
-						<tr>
-							<td>[<a href="product-detail.jsp?no=<%=qnA.getProductNo()%>"><%=qnA.getProductName() %></a>
-						    	<small class="text-muted"><%=qnA.getProductBrand() %></small>]
-						    <%=qnA.getQuestionContent() %><small class="text-muted">(<%=qnA.getQuestionDate() %>)</small>	
-						    </td>
-						</tr>   	
+
+
+ 					<tr>
+                     <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"">
+                        <div style="position:relative; top:4px; display:inline-block; margin-right:8px; line-height:13px; font-size:13px;"">
+                           <a href="product-detail.jsp?no=<%=qnA.getProductNo()%>"><%=qnA.getProductName() %></a><br>
+                           <small class="text-muted" style="font-size:12px;">(<%=qnA.getQuestionDate() %>)</small>       
+                        </div>
+                        <span><%=qnA.getQuestionContent() %></span>
+                      </td>
+                  </tr> 	
 <% 
 	}
 %>						
@@ -178,8 +189,8 @@ List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
 		
 		
 		
-		<h4>총 구매 내역</h4>
-		<table class="table table-hover table-striped">
+		<h6>총 구매 내역</h6>
+		<table class="table table-hover table-striped table-sm">
 		<colgroup>
 			<col width="5%">
 			<col width="20%">
@@ -276,12 +287,14 @@ if	("주문취소".equals(order.getStatus())) {
 <% 
 	}
 %>	
-
+		<tr>
+			<td colspan="3">총 주문 횟수 :<strong> <%=totalOrderCount %> </strong>회</td>
+			<td colspan="3">총 구매액 :<strong> <%=priceDF.format(sum) %> </strong>원</td>
+		</tr>
 
 		
 		</tbody>
 	</table>
-	<h5>총 주문 횟수 : <%=totalOrderCount %> 회   총 구매액 : <%=priceDF.format(sum) %>원</h5>
 	</div>	
 	</div>
 	</div>

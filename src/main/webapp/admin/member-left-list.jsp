@@ -20,7 +20,7 @@
  #member-container .select-box select{padding:0 10px;}
    
    </style>
-    <title></title>
+    <title>ABC마트 관리자페이지</title>
 </head>
 <body>
 <%@ include file="admin-common.jsp" %>
@@ -64,7 +64,8 @@ List<Member> memberList = memberDao.selectAllLeftMembers(criteria);
 		<div class="col-2 p-0 aside">
 			<span class="aside-title">관리자 페이지</span>
 			<ul class="nav flex-column p-0">
-			<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
+				<li class=""><a href="main.jsp" class="nav-link p-0">관리자페이지</a></li>
+				<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
 				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
 				<li class=""><a href="registerform.jsp" class="nav-link p-0">신규 상품 등록</a></li>
@@ -77,12 +78,12 @@ List<Member> memberList = memberDao.selectAllLeftMembers(criteria);
 		<div class="col-9">
 		<div class="row mb-3">
 			<div class="col">
-			<div><h4>탈퇴 회원 목록</h4></div>
+			<div><h4>회원 목록</h4></div>
 			<div>
 			<form id="form-search" class="row" method="get" action="member-list.jsp">
 					<input type="hidden" id="page-field" name="page" value="<%=pageNo%>">
 					<div class="col-4" style="height: 31px; line-height: 31px;">
-						총 <strong><%=totalRows %></strong> 명의 탈퇴한 회원이 있습니다.
+						총 <strong><%=totalRows %></strong> 명의 회원이 있습니다.
 					</div>			
 					<div class="col-4">
 						<div class="input-group select-box">
@@ -111,7 +112,7 @@ List<Member> memberList = memberDao.selectAllLeftMembers(criteria);
 			</div>
 			</div>
 		
-				<table class="table table-hover table-striped">
+		<table class="table table-hover table-striped">
 		<colgroup>
 			<col width="5%">
 			<col width="7%">

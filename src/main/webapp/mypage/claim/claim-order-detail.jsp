@@ -168,7 +168,7 @@
 								<span style="font-weight: bold;"><%=orderDetail.getStatus() %></span>
 							</div>
 	<%
-		if("주문완료".equals(order.getStatus()) && "N".equals(orderDetail.getReviewStatus())) {
+		if("배송완료".equals(order.getStatus()) && "N".equals(orderDetail.getReviewStatus())) {
 	%>
 							<div class="col mt-4 text-end ">
 								<button type="button" class="btn btn-dark btn-sm " 

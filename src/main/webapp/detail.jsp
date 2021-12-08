@@ -430,6 +430,7 @@
 			var form = document.getElementById("product-form");
 			form.setAttribute("action", "/semi-project/mypage/add.jsp");
 			form.submit();
+			alert('상품이 장바구니에 담겼습니다.');
 		}
 
 		function goOrder() {

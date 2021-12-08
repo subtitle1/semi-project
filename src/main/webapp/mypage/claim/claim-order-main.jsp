@@ -126,7 +126,7 @@
 	int totalCount = orderDao.selectOrderCountByMemberNo(member.getNo());
 	Pagination pagination = new Pagination(pageNo, totalCount);
 	
-	List<Order> orders = orderDao.selectAllOrdersByMemberNo(pagination.getBegin(), pagination.getEnd(), member.getNo());
+	List<Order> orders = orderDao.selectAllOrdersByMemberNoIndex(pagination.getBegin(), pagination.getEnd(), member.getNo());
 	if (orders.isEmpty()) {
 %>
 			<div class="order-list-box p-5">

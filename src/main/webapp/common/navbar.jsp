@@ -28,7 +28,7 @@
 <%
 	} else if ("admin".equals(loginUserInfo.getId())) {
 %>
-				<li class="nav-item"><a href="/semi-project/admin/member-list.jsp" class="nav-link ">관리자페이지</a></li>
+				<li class="nav-item"><a href="/semi-project/admin/main.jsp" class="nav-link ">관리자페이지</a></li>
 				<li class="nav-item"><a href="/semi-project/logout.jsp" class="nav-link ">로그아웃</a></li>
 <%
 	} else {
@@ -59,7 +59,7 @@
 				String mainKeyword = StringUtils.defaultString(request.getParameter("keyword"), "");
 			%>
 			<div class="col search-box">
-				<form method="get" id="main-search" action="search-list.jsp">
+				<form method="get" id="main-search" action="/semi-project/search-list.jsp">
 					<input type="hidden" id="main-page-field" name="pno" value="<%=mainPageNo%>">
 	     		 	<input class="form-control" type="search" name="keyword" value="<%=StringUtils.isBlank(mainKeyword) ? "" : mainKeyword %>" placeholder="아디다스 오젤리아" aria-label="Search">
 	      			<button onclick="searchProducts(1);" class="btn btn-outline-success btn-sm" type="button"></button>

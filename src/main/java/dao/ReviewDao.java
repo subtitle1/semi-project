@@ -30,7 +30,89 @@ public class ReviewDao {
 	public static ReviewDao getInstance() {
 		return self;
 	}
+	
+	
+	/**
+	 * 
+	 * @return 오늘 등록된 리뷰 수
+	 * @throws SQLException
+	 */
+	public int selectTodayReviewCount() throws SQLException {
+		int count = 0;
+		
+		String sql = "select count(*) cnt "
+				+ "from TB_REVIEWS "
+				+ "where REVIEW_DATE >= TRUNC(SYSDATE) "
+				+ "AND REVIEW_DATE < TRUNC(SYSDATE) + 1";
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.next();
+		count = rs.getInt("cnt");
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return count;
+	}
+	
+	
+	
+	
+	public List<ReviewDetailDto> selectReviewDetailToday() throws SQLException {
+		String sql = "SELECT R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
+				   + "		R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
+				   + "		M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
+				   + "		P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
+				   + "		S.PRODUCT_SIZE "
+				   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
+				   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
+				   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
+				   + "		AND S.PRODUCT_NO = P.PRODUCT_NO "
+				   + "		and REVIEW_DATE >= TRUNC(SYSDATE) AND REVIEW_DATE < TRUNC(SYSDATE) + 1";
+				  
+		
+		List<ReviewDetailDto> reviewList = new ArrayList<>();
+		
+		Connection connection = getConnection();
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		while (rs.next()) {
+			ReviewDetailDto reviewDetailDto = new ReviewDetailDto();
 
+			reviewDetailDto.setReviewNo(rs.getInt("review_no"));
+			
+			reviewDetailDto.setMemberNo(rs.getInt("member_no"));
+			reviewDetailDto.setId(rs.getString("member_id"));
+			reviewDetailDto.setName(rs.getString("member_name"));
+			
+			reviewDetailDto.setStockNo(rs.getInt("product_detail_no"));
+			reviewDetailDto.setSize(rs.getInt("product_size"));
+			
+			reviewDetailDto.setProductNo(rs.getInt("product_no"));
+			reviewDetailDto.setProductName(rs.getString("product_name"));
+			reviewDetailDto.setPhoto(rs.getString("product_img"));
+			reviewDetailDto.setBrand(rs.getString("product_brand"));
+			
+			reviewDetailDto.setContent(rs.getString("review_content"));
+			reviewDetailDto.setLikeCount(rs.getInt("review_like_count"));
+			reviewDetailDto.setDeleted(rs.getString("review_deleted"));
+			reviewDetailDto.setReviewDate(rs.getDate("review_date"));
+			
+			reviewList.add(reviewDetailDto);
+		}
+		rs.close();
+		pstmt.close();
+		connection.close();
+		
+		return reviewList;
+	}
+	
+	
+	
 		/**
 		 * 지정된 리뷰 정보를 테이블에 저장한다.
 		 * @param review 리뷰 정보
