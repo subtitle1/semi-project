@@ -83,19 +83,19 @@
 	<%
 		if (orderDetail.getDisPrice() > 0) {
 	%>
-				<div class="col mt-3">
-					<div class="text-center">
-						<span  style="font-size:15px; color:gray; text-decoration:line-through;"><%=price.format(orderDetail.getPrice()) %>원</span>
+				<div class="col mt-3 text-end">
+					<div class="text-end">
+						<span  style="font-size:15px; color:gray; text-decoration:line-through;"><%=price.format(orderDetail.getPrice()*orderDetail.getAmount()) %>원</span>
 					</div>
-					<div class="text-center">
-						<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()) %>원</span>
+					<div class="text-end">
+						<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()*orderDetail.getAmount()) %>원</span>
 					</div>
 				</div>
 	<%
 		} else {
 	%>
 				<div class="col mt-4 text-end">
-					<span><%=price.format(orderDetail.getPrice()) %>원</span>
+					<span><%=price.format(orderDetail.getPrice()*orderDetail.getAmount()) %>원</span>
 				</div>
 	<%
 		}
