@@ -1,4 +1,3 @@
-        
 <%@page import="vo.Pagination3"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="vo.Pagination2"%>

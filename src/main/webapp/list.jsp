@@ -10,11 +10,17 @@
 <!doctype html>
 <html lang="ko">
 <head>
+<%
+//카테고리 요청
+String category = request.getParameter("category");
+%>
    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
  	 <link rel="stylesheet" href="resources/css/style.css" />
-   <title></title>
+
+    <title><%=category %> | ABC마트 온라인몰</title>
+
 </head>
 <style>
 .title {font-family:'Montserrat', Noto Sans KR; font-weight:500; color:black; font-size:50px; text-align:center; }
@@ -23,6 +29,23 @@ a{text-decoration:none; color:black;}
 
 </style>
 <body>
+<%
+//include 시킨 navbar의 nav-item 중에서 페이지에 해당하는 nav-item를 active 시키기위해서 "menu"라는 이름으로 페이지이름을 속성으로 저장한다.
+   // pageContext에 menu라는 이름으로 설정한 속성값은 navbar.jsp에서 조회해서 navbar의 메뉴들 중 하나를 active 시키기 위해서 읽어간다.
+   if ("SNEAKERS".equals(request.getParameter("category"))) {
+      pageContext.setAttribute("menu", "SNEAKERS");
+   }
+   if ("SPORTS".equals(request.getParameter("category"))) {
+      pageContext.setAttribute("menu", "SPORTS");
+   }
+   if ("SANDALS".equals(request.getParameter("category"))) {
+      pageContext.setAttribute("menu", "SANDALS");
+   }
+   if ("LOAFERS".equals(request.getParameter("category"))) {
+      pageContext.setAttribute("menu", "LOAFERS");
+   }
+   
+%>
 <%@ include file = "common/navbar.jsp" %>
 <div class="container">
 <% 
@@ -32,10 +55,6 @@ a{text-decoration:none; color:black;}
 
 	// 제품 정보 관련 기능을 제공하는 ProductDao객체를 획득한다.
 	ProductDao productDao = ProductDao.getInstance();
-	
-	//카테고리 요청
-	String category = request.getParameter("category");
-	
 
 	// select할 속성 요청.
 	String brand = request.getParameter("brand");
@@ -48,12 +67,15 @@ a{text-decoration:none; color:black;}
 		c.setBrand (brand);
 	} 
 	if(gender != null && !gender.isEmpty()){
-		c.setGender(gender);
+		c.setGender(gender); 
 	} 
 	if(sort != null && !sort.isEmpty()) {
 		c.setSort(sort);
 	}
 	
+	// 총 상품 수량
+	int totalRows = productDao.countTotalCategoryProductsByOption(c);
+	// 옵션별 상품조회
 	List<Product> products = productDao.selectProductsByOption(c);
 	
 
@@ -86,9 +108,9 @@ a{text-decoration:none; color:black;}
   
    	<nav class="navbar navbar-expand-lg navbar-ligth ">
 	<div class="container">
-		<form id="search-form" action="list.jsp" method="get">
+		<form id="search-form" action="list.jsp" method="get" style="width:100%;">
 			<input type="hidden" name="category" value="<%=category %>">
-			<div class="collapse navbar-collapse " id="navbar-1">
+			<div class="collapse navbar-collapse justify-content-between " id="navbar-1">
 				<ul class="navbar-nav" >
 					<li class="nav-item" >
 						<select name="brand" class=" border-0 text-center mx-3 hover" onchange="searchProducts()">
@@ -113,6 +135,9 @@ a{text-decoration:none; color:black;}
 						</select>
 					</li>
 				</ul>
+				<div class=" ">
+						총 <%=totalRows %> 개의 상품이 있습니다.
+				</div>				
 			</div>
 		</form>
 	</div>

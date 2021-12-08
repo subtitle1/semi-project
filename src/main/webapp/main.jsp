@@ -1,3 +1,4 @@
+        
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="vo.Product"%>
 <%@page import="java.util.List"%>
@@ -23,7 +24,7 @@ a{text-decoration:none; color:black;}
 .swiper-button-next{right:-20px;}
 </style>
 <body>
-<%@ include file="common/navbar.jsp" %>
+<%@ include file="common/navbar.jsp" %> 
 <div class="container"> 
 
 <%
@@ -33,14 +34,7 @@ a{text-decoration:none; color:black;}
 	List<Product> newProductList = productDao.selectAllProducts(1, 8);
 	DecimalFormat price = new DecimalFormat("###,###");
 
-	String user = request.getParameter("user");
-	if ("deleted".equals(user)) {
-%>
-	<script type="text/javascript">
-		alert("탈퇴가 완료되었습니다.");
-	</script>
-<%
-	}
+
 %>
 	<!-- 
 		세일상품목록
@@ -165,3 +159,5 @@ for(Product product : newProductList){
 </script>
 </body>
 </html>
+
+    

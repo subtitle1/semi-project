@@ -20,19 +20,19 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" href="resources/css/default.css" />
-<link rel="stylesheet" href="resources/css/style2.css" />
 <link rel="stylesheet" href="resources/css/style.css" />
-<title></title>
+<link rel="stylesheet" href="resources/css/style2.css" />
+<link rel="stylesheet" href="resources/css/default.css" />
+<title>ABC-마트 온라인몰</title>
 </head>
-<body >
+<body > S
 	<%@ include file="common/navbar.jsp"%>
 	<div class="container" id="detail-container">
 		<%
 		DecimalFormat price = new DecimalFormat("###,###");
 		int productNo = Integer.parseInt(request.getParameter("no"));
 
-		ProductDao productDao = ProductDao.getInstance();
+		ProductDao productDao = ProductDao.getInstance(); 
 		StockDao stockDao = StockDao.getInstance();
 
 		Product product = productDao.selectProductbyNo(productNo);
@@ -46,8 +46,8 @@
 				<table style="border-top: 2px solid #000">
 					<colgroup>
 						<col width="30%">
-						<col width="40%">
-						<col width="30%">
+						<col width="50%">
+						<col width="20%">
 					</colgroup>
 					<tbody>
 						<tr>
@@ -55,11 +55,11 @@
 	<%
 		if(product.getDisPrice() > 0){
 	%>
-							<td class="price" id="price"><%=price.format(product.getDisPrice())%></td>
+							<td class="price" colspan="2" id="price"><%=price.format(product.getDisPrice())%> 원</td>
 	<%		
 		} else {
 	%>						
-							<td class="price" id="price"><%=price.format(product.getPrice())%></td>
+							<td class="price" colspan="2" id="price"><%=price.format(product.getPrice())%> 원</td>
 	<%
 			}
 	%>
@@ -81,8 +81,8 @@
 							<td colspan="2">
 								<div class="length">
 									<input name="amount" id="count" type="number" min="1" max="20" value="1" onchange="change();" readonly>
-										<a href="#" onclick="plus(event)">증가</a> 
-										<a href="#" onclick="minus(event)">감소</a>
+										<a href="#" onclick="plus(event)"> </a> 
+										<a href="#" onclick="minus(event)"> </a>
 								</div>
 							</td>
 						</tr>
@@ -155,9 +155,7 @@
 %>
 					<div class="row">
 						<div class="col mt-2">
-
-							<span style="margin-left: 5px;">총 <%=totalRecords%>건의
-
+							<span style="margin-left: 5px;">총 <%=totalRecords%>건의 
 								상품 후기가 있습니다.
 							</span>
 						</div>
@@ -231,9 +229,7 @@
 									</div>
 									<div id="faq-content-<%=detail.getReviewNo()%>"
 										class="accordion-collapse collapse" data-bs-parent="#faqlist">
-
-										<div class="accordion-body mt-2">
-
+		 								<div class="accordion-body mt-2">
 											<strong>review : </strong><%=detail.getContent()%>
 										</div>
 									</div>
@@ -349,32 +345,29 @@
 	} // else 끝
 %>
 				</div>
-
-	<%
-		// Q&A 등록폼
-		if(loginUserInfo != null) {
-	%>		
-			<div class="mt-3 mb-3">
-				<form class="border p-4 bg-light" method="post" action="insertQna.jsp">
-					<input type="hidden" name="productNo" value="<%=productNo%>">
-					<div class="mb-3">
-						<label class="form-label mb-3" for="title"><strong>상품 Q&A 제목</strong></label>
-						<input type="text" class="form-control" name="title" id="title" maxlength="30">
-					</div>
-					<div class="mb-2">
-						<label class="form-label mb-3" for="content"><strong>상품 Q&A 내용</strong></label>
-	    				<textarea class="form-control" name="content" id="content" rows="3" maxlength=""></textarea>
-					</div>
-					<div class="mt-3  text-end">
-						<button type="submit" class="btn btn-dark">등록</button>
-					</div>
-				</form>
-	
-			</div>
-	<%
-		} 
-	%>				
-
+		<%
+			// Q&A 등록폼
+			if(loginUserInfo != null) {
+		%>		
+				<div class="mt-3 mb-3">
+					<form class="border p-4 bg-light" method="post" action="insertQna.jsp">
+						<input type="hidden" name="productNo" value="<%=productNo%>">
+						<div class="mb-3">
+							<label class="form-label mb-3" for="title"><strong>상품 Q&A 제목</strong></label>
+							<input type="text" class="form-control" name="title" id="title" maxlength="30">
+						</div>
+						<div class="mb-2">
+							<label class="form-label mb-3" for="content"><strong>상품 Q&A 내용</strong></label>
+		    				<textarea class="form-control" name="content" id="content" rows="3" maxlength=""></textarea>
+						</div>
+						<div class="mt-3 text-end">
+							<button type="submit" class="btn btn-dark">등록</button>
+						</div>
+					</form>
+				</div>
+		<%
+			} 
+		%>				
 	
 			</div>
 		</div>	<!-- tab content 끝 -->

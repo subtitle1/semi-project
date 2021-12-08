@@ -27,6 +27,7 @@
 <div class="container">   
 	
 <%
+
 	int orderNo = Integer.parseInt(request.getParameter("no"));
 
 	OrderDao orderDao = OrderDao.getInstance();
@@ -181,6 +182,7 @@ if (orderDetail.getDisPrice() == 0) {
 
 					</tbody>
 				</table>	
+
 			</div>
 		</div>
 	</div>	
