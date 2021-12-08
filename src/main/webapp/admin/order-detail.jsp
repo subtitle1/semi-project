@@ -1,17 +1,149 @@
+<%@page import="vo.QnA"%>
+<%@page import="dto.QnADetailDto"%>
+<%@page import="dao.QnaDao"%>
+<%@page import="dto.ReviewDetailDto"%>
+<%@page import="dao.ReviewDao"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
+<%@page import="dto.OrderDetailDto"%>
+<%@page import="vo.Order"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.OrderDao"%>
+<%@page import="dao.MemberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	   pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="ko">
 <head>
-   <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
-    <title></title>
+	 <meta charset="UTF-8">
+	 <meta name="viewport" content="width=device-width, initial-scale=1">
+	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
+	 <link rel="stylesheet" href="../resources/css/style.css" />
+	 <title>관리자페이지</title>
 </head>
-<body>
-<div class="container">    
 
+<body>
+<%@ include file="admin-common.jsp" %>
+<div class="container">   
+	
+<%
+	int orderNo = Integer.parseInt(request.getParameter("orderNo"));
+	int memberNo = Integer.parseInt(request.getParameter("memberNo"));
+
+	MemberDao memberDao = MemberDao.getInstance();
+	Member member = memberDao.selectMemberByNo(memberNo);
+	
+	DecimalFormat price = new DecimalFormat("###,###");
+	OrderDao orderDao = OrderDao.getInstance();
+	Order order = orderDao.selectOrderByOrderNo(orderNo);
+	
+	DecimalFormat priceDF = new DecimalFormat("###,###");
+	
+	List<OrderDetailDto> orderDetails = orderDao.selectAllOrderDetailsByOrderNo(orderNo);
+%>
+	<div class="row">
+		<div class="col p-0 page-title">
+			<h1>관리자페이지</h1>
+		</div>
+	</div>
+	
+	<div class="row mypage">
+		<!-- aside 시작 -->
+		<div class="col-2 p-0 aside">
+			<span class="aside-title">관리자 페이지</span>
+			<ul class="nav flex-column p-0">
+				<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
+				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
+				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
+				<li class=""><a href="registerform.jsp" class="nav-link p-0">신규 상품 등록</a></li>
+				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
+				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
+				<li class=""><a href="qna-list.jsp" class="nav-link p-0">QnA 목록</a></li>
+				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>
+			</ul>
+		</div>
+		
+		<div class="col-9">
+			<h4>상세 주문정보</h4>
+			<table class="table table-bordered mb-4" style="border-top: 2px solid #000; border-bottom: 1px solid #000" >
+				<colgroup>
+				<col width="12%">
+				<col width="38%">
+				<col width="12%">
+				<col width="38%">
+				</colgroup>
+					<tbody>
+						<tr>
+							<th>회원번호</th>
+							<td><%=member.getNo() %></td>
+							<th>이름</th>
+							<td><%=member.getName() %></td>
+						</tr>
+						<tr>
+							<th>ID</th>
+							<td><%=member.getId() %></td>
+							<th>연락처</th>
+							<td><%=member.getTel() %></td>
+						</tr>
+						<tr>
+							<th>이메일</th>
+							<td><%=member.getEmail() %></td>
+							<th>주소</th>
+							<td><%=member.getAddress() %></td>
+						</tr>
+						<tr>
+							<th>포인트</th>
+							<td><%=member.getPct() %></td>
+							<th>가입일</th>
+							<td><%=member.getRegisteredDate() %></td>
+						</tr>
+					</tbody>				
+				</table>
+			<div>
+			<h4>주문상품</h4>
+<%
+	for (OrderDetailDto orderDetail : orderDetails) {
+%>
+			<table class="table table-bordered" style="border-top: 2px solid #000">
+				<colgroup>
+				<col width="10%">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+				</colgroup>
+					<tbody>
+						<tr>
+							<th>상품 이미지</th>
+							<th>상품 이름</th>
+							<th>브랜드</th>
+							<th>판매가</th>
+							<th>할인가격</th>
+							<th>상품번호</th>
+							<th>카테고리</th>
+						</tr>
+						<tr>
+							<td><img class="order-img me-2" src="/semi-project/resources/images/products/<%=orderDetail.getPhoto()%>" width=100% /></td>
+							<td><%=orderDetail.getProductName() %></td>
+							<td><%=orderDetail.getBrand() %></td>
+							<td><%=price.format(orderDetail.getPrice()) %></td>
+							<td><%=price.format(orderDetail.getDisPrice()) %></td>
+							<td><%=orderDetail.getProductNo() %></td>
+							<td><%=orderDetail.getCategory() %></td>
+						</tr>
+					</tbody>
+				</table>	
+<%
+	}
+%>
+			</div>
+		</div>
+	</div>	
 </div>
+<%@ include file="../common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"></script>
 </body>
 </html>

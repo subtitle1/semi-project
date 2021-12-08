@@ -78,7 +78,7 @@
 						<span class="member-info">멤버십 회원 가입일 <span class="member-number"><%=member.getRegisteredDate() %></span></span> 
 					</div>
 					<div class="col-4 p-0 right-box">
-						<span class="text-center"><img src="" alt="" />포인트</span>
+						<span class="text-center"><i class="icon-point"></i>포인트</span>
 						<span class="point"><%=member.getPct() %><span class="unit">p</span></span>
 					</div>
 				</div>
@@ -91,7 +91,7 @@
 						<span><%=order.getNo() %></span>
 						<input type="hidden" name="orderNo"/>
 					</div>
-					<div class="col mt-1 cancel-font">
+					<div class="col mt-1 text-end cancel-font">
 						<span>주문일시</span>
 						<span><%=order.getOrderDate() %></span>
 					</div>
@@ -145,7 +145,7 @@
 											<span  style="text-decoration:line-through;"><%=price.format(orderDetail.getPrice()) %>원</span>
 										</div>
 										<div class="text-end me-2">
-											<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()) %>원</span>
+											<span style="color: red; font-weight: bold; font-size: 17px;"><%=orderDetail.getDisPrice() %>원</span>
 										</div>
 									</div>
 									</td>
@@ -154,8 +154,8 @@
 %>
 									<td>
 										<div class="col text-end me-2">
-											<span><%=orderDetail.getPrice() %>원</span>
-											<input type="hidden" name="price" value="<%=price.format(orderDetail.getPrice())%>"/>
+											<span><%=price.format(orderDetail.getPrice()) %>원</span>
+											<input type="hidden" name="price" value="<%=orderDetail.getPrice()%>"/>
 										</div>
 									</td>
 								</tr>

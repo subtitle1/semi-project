@@ -161,7 +161,7 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 %>	
 			<tr>
 			
-				<td class="style"><a href="order-detail.jsp?no=<%=order.getNo()%>"><%=order.getNo()%></td>		
+				<td class="style"><a href="order-detail.jsp?orderNo=<%=order.getNo()%>&memberNo=<%=order.getMemberNo() %>"><%=order.getNo()%></a></td>		
 				<td class="style"><%=order.getMemberName() %></td>		
 				<td class="style">
 <%					
@@ -173,7 +173,7 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 <% 
 	}
 %>					
-	
+
 				</td>
 				<td class="style"><%=order.getTotalPrice() %></td>
 				<td class="style"><small class="text-muted"><%=order.getOrderDate() %></small></td>
