@@ -1,3 +1,5 @@
+<%@page import="vo.Pagination"%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="dao.OrderDao"%>
 <%@page import="vo.Order"%>
 <%@page import="java.util.List"%>
@@ -6,7 +8,7 @@
     pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="ko">
-<head>
+<head>          
    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
@@ -17,24 +19,27 @@
 <%@ include file="/common/navbar.jsp" %>
 <%
 	if (loginUserInfo == null) {
-%>
-	<a href="#" onclick="javascript=alert('로그인이 필요한 페이지입니다.'); location.href='/semi-project/loginform.jsp';" class="nav-link util-mypage" ></a>		
-<%
+		response.sendRedirect("../../loginform.jsp?user=undefined");	
 	}
+
 	int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
+	DecimalFormat price = new DecimalFormat("###,###");
 	
 	Member member = memberDao.selectMemberByNo(memberNo);
 	String claimCancel = request.getParameter("claimCancel");
+	
+	
 	if ("canceled".equals(claimCancel)) {
 %>
-<script type="text/javascript">
-	alert("주문이 취소되었습니다.");
-</script>
+	<script type="text/javascript">
+		alert("주문이 취소되었습니다.");
+	</script>
 <%
 	}
 %>
+
 <div class="container">    
 	<div class="row">
 		<div class="col breadcrumb">
@@ -57,8 +62,8 @@
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
-				<li class=""><a href="" class="nav-link p-0">개인정보 수정</a></li>
-				<li class=""><a href="" class="nav-link p-0">비밀번호 변경</a></li>
+				<li class=""><a href="../info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
+				<li class=""><a href="../info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
 				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
 				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
@@ -117,7 +122,11 @@
 			<div class="buy-list mb-3">
 				<p>전체 주문/배송 현황 조회</p>
 <%
-	List<Order> orders = orderDao.selectAllOrdersByMemberNo(memberNo);
+	String pageNo = request.getParameter("pageNo");
+	int totalCount = orderDao.selectOrderCountByMemberNo(member.getNo());
+	Pagination pagination = new Pagination(pageNo, totalCount);
+	
+	List<Order> orders = orderDao.selectAllOrdersByMemberNo(pagination.getBegin(), pagination.getEnd(), member.getNo());
 	if (orders.isEmpty()) {
 %>
 			<div class="order-list-box p-5">
@@ -129,23 +138,20 @@
 %>
 				<div class="order-list-box mb-3">
 					<div class="row mb-1">
-						<div class="col-2 mt-2">
+						<div class="col mt-2">
 							<span style="font-weight: bold;">주문번호</span>
 							<a href="claim-order-detail.jsp?orderNo=<%=order.getNo() %>" style="color:black;"><span><%=order.getNo() %></span></a>
 						</div>
-						<div class="col-3 mt-2">
+						<div class="col mt-2">
 							<span style="font-weight: bold;">주문일시</span>
 							<span style="font-weight: bold;"><%=order.getOrderDate() %></span>
 						</div>
-						<div class="col text-end mt-2">
+						<div class="col text-center mt-2">
 							<span style="font-weight: bold;"><%=order.getStatus() %></span>
 						</div>
 						<div class="col-3 text-end mt-2">
 							<span style="font-weight: bold;">총 결제금액</span>
-							<span style="color:red; font-weight: bold;"><%=order.getTotalPrice() %>원</span>
-						</div>
-						<div class="col-1 text-end mt-1">
-							<button type="button" class="btn btn-dark btn-sm">취소</button>
+							<span style="color:red; font-weight: bold;"><%=price.format(order.getTotalPrice()) %>원</span>
 						</div>
 					</div>
 				</div>
@@ -153,6 +159,30 @@
 		}
 	}
 %>
+			</div>
+			<div class="row mb-3">
+				<div class="col-6 offset-3">
+					<nav>
+						<ul class="pagination justify-content-center">
+							<li class="page-item <%=!pagination.isExistPrev() ? "disabled" : "" %>"><a class="page-link" href="claim-order-main.jsp?pageNo=<%=pagination.getPrevPage()%>" >이전</a></li>
+<%
+	if (totalCount == 0) {
+%>
+							<li class="page-item <%=pagination.getPageNo() == 1 ? "active" : "" %>"><a class="page-link" href="claim-order-main.jsp?pageNo=1">1</a></li>
+<% 
+	} else {
+		for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+%>					
+							<li class="page-item <%=pagination.getPageNo() == num ? "active" : "" %>"><a class="page-link" href="claim-order-main.jsp?pageNo=<%=num%>"><%=num %></a></li>
+<%
+		}
+	}
+%>					
+
+							<li class="page-item <%=!pagination.isExistNext() ? "disabled" :"" %>"><a class="page-link" href="claim-order-main.jsp?pageNo=<%=pagination.getNextPage()%>" >다음</a></li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 		</div>
 	</div>

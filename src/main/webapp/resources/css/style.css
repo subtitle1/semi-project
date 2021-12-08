@@ -444,15 +444,17 @@ a {
 /* //이미지 동적 hover 기능 */
 
 /* footer 상단 */
-footer {margin-top:50px; font-family:"Montserrat"; font-size:13px;}
+footer {margin-top:50px;}
 .footer-title {font-size: 15px; font-weight: 900;}
 .cs-number {font-size: 15px;}
 .cs-time {font-size: 14px; color:#999999;}
 
 /* footer 하단 */
 .weight {font-family:"Noto Sans KR"; font-weight:border;}
-.footer-font  {color:#999999;}
+.footer-font {font-size:13px; color:#999999;}
+.footer-font p {font-family:"Montserrat"; font-size:13px; color:#999999;}
 .box a {text-decoration: none; color: black;}
+footer .box a{font-size:13px;}
 
 /* order detail */
 .order-list {margin-top:55px;}

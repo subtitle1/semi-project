@@ -5,53 +5,53 @@
 
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
-body,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,p,table,th,td,pre{margin:0;padding:0;}
+/* body,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,p,table,th,td,pre{margin:0;padding:0;} */
 body,dl,dt,dd,h1,h2,h3,h4,h5,h6,form,fieldset,p,th,td,input,textarea,select,pre,a{font-family:'Montserrat', Noto Sans KR; font-size:16px; color:#222;}
 
-h2{
+#detail-container h2{
 	font-size:50px; 
 	font-weight:700;
 }
 
-textarea { width:100%;}
-select,input,img, button {vertical-align:middle;}
-ul, ol {list-style-type:none; }
-.hide,legend,hr,caption span {position:absolute; left:-3000%;}
-em, address { font-style:normal;}
-table { border-collapse:collapse; border-spacing:0; width:100%;}
-a { color:#666; text-decoration:none;}
-a:focus,
-a:hover { text-decoration:none;}
-fieldset, img, button{border:0;}
+#detail-container textarea { width:100%;}
+#detail-container select,input,#detail-container img, #detail-container button {vertical-align:middle;}
+#detail-container ul, #detail-container ol {list-style-type:none; }
+#detail-container .hide,legend,#detail-container hr,#detail-container caption span {position:absolute; left:-3000%;}
+#detail-container em, #detail-container address { font-style:normal;}
+#detail-container table { border-collapse:collapse; border-spacing:0; width:100%;}
+#detail-container a { color:#666; text-decoration:none;}
+#detail-container a:focus,
+#detail-container a:hover { text-decoration:none;}
+#detail-container fieldset, #detail-container img, #detail-container button{border:0;}
 
-input[type=text]::-ms-clear {display: none;}
+#detail-container input[type=text]::-ms-clear {display: none;}
 
-select { padding:0 0 0 5px; height:38px; border:1px solid #e3e3e3;}
-textarea,
-input[type="file"],
-input[type="password"],
-input[type="text"] { text-indent:4px; border:1px solid #ccc;}
+#detail-container select { padding:0 0 0 5px; height:38px; border:1px solid #e3e3e3;}
+#detail-container textarea,
+#detail-container input[type="file"],
+#detail-container input[type="password"],
+#detail-container input[type="text"] { text-indent:4px; border:1px solid #ccc;}
  
-select:focus, textarea:focus,
-input[type="password"]:focus,
-input[type="file"]:focus,
-input[type="text"]:focus { border:1px solid #555;}
+#detail-container select:focus, textarea:focus,
+#detail-container input[type="password"]:focus,
+#detail-container input[type="file"]:focus,
+#detail-container input[type="text"]:focus { border:1px solid #555;}
  
-textarea[readonly="readonly"],
-button[readonly="readonly"],
-select[readonly="readonly"],
-input[readonly="readonly"],
+#detail-container textarea[readonly="readonly"],
+#detail-container button[readonly="readonly"],
+#detail-container select[readonly="readonly"],
+#detail-container input[readonly="readonly"],
  
-textarea[disabled="disabled"],
-button[disabled="disabled"],
-select[disabled="disabled"],
-input[disabled="disabled"] { background:#f5f5f5; border-color:#d4d4d4;}
+#detail-container textarea[disabled="disabled"],
+#detail-container button[disabled="disabled"],
+#detail-container select[disabled="disabled"],
+#detail-container input[disabled="disabled"] { background:#f5f5f5; border-color:#d4d4d4;}
  
-input[type="password"],
-input[type="file"],
-input[type="text"] { height:34px; line-height:34px;}
-input[type="file"] { width:100%;}
-input[type="radio"] { vertical-align:text-bottom;}
+#detail-container input[type="password"],
+#detail-container input[type="file"],
+#detail-container input[type="text"] { height:34px; line-height:34px;}
+#detail-container input[type="file"] { width:100%;}
+#detail-container input[type="radio"] { vertical-align:text-bottom;}
  
 .clear { zoom:1;clear:both;}
 .clear:after { content:""; display:block; clear:both;}

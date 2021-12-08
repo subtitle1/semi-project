@@ -17,8 +17,10 @@
 	String values[] = request.getParameterValues("no");
 	
 	MemberDao memberDao = MemberDao.getInstance();
+
 	
 	Member member = memberDao.selectMemberByNo(memberNo);
+
 	
 	CartDao cartDao = CartDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
@@ -52,6 +54,7 @@
 	
 	member.setPct(member.getPct() + pct);
 	memberDao.updateMember(member);
+
 	
 	orderItem.setOrderNo(orderNumber);
 	for (int i = 0; i < values.length; i ++){

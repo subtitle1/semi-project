@@ -18,6 +18,11 @@
 <body>
 <%@ include file="/common/navbar.jsp" %>
 <%
+
+	if (loginUserInfo == null) {
+		response.sendRedirect("../../loginform.jsp?user=undefined");	
+	}
+
 	int memberNo = loginUserInfo.getNo();
 	MemberDao memberDao = MemberDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
