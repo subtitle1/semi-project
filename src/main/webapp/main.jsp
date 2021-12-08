@@ -14,10 +14,7 @@
    <title></title>
 </head>
 <style>
-
-.img1{height:285px; width:285px;}
-h1 {font-family:'Montserrat', Noto Sans KR; font-weight:550; font-size:30px color:black; 
-  }
+h1{font-family:'Montserrat', Noto Sans KR; font-weight:550; color:black;}
 a{text-decoration:none; color:black;}
 </style>
 <body>
@@ -56,7 +53,9 @@ a{text-decoration:none; color:black;}
 %>
 		<div class="col-3">
 			<a href="detail.jsp?no=<%=product.getNo()%>">
-				<img src="resources/images/products/<%=product.getPhoto() %>" class="img1" alt="">
+				<div class="img-box">
+					<img src="resources/images/products/<%=product.getPhoto() %>" class="img1" alt="">
+				</div>
 				<div class="row mt-3 mb-3 p-2">
 					<div class="col">
 						<h5><strong><%=product.getBrand() %></strong></h5>
@@ -89,7 +88,7 @@ a{text-decoration:none; color:black;}
 		신상품순 상품목록
 		
 	 -->
-	<div class="row p-5 mt-5 mb-5 text-center">
+	<div class="row p-5 mt-5 mb-5 text-center justify-content-center sub-title">
 		<h1>NEW ARRIVALS</h1>
 	</div>
      <div class="row mb-5 mt-5" style="margin: 0 20px 0px">
@@ -98,7 +97,9 @@ for(Product product : newProductList){
 %>	
 		<div class="col-3">
 			<a href="detail.jsp?no=<%=product.getNo() %>">
-			<img src="resources/images/products/<%=product.getPhoto()%>" class="img1" alt="">
+			<div class="img-box">
+				<img src="resources/images/products/<%=product.getPhoto()%>" class="img1" alt="">
+			</div>
 			<div class="row mt-3 mb-3 p-2">
 				<div class="col">
 					<h5>

@@ -17,7 +17,10 @@
 	String values[] = request.getParameterValues("no");
 	
 	MemberDao memberDao = MemberDao.getInstance();
-	Member memberInfo = memberDao.selectMemberByNo(memberNo);
+
+	
+	Member member = memberDao.selectMemberByNo(memberNo);
+
 	
 	CartDao cartDao = CartDao.getInstance();
 	OrderDao orderDao = OrderDao.getInstance();
@@ -39,23 +42,19 @@
 	
 		if(cart.getProductDisprice() > 0){
 			sum += cart.getProductDisprice() * cart.getAmount();
-			order.setTotalPrice(sum);
 			
 		} else {
 			sum += cart.getProductPrice() * cart.getAmount();
-			order.setTotalPrice(sum);
 		}
 	}
-	
-	
+	order.setTotalPrice(sum);	
 	orderDao.insertOrder(order);
 	
 	int pct = (int)(sum * 0.01);
 	
-	memberInfo.setPct(memberInfo.getPct() + pct);
-	memberInfo.setNo(memberNo);
-	memberDao.updateMember(memberInfo);
-	System.out.println();
+	member.setPct(member.getPct() + pct);
+	memberDao.updateMember(member);
+
 	
 	orderItem.setOrderNo(orderNumber);
 	for (int i = 0; i < values.length; i ++){

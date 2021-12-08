@@ -132,7 +132,7 @@
 							<td>
 								<div class="product-stock">
 									<span class="minus" onclick="minus(<%=cart.getNo() %>)"></span>
-									<input type="number" id="Qty-<%=cart.getNo() %>" class="count" value="<%=cart.getAmount() %>" min="1" max="20" />
+									<input type="number" id="Qty-<%=cart.getNo() %>" class="count" value="<%=cart.getAmount() %>" min="1" max="20" readonly="readonly" />
 									<span class="plus" onclick="plus(<%=cart.getNo() %>)"></span>
 								</div>
 								<div>

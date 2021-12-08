@@ -23,6 +23,7 @@
 <%@ include file="/common/navbar.jsp" %>
 <div class="container">
 <%
+
 	//주문번호를 조회
 	int orderNo = Integer.parseInt(request.getParameter("no"));
 
@@ -30,7 +31,10 @@
 	OrderItemDao orderItem = OrderItemDao.getInstance();
 	
 	Order orderInfo = orderDao.selectOrderByOrderNo(orderNo);
+	
 	List<OrderDetailDto> orderList = orderDao.selectAllOrderDetailsByOrderNo(orderNo);
+	
+	DecimalFormat price = new DecimalFormat("###,###");
 	
 %>
 	<div class="row mt-5">
@@ -81,17 +85,17 @@
 	%>
 				<div class="col mt-3">
 					<div class="text-center">
-						<span  style="text-decoration:line-through;"><%=orderDetail.getPrice() %>원</span>
+						<span  style="font-size:15px; color:gray; text-decoration:line-through;"><%=price.format(orderDetail.getPrice()) %>원</span>
 					</div>
 					<div class="text-center">
-						<span style="color: red; font-weight: bold; font-size: 17px;"><%=orderDetail.getDisPrice() %>원</span>
+						<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()) %>원</span>
 					</div>
 				</div>
 	<%
 		} else {
 	%>
 				<div class="col mt-4 text-end">
-					<span><%=orderDetail.getPrice() %>원</span>
+					<span><%=price.format(orderDetail.getPrice()) %>원</span>
 				</div>
 	<%
 		}
@@ -116,38 +120,57 @@
 		<div class="order-list">
 			<div class="order-list-box p-3">
 				<div class="row">
-					<div class="col-2">
-						<span style="margin-left:5px;">주문금액</span>
+					<div class="col-3">
+						<div class="row">
+							<div class="col">
+								<span style="margin-left:5px;">주문금액</span>
+							</div>
+							<div class="col text-end">
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=price.format(totalPrice) %>원</span>
+							</div>
+						</div>
 					</div>
-					<div class="col text-end">
-						<span style="margin-right:5px; color:red; font-weight: bold;"><%=totalPrice %>원</span>
+					<div class="col-3">
+						<div class="row">
+							<div class="col">
+								<span style="margin-left:5px;">총 할인금액</span>
+							</div>
+		<%
+			if (discount > 0) {
+		%>		
+							<div class="col text-end">
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=price.format(discount) %> 원</span>
+							</div>
+		<%
+			} else {
+		%>
+							<div class="col text-end">
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=price.format(totalPrice) %> 원</span>
+							</div>
+		<%
+			}
+		%>
+						</div>
 					</div>
-					<div class="col-2">
-						<span style="margin-left:5px;">총 할인금액</span>
+					<div class="col-3">
+						<div class="row">
+							<div class="col">적립포인트</div>
+							<div class="col text-end">
+								<span style="margin-right:5px; color:red; font-weight: bold;">
+									<%=price.format(orderInfo.getTotalPrice() * 0.01) %><i>P</i>
+								</span>
+							</div>
+						</div>
 					</div>
-	<%
-		if (discount == 0) {
-	%>		
-					<div class="col text-end">
-						<span style="margin-right:5px; color:red; font-weight: bold;">0 원</span>
-					</div>
-					<div class="col text-end">
-						<span style="margin-right:5px; color:red; font-weight: bold;">0원</span>
-					</div>
-	<%
-		} else {
-	%>
-					<div class="col text-end">
-						<span style="margin-right:5px; color:red; font-weight: bold;"><%=discount %>원</span>
-					</div>
-	<%
-		}
-	%>
-					<div class="col-2">
-						<span style="margin-left:5px;">결제금액</span>
-					</div>
-					<div class="col text-end">
-						<span style="margin-right:5px; color:red; font-weight: bold;"><%=orderInfo.getTotalPrice() %>원</span>
+					<div class="col-3">
+						<div class="row">
+							<div class="col">
+								<span style="margin-left:5px;">결제금액</span>
+							</div>
+							<div class="col text-end">
+								<span style="margin-right:5px; color:red; font-weight: bold;"><%=price.format(orderInfo.getTotalPrice()) %>원</span>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

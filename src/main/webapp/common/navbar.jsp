@@ -1,3 +1,5 @@
+
+<%@page import="dao.CartDao"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
@@ -87,7 +89,12 @@
 <%
 	} else {
 %>
-						<a href="/semi-project/mypage/cart.jsp?memberNo=<%=loginUserInfo.getNo() %>" class="nav-link util-cart" ></a>
+
+<%
+	CartDao cartDao = CartDao.getInstance();	
+	int countCart = cartDao.selectCartCountbymemberNo(loginUserInfo.getNo());
+%>
+						<a href="/semi-project/mypage/cart.jsp?memberNo=<%=loginUserInfo.getNo() %>" class="nav-link util-cart" ><div class="count-box"><%=countCart %></div></a>
 <%
 	}
 %>
