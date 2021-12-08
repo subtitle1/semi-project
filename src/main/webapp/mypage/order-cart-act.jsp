@@ -17,8 +17,6 @@
 	String values[] = request.getParameterValues("no");
 	
 	MemberDao memberDao = MemberDao.getInstance();
-	Member member = new Member();
-	
 	Member memberInfo = memberDao.selectMemberByNo(memberNo);
 	
 	CartDao cartDao = CartDao.getInstance();
@@ -54,9 +52,10 @@
 	
 	int pct = (int)(sum * 0.01);
 	
-	member.setPct(memberInfo.getPct() + pct);
-	member.setNo(memberNo);
-	memberDao.updateMember(member);
+	memberInfo.setPct(memberInfo.getPct() + pct);
+	memberInfo.setNo(memberNo);
+	memberDao.updateMember(memberInfo);
+	System.out.println();
 	
 	orderItem.setOrderNo(orderNumber);
 	for (int i = 0; i < values.length; i ++){

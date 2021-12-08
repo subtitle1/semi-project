@@ -20,14 +20,14 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-<link rel="stylesheet" href="resources/css/style.css" />
-<link rel="stylesheet" href="resources/css/style2.css" />
 <link rel="stylesheet" href="resources/css/default.css" />
+<link rel="stylesheet" href="resources/css/style2.css" />
+<link rel="stylesheet" href="resources/css/style.css" />
 <title></title>
 </head>
 <body >
 	<%@ include file="common/navbar.jsp"%>
-	<div class="container">
+	<div class="container" id="detail-container">
 		<%
 		DecimalFormat price = new DecimalFormat("###,###");
 		int productNo = Integer.parseInt(request.getParameter("no"));
@@ -155,7 +155,9 @@
 %>
 					<div class="row">
 						<div class="col mt-2">
-							<span style="margin-left: 5px;">총 <%=totalRecords%>건의 
+
+							<span style="margin-left: 5px;">총 <%=totalRecords%>건의
+
 								상품 후기가 있습니다.
 							</span>
 						</div>
@@ -229,7 +231,9 @@
 									</div>
 									<div id="faq-content-<%=detail.getReviewNo()%>"
 										class="accordion-collapse collapse" data-bs-parent="#faqlist">
-		 								<div class="accordion-body mt-2">
+
+										<div class="accordion-body mt-2">
+
 											<strong>review : </strong><%=detail.getContent()%>
 										</div>
 									</div>
@@ -345,29 +349,32 @@
 	} // else 끝
 %>
 				</div>
-		<%
-			// Q&A 등록폼
-			if(loginUserInfo != null) {
-		%>		
-				<div class="mt-3 mb-3">
-					<form class="border p-4 bg-light" method="post" action="insertQna.jsp">
-						<input type="hidden" name="productNo" value="<%=productNo%>">
-						<div class="mb-3">
-							<label class="form-label mb-3" for="title"><strong>상품 Q&A 제목</strong></label>
-							<input type="text" class="form-control" name="title" id="title" maxlength="30">
-						</div>
-						<div class="mb-2">
-							<label class="form-label mb-3" for="content"><strong>상품 Q&A 내용</strong></label>
-		    				<textarea class="form-control" name="content" id="content" rows="3" maxlength=""></textarea>
-						</div>
-						<div class="mt-3 text-end">
-							<button type="submit" class="btn btn-dark">등록</button>
-						</div>
-					</form>
-				</div>
-		<%
-			} 
-		%>				
+
+	<%
+		// Q&A 등록폼
+		if(loginUserInfo != null) {
+	%>		
+			<div class="mt-3 mb-3">
+				<form class="border p-4 bg-light" method="post" action="insertQna.jsp">
+					<input type="hidden" name="productNo" value="<%=productNo%>">
+					<div class="mb-3">
+						<label class="form-label mb-3" for="title"><strong>상품 Q&A 제목</strong></label>
+						<input type="text" class="form-control" name="title" id="title" maxlength="30">
+					</div>
+					<div class="mb-2">
+						<label class="form-label mb-3" for="content"><strong>상품 Q&A 내용</strong></label>
+	    				<textarea class="form-control" name="content" id="content" rows="3" maxlength=""></textarea>
+					</div>
+					<div class="mt-3  text-end">
+						<button type="submit" class="btn btn-dark">등록</button>
+					</div>
+				</form>
+	
+			</div>
+	<%
+		} 
+	%>				
+
 	
 			</div>
 		</div>	<!-- tab content 끝 -->
