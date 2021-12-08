@@ -229,7 +229,7 @@
 									</div>
 									<div id="faq-content-<%=detail.getReviewNo()%>"
 										class="accordion-collapse collapse" data-bs-parent="#faqlist">
-										<div class="accordion-body mt-2">
+		 								<div class="accordion-body mt-2">
 											<strong>review : </strong><%=detail.getContent()%>
 										</div>
 									</div>

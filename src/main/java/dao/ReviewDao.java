@@ -209,12 +209,11 @@ public class ReviewDao {
 		 */
 		public int selectTotalReviewCountByProductNo(int productNo) throws SQLException {
 			String sql = "select count(*) cnt "
-					+ "from (select count(*)cnt "
-					+ "		from tb_products P, tb_product_stocks S, tb_reviews R "
-					+ "		where  P.product_no = S.product_no "
-					+ "		and S.product_detail_no = R.product_detail_no "
-					+ "		and r.review_deleted = 'N' "
-					+ "		and P.product_no = ?) ";
+					+ "	  from tb_products P, tb_product_stocks S, tb_reviews R "
+					+ "	  where  P.product_no = S.product_no "
+					+ "	  and S.product_detail_no = R.product_detail_no "
+					+ "	  and r.review_deleted = 'N' "
+					+ "	  and P.product_no = ? ";
 			
 			int totalRecords = 0;
 			
