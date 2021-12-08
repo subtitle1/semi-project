@@ -14,7 +14,7 @@
 <div class="container" id="member-join">    
 	<div class="row">
 		<div class="col">
-			<p class="text-head2">회원정보</p>
+			<p class="text-head2">회원가입</p>
 <%
 	// register.jsp에서는 회원가입에 실패한 경우 브라우져에게 재요청 URL(member-join.jsp?login=실패원인)을 응답으로 보낸다.
 	
