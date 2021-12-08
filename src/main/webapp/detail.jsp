@@ -155,7 +155,9 @@
 %>
 					<div class="row">
 						<div class="col mt-2">
+
 							<span style="margin-left: 5px;">총 <%=totalRecords%>건의
+
 								상품 후기가 있습니다.
 							</span>
 						</div>
@@ -229,7 +231,9 @@
 									</div>
 									<div id="faq-content-<%=detail.getReviewNo()%>"
 										class="accordion-collapse collapse" data-bs-parent="#faqlist">
+
 										<div class="accordion-body mt-2">
+
 											<strong>review : </strong><%=detail.getContent()%>
 										</div>
 									</div>
@@ -345,6 +349,7 @@
 	} // else 끝
 %>
 				</div>
+
 	<%
 		// Q&A 등록폼
 		if(loginUserInfo != null) {
@@ -369,6 +374,7 @@
 	<%
 		} 
 	%>				
+
 	
 			</div>
 		</div>	<!-- tab content 끝 -->
