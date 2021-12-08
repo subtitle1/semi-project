@@ -31,6 +31,12 @@ fieldset, img, button{border:0;}
 #detail-container em, #detail-container address { font-style:normal;}
 #detail-container table { border-collapse:collapse; border-spacing:0; width:100%;}
 
+#detail-container a { color:#666; text-decoration:none;}
+#detail-container a:focus,
+#detail-container a:hover { text-decoration:none;}
+#detail-container fieldset, #detail-container img {border:0;}
+
+
 #detail-container input[type=text]::-ms-clear {display: none;}
 
 #detail-container select { padding:0 0 0 5px; height:38px; border:1px solid #e3e3e3;}

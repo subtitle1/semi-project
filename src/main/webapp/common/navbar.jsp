@@ -1,3 +1,4 @@
+        
 <%@page import="dao.CartDao"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="org.apache.commons.lang3.math.NumberUtils"%>
@@ -59,7 +60,7 @@
 				String mainKeyword = StringUtils.defaultString(request.getParameter("keyword"), "");
 			%>
 			<div class="col search-box">
-				<form method="get" id="main-search" action="search-list.jsp">
+				<form method="get" id="main-search" action="/semi-project/search-list.jsp">
 					<input type="hidden" id="main-page-field" name="pno" value="<%=mainPageNo%>">
 	     		 	<input class="form-control" type="search" name="keyword" value="<%=StringUtils.isBlank(mainKeyword) ? "" : mainKeyword %>" placeholder="아디다스 오젤리아" aria-label="Search">
 	      			<button onclick="searchProducts(1);" class="btn btn-outline-success btn-sm" type="button"></button>
@@ -125,3 +126,5 @@
 		form.submit();
 	}
 </script>
+
+    

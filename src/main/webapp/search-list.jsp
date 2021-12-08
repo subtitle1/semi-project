@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="resources/css/style.css" />
 <link rel="stylesheet" href="resources/css/style2.css" />
 <link rel="stylesheet" href="resources/css/default.css" />
-<title></title>
+<title>ABC마트 온라인몰</title>
 </head>
 <body data-spy='scroll' data-target='.navbar' data-offset='50'>
 <style>
@@ -55,7 +55,7 @@
 		</ul>
 	</div>
 	<div class="tab-content mt-4">
-		<div id="brand" class="container tab-pane active">
+		<div id="brand" class="container tab-pane fade active show">
 			<p class=" mb-2" style="font-weight: bold; font-color:gray;"><%=keyword %> 브랜드상품</p>
 			<div class="inquiry-box">
 <%	
