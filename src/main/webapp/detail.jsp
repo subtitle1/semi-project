@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="resources/css/default.css" />
 <title>ABC-마트 온라인몰</title>
 </head>
-<body > S
+<body>
 	<%@ include file="common/navbar.jsp"%>
 	<div class="container" id="detail-container">
 		<%
@@ -131,7 +131,7 @@
 		</style>
 		<ul class="nav nav-tabs mb-3" role="tablist">
 			<li class="nav-item"><a class="nav-link active"	aria-current="page" href="#review" data-bs-toggle="tab">리뷰</a></li>
-			<li class="nav-item"><a class="nav-link" href="#qnaList" data-bs-toggle="tab">상품 Q&A</a></li>
+			<li class="nav-item"><a class="nav-link" href="#qna" data-bs-toggle="tab">상품 Q&A</a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -159,12 +159,12 @@
 								상품 후기가 있습니다.
 							</span>
 						</div>
+						<div class="mt-3">
+							<div class="accordion accordion-flush pt-3 pb-3" style="border-top:1px solid #333; border-bottom:1px solid #333;" id="reviewlist">
 	<%
 		for (ReviewDetailDto detail : reviewDetails) {
 			if("N".equals(detail.getDeleted())){
 	%>
-						<div>
-							<div class="accordion accordion-flush" id="faqlist">
 								<div class="accordion-item">
 									<div class="row p-2">
 										<div class="col-1">
@@ -219,27 +219,27 @@
 		%>
 										<div class="col-1 mt-3  text-end">
 											<h2 class="accordion-header"
-												id="faq-heading-<%=detail.getReviewNo()%>">
+												id="review-heading-<%=detail.getReviewNo()%>">
 												<button class="accordion-button collapsed" type="button"
 													data-bs-toggle="collapse"
-													data-bs-target="#faq-content-<%=detail.getReviewNo()%>">
+													data-bs-target="#review-content-<%=detail.getReviewNo()%>">
 												</button>
 											</h2>
 										</div>
 									</div>
-									<div id="faq-content-<%=detail.getReviewNo()%>"
-										class="accordion-collapse collapse" data-bs-parent="#faqlist">
+									<div id="review-content-<%=detail.getReviewNo()%>"
+										class="accordion-collapse collapse" data-bs-parent="#reviewlist">
 		 								<div class="accordion-body mt-2">
 											<strong>review : </strong><%=detail.getContent()%>
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
 	<%
 			} // detail.getDeleted() if문 끝
 		} // for문 끝
 	%>
+							</div>
+						</div>
 					</div>
 <%
 	} // else문 끝
@@ -247,7 +247,7 @@
 				</div>
 			</div> <!-- review 끝 -->
 			
-			<div id="qnaList" class="container tab-pane fade">
+			<div id="qna" class="container tab-pane fade">
 				<p class="mb-2" style="font-weight:bold;">상품 Q&A</p>
 				<div class="inquiry-box">
 <%
@@ -270,11 +270,11 @@
 								상담내역이 있습니다.
 							</span>
 						</div>
+						<div class="mt-3">
+							<div class="accordion accordion-flush pt-3 pb-3" style="border-top:1px solid #333; border-bottom:1px solid #333;" id="qnalist">
 	<%
 		for (QnADetailDto detail : qnaDetails) {
 	%>
-						<div>
-							<div class="accordion accordion-flush" id="faqlist">
 								<div class="accordion-item">
 									<div class="row p-2">
 										<div class="col-3">
@@ -307,16 +307,16 @@
 		%>
 										<div class="col-1 mt-3 text-end">
 											<h2 class="accordion-header"
-												id="faq-heading-<%=detail.getQnANo()%>">
+												id="qna-heading-<%=detail.getQnANo()%>">
 												<button class="accordion-button collapsed" type="button"
 													data-bs-toggle="collapse"
-													data-bs-target="#faq-content-<%=detail.getQnANo()%>">
+													data-bs-target="#qna-content-<%=detail.getQnANo()%>">
 												</button>
 											</h2>
 										</div>
 									</div>
-									<div id="faq-content-<%=detail.getQnANo()%>"
-										class="accordion-collapse collapse" data-bs-parent="#faqlist">
+									<div id="qna-content-<%=detail.getQnANo()%>"
+										class="accordion-collapse collapse" data-bs-parent="#qnalist">
 										<div class="accordion-body">
 											<strong>Q. </strong><%=detail.getQuestionContent()%>
 										</div>
@@ -335,11 +335,11 @@
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
 	<%
 		} // for문 끝
 	%>		
+							</div>
+						</div>
 					</div>
 <%
 	} // else 끝
