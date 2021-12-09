@@ -103,31 +103,28 @@
 	} else {
 		
 %>
-						<div class="col mt-2">
-							<span style="margin-left:5px;">총 <%=totalRecords%>건의 상품 후기가 있습니다.</span>
+						<div class="col mt-2 mb-3">
+							<span style="margin-left:5px;">총 <strong><%=totalRecords%></strong>건의 상품 후기가 있습니다.</span>
 						</div>
 					</div>
-					<hr>
+					<div class="row">
+			            <div>
+			                <div class="accordion accordion-flush" id="faqlist" style="border-top:1px solid #d5d5d5; border-bottom:1px solid #d5d5d5;">
 	<% 
 			for (ReviewDetailDto detail : reviewDetails) {
 				if("N".equals(detail.getDeleted())){
 	%>
-					<div class="row">
-			            <div>
-			                <div class="accordion accordion-flush" id="faqlist">
 			                    <div class="accordion-item">
-			                   	    <div class="row p-2">
-										<div class="col-5">
-											<img class="order-img me-2" src="../../resources/images/products/<%=detail.getPhoto()%>">
-											<div>
-												<div>
-													<span><strong>상품명</strong></span>
-												</div>
-												<div>
-													<span><%=detail.getProductName() %></span>
+			                   	    <div class="row ps-2 pe-2 pt-3 pb-3">
+											<div class="col-2">
+												<img class="order-img me-2" src="../../resources/images/products/<%=detail.getPhoto()%>">
+											</div>
+											<div class="col-3" style="position:relative;">
+												<div style="position:absolute; top:50%; transform:translateY(-50%);">
+													<span><strong>상품명</strong></span><br>
+													<span><%=detail.getProductName()%></span>
 												</div>
 											</div>
-										</div>
 										<div class="col mt-4 text-end">
 											<span>review</span>
 										</div>
@@ -150,19 +147,18 @@
 			                            </div>
 			                        </div>
 			                    </div>
-			                </div>
-			            </div>
-		        	</div>
-		        	<hr>
 				
 <%
 			}
 		}
 	}
 %>
+			                </div>
+			            </div>
+		        	</div>
 				</div>
 			</div>
-			<div class="row mb-3">
+			<div class="row mt-3 mb-3">
 				<div class="col-6 offset-3">
 					<nav>
 						<ul class="pagination justify-content-center">
