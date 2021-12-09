@@ -77,7 +77,7 @@
 						<span class="member-info">멤버십 회원 가입일 <span class="member-number"><%=member.getRegisteredDate() %></span></span> 
 					</div>
 					<div class="col-4 p-0 right-box">
-						<span class="text-center"><img src="" alt="" />포인트</span>
+						<span class="text-center"><i class="icon-point"></i>포인트</span>
 						<span class="point"><%=member.getPct() %><span class="unit">p</span></span>
 					</div>
 				</div>

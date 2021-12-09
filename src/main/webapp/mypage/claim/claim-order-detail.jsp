@@ -31,7 +31,18 @@
 	DecimalFormat price = new DecimalFormat("###,###");
 	OrderDao orderDao = OrderDao.getInstance();
 	Order order = orderDao.selectOrderByOrderNo(orderNo);
+	
+	String referer = request.getHeader("referer");
+	if (referer == null) {
 %>
+	<script>
+		alert("정상적인 경로를 통해 다시 접근해 주세요.");
+		history.back();
+	</script>
+<%
+	return;
+	}
+%>	
 <div class="container">    
 	<div class="row">
 		<div class="col breadcrumb">
