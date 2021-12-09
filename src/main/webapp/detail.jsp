@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="resources/css/default.css" />
 <title>ABC-마트 온라인몰</title>
 </head>
-<body > S
+<body>
 	<%@ include file="common/navbar.jsp"%>
 	<div class="container" id="detail-container">
 		<%
