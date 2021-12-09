@@ -160,11 +160,24 @@ List<ReviewDetailDto> reviewDetailList = reviewDao.getReviewList(criteria);
 				<small class="text-muted"><%=reviewDetail.getBrand() %></small>
 				<small>(<%=reviewDetail.getSize() %>) </small></td>
 				<td class="style"><%=reviewDetail.getName() %>(<%=reviewDetail.getId() %>)</td>
-				<td class="style-1"><strong><%=reviewDetail.getContent() %></strong></td>
+	<% 
+	if (reviewDetail.getDeleted().equals("Y")) {
+%>					
+				<td class="style-1"><del><%=reviewDetail.getContent() %></del></td>
+<% 
+	} else {
+%>					
+				<td class="style-1"><%=reviewDetail.getContent() %></td>
+<% 
+	}
+	
+%>			
+				
 				<td class="style"><small class="text-muted"><%=reviewDetail.getReviewDate() %></small></td>
 			</tr>			
 <% 
 	}
+	
 %>			
 		</tbody>
 	</table>
