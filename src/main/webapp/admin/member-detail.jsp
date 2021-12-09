@@ -113,7 +113,7 @@ List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
 		
 		<div class="row">
 			<div class="col-6">
-         <h6>최근 작성한 REVIEW <a href="review-list.jsp?page=1&option=id&keyword=<%=member.getId() %>" class="link"><strong>더보기</strong></a>	</h6>
+         <h6>최근 작성한 REVIEW <a style="float:right;" href="review-list.jsp?page=1&option=id&keyword=<%=member.getId() %>" class="link"><strong>더보기</strong></a>	</h6>
          <table class="table table-hover align-middle mb-5" style="table-layout:fixed; border-top: 2px solid #000; border-bottom: 1px solid #000" >
                <tbody>
 <%
@@ -150,7 +150,7 @@ List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
 %>
          </div>
 			<div class="col-6">
-			<h6>최근 작성한 QnA <a href="qna-list.jsp?page=1&option=id&keyword=<%=member.getId() %>" class="link"><strong>더보기</strong></a></h6>
+			<h6>최근 작성한 QnA <a style="float:right;" href="qna-list.jsp?page=1&option=id&keyword=<%=member.getId() %>" class="link"><strong>더보기</strong></a></h6>
 			  <table class="table table-hover align-middle mb-5" style="table-layout:fixed; border-top: 2px solid #000; border-bottom: 1px solid #000" >
 					<tbody>
 <%
@@ -293,8 +293,8 @@ if	("주문취소".equals(order.getStatus())) {
 	}
 %>	
 		<tr>
-			<td colspan="3">총 주문 횟수 :<strong> <%=totalOrderCount %> </strong>회</td>
-			<td colspan="3">총 구매액 :<strong> <%=priceDF.format(sum) %> </strong>원</td>
+			<td colspan="3">총 주문 횟수 :<strong style="color:#ee1c25;"> <%=totalOrderCount %> </strong>회</td>
+			<td colspan="3">총 구매액 :<strong style="color:#ee1c25;"> <%=priceDF.format(sum) %> </strong>원</td>
 		</tr>
 
 		
