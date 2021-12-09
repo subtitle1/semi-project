@@ -112,7 +112,7 @@
 			                <div class="accordion accordion-flush" id="faqlist" style="border-top:1px solid #d5d5d5; border-bottom:1px solid #d5d5d5;">
 	<% 
 			for (ReviewDetailDto detail : reviewDetails) {
-				if("N".equals(detail.getDeleted())){
+				if("N".equals(detail.getDeleted())) {
 	%>
 			                    <div class="accordion-item">
 			                   	    <div class="row ps-2 pe-2 pt-3 pb-3">
@@ -150,12 +150,14 @@
 				
 <%
 			}
-		}
-	}
+		} // for문 끝
 %>
 			                </div>
 			            </div>
 		        	</div>
+<%
+	}
+%>
 				</div>
 			</div>
 			<div class="row mt-3 mb-3">
