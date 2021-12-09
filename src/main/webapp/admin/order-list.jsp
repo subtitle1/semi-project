@@ -80,15 +80,24 @@ List<OrderMemberInfoDto> orderDetailList = orderDao.selectAllOrderMemberInfo(cri
 	</div>
 	<div class="row mypage">
 		<!-- aside 시작 -->
-		<div class="col-2 p-0 aside">
+			<div class="col-2 p-0 aside">
 			<span class="aside-title">관리자 페이지</span>
 			<ul class="nav flex-column p-0">
-				<li class=""><a href="main.jsp" class="nav-link p-0">관리자페이지</a></li>
+				<li class=""><a href="main.jsp" class="nav-link p-0">관리자페이지 메인</a></li>
+			</ul>
+			<span class="aside-title d-block mt-4">회원 관리</span>
+			<ul class="nav flex-column p-0">
 				<li class=""><a href="member-list.jsp" class="nav-link p-0">회원목록 조회</a></li>
 				<li class=""><a href="member-left-list.jsp" class="nav-link p-0">탈퇴회원 목록 조회</a></li>
+			</ul>
+			<span class="aside-title d-block mt-4">상품 관리</span>
+			<ul class="nav flex-column p-0">
 				<li class=""><a href="product-list.jsp" class="nav-link p-0">전체 상품 조회</a></li>
 				<li class=""><a href="registerform.jsp" class="nav-link p-0">신규 상품 등록</a></li>
 				<li class=""><a href="stock-management.jsp" class="nav-link p-0">재고 관리</a></li>
+			</ul>
+			<span class="aside-title d-block mt-4">CS</span>
+			<ul class="nav flex-column p-0">
 				<li class=""><a href="order-list.jsp" class="nav-link p-0">주문 관리</a></li>
 				<li class=""><a href="qna-list.jsp" class="nav-link p-0">QnA 목록</a></li>
 				<li class=""><a href="review-list.jsp" class="nav-link p-0">리뷰 목록</a></li>

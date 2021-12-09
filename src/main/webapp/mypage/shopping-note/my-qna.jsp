@@ -1,3 +1,4 @@
+
 <%@page import="vo.Pagination"%>
 <%@page import="dao.QnaDao"%>
 <%@page import="dto.QnADetailDto"%>
@@ -225,4 +226,5 @@
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
