@@ -164,9 +164,12 @@ List<QnADetailDto> qnaDetailList = qnaDao.selectAllQnADetail(criteria);
 	                     		</h2>
 							</div>
 	                       	<div id="faq-content-<%=qnaDetail.getQnANo()%>" class="accordion-collapse collapse" data-bs-parent="#faqlist">
-								<div class="accordion-body">          
+								<div class="accordion-body">       
 			                		<form class="well row g-3" method="post" action="qna-answer.jsp">
 			                			<input type="hidden" name="qnANo" value="<%=qnaDetail.getQnANo()%>"/>
+			                			<input type="hidden" name="page" value="<%=pageNo%>"/>
+			                			<input type="hidden" name="option" value="<%=option%>"/>
+			                			<input type="hidden" name="keyword" value="<%=keyword%>"/>
 	   			 						<div class="col-11">
 	   			 							<textarea class="form-control" aria-label="With textarea" name="content"></textarea> 
 	   			 						</div>
