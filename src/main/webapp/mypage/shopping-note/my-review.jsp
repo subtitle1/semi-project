@@ -107,7 +107,7 @@
 	} else {
 		
 %>
-						<div class="col mt-2 mb-3">
+						<div class="col mt-2">
 							<span style="margin-left:5px;">총 <strong><%=totalRecords%></strong>건의 상품 후기가 있습니다.</span>
 						</div>
 					</div>

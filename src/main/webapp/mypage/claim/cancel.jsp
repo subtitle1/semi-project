@@ -56,5 +56,5 @@
 	orderDao.updateOrder(order);
 	memberDao.updateMember(member);
 	
-	response.sendRedirect("../claim/claim-order-main.jsp?claimCancel=canceled");
+	response.sendRedirect("../claim/cancel-main.jsp?claimCancel=canceled");
 %>

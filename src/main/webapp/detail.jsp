@@ -143,7 +143,7 @@
 	List<ReviewDetailDto> reviewDetails = reviewDao.selectReviewDetailByProductNo(productNo);
 	int totalRecords = reviewDao.selectTotalReviewCountByProductNo(productNo);
 	
-	if (reviewDetails.isEmpty()) {
+	if (reviewDetails.isEmpty() || totalRecords == 0) {
 %>
 					<div class="row">
 						<div class="p-5">

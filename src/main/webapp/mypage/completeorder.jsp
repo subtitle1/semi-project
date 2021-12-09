@@ -145,7 +145,7 @@
 			} else {
 		%>
 							<div class="col text-end">
-								<span style="margin-right:5px; color:red; font-weight: bold;"><%=price.format(totalPrice) %> 원</span>
+								<span style="margin-right:5px; color:red; font-weight: bold;"> 0원</span>
 							</div>
 		<%
 			}
