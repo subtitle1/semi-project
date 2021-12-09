@@ -361,31 +361,29 @@ public class ReviewDao {
 		 * @throws SQLException
 		 */
 		public List<ReviewDetailDto> getReviewListByMemberNo(int begin, int end, int memberNo) throws SQLException {
-			String sql = "SELECT REVIEW_NO, PRODUCT_NO, PRODUCT_DETAIL_NO, PRODUCT_SIZE, PRODUCT_BRAND, "
-					   + "MEMBER_NO, MEMBER_ID, MEMBER_NAME, REVIEW_CONTENT, "
-					   + "       REVIEW_LIKE_COUNT, REVIEW_DELETED, REVIEW_DATE, PRODUCT_NAME, PRODUCT_IMG "
-					   + "FROM (SELECT ROW_NUMBER() OVER (ORDER BY R.REVIEW_NO DESC)RN, "
-					   + "				R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
-					   + "				R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
-					   + "				M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
-					   + "				P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
-					   + "				S.PRODUCT_SIZE "
-					   + "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
-					   + "		WHERE R.MEMBER_NO = M.MEMBER_NO "
-					   + "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
-					   + "		AND S.PRODUCT_NO = P.PRODUCT_NO"
-					   + "		AND REVIEW_DELETED = 'N') "
-					   + "WHERE RN >= ? AND RN <= ? "
-					   + "AND MEMBER_NO = ? "
-					   + "ORDER BY REVIEW_NO DESC ";
+			String sql = "SELECT *"
+					+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY R.REVIEW_NO DESC) RN, "
+					+ "		R.REVIEW_NO, R.PRODUCT_DETAIL_NO, R.REVIEW_CONTENT, "
+					+ "		R.REVIEW_LIKE_COUNT, R.REVIEW_DATE, R.REVIEW_DELETED, "
+					+ "		M.MEMBER_NO, M.MEMBER_ID, M.MEMBER_NAME, "
+					+ "		P.PRODUCT_NO, P.PRODUCT_NAME, P.PRODUCT_IMG, P.PRODUCT_BRAND, "
+					+ "		S.PRODUCT_SIZE "
+					+ "		FROM TB_REVIEWS R, TB_MEMBERS M, TB_PRODUCTS P, TB_PRODUCT_STOCKS S "
+					+ "		WHERE R.MEMBER_NO = M.MEMBER_NO "
+					+ "		AND R.PRODUCT_DETAIL_NO = S.PRODUCT_DETAIL_NO "
+					+ "		AND S.PRODUCT_NO = P.PRODUCT_NO "
+					+ "		AND R.REVIEW_DELETED = 'N' "
+					+ "		AND M.MEMBER_NO = ?) "
+					+ "WHERE RN >= ? AND RN <= ? "
+					+ "ORDER BY REVIEW_NO DESC ";
 			
 			List<ReviewDetailDto> reviewList = new ArrayList<>();
 			
 			Connection connection = getConnection();
 			PreparedStatement pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, begin);
-			pstmt.setInt(2, end);
-			pstmt.setInt(3, memberNo);
+			pstmt.setInt(1, memberNo);
+			pstmt.setInt(2, begin);
+			pstmt.setInt(3, end);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				ReviewDetailDto reviewDetailDto = new ReviewDetailDto();

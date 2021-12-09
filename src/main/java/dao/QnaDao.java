@@ -268,27 +268,25 @@ public class QnaDao {
 	
 	
 	public List<QnADetailDto> selectQnAListByMemberNo(int begin, int end, int memberNo) throws SQLException{
-		String sql = "select question_no, product_no, member_no, question_title, question_content, "
-	            + "question_date, question_answered, answer_content, "
-	            + "answer_date, member_name, member_id, product_name, product_img, product_brand "
+		String sql = "select * "
 	            + "    from (select row_number() over (order by q.question_date desc) rn, q.question_no, "
 	            + "    q.product_no, q.member_no, q.question_title, q.question_content, q.question_date, "
 	            + "    q. question_answered, q.answer_content, q.answer_date, m.member_name, m.member_id, "
 	            + "    p.product_name, p.product_img, p.product_brand "
 	            + "    from tb_qna q, tb_members m, tb_products p "
 	            + "    where q.member_no = m.member_no "
-	            + "    and p.product_no = q.product_no) "
+	            + "    and p.product_no = q.product_no"
+	            + "	   and m.member_no = ?) "
 	            + "where rn >= ? and rn <= ? "
-	            + "and member_no = ? "
 	            + "order by question_no desc ";
 		
 		List<QnADetailDto> qnADetailList = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, begin);
-		pstmt.setInt(2, end);
-		pstmt.setInt(3, memberNo);
+		pstmt.setInt(1, memberNo);
+		pstmt.setInt(2, begin);
+		pstmt.setInt(3, end);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {

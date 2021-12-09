@@ -103,19 +103,22 @@
 	} else {
 		
 %>
-						<div class="col mt-2">
-							<span style="margin-left:5px;">총 <%=totalRecords%>건의 상품 후기가 있습니다.</span>
+						<div class="col mt-2 mb-3">
+							<span style="margin-left:5px;">총 <strong><%=totalRecords%></strong>건의 상품 후기가 있습니다.</span>
 						</div>
 					</div>
+
 					<div class="row mt-3">
+
 			            <div>
 			                <div class="accordion accordion-flush" id="faqlist" style="border-top:1px solid #d5d5d5; border-bottom:1px solid #d5d5d5;">
 	<% 
 			for (ReviewDetailDto detail : reviewDetails) {
-				if("N".equals(detail.getDeleted())){
+				if("N".equals(detail.getDeleted())) {
 	%>
 			                    <div class="accordion-item">
 			                   	    <div class="row ps-2 pe-2 pt-3 pb-3">
+
 										<div class="col-1">
 											<img class="order-img me-2" src="../../resources/images/products/<%=detail.getPhoto()%>">
 										</div>
@@ -126,6 +129,7 @@
 											</div>
 										</div>
 										<div class="col mt-4 text-center">
+
 											<span>review</span>
 										</div>
 										<div class="col mt-4 text-center">
@@ -148,19 +152,22 @@
 			                        </div>
 			                    </div>
 				
+
 <%
 			}
-		}
+		} // for문 끝
 %>
 			                </div>
 			            </div>
 		        	</div>
 <%
+
+
 	}
 %>
 				</div>
 			</div>
-			<div class="row mb-3">
+			<div class="row mt-3 mb-3">
 				<div class="col-6 offset-3">
 					<nav>
 						<ul class="pagination justify-content-center">
