@@ -118,7 +118,8 @@ public class QnaDao {
 				+ "from tb_qna q, tb_members m, tb_products p "
 				+ "where q.member_no = m.member_no "
 				+ "and p.product_no = q.product_no "
-				+ "and q.question_answered = 'N'  ";
+				+ "and q.question_answered = 'N'  "
+				+ "order by q.question_no desc ";
 		
 		List<QnADetailDto> qnADetailList = new ArrayList<>();
 		

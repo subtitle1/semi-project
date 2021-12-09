@@ -870,18 +870,18 @@ public class OrderDao {
 				+ "from (select row_number() over (order by order_no desc) rn, order_no, order_status, "
 				+ "      order_date, order_total_price, cancel_reason, "
 				+ "      cancel_status, canceled_date, member_no "
-				+ "      from tb_orders) "
+				+ "      from tb_orders"
+				+ "		 where member_no = ?) "
 				+ "where rn >= ? and rn <= ? "
-				+ "and member_no = ? "
 				+ "order by order_no desc ";
 		
 		List<Order> orders = new ArrayList<>();
 		
 		Connection connection = getConnection();
 		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setInt(1, begin);
-		pstmt.setInt(2, end);
-		pstmt.setInt(3, memberNo);
+		pstmt.setInt(1, memberNo);
+		pstmt.setInt(2, begin);
+		pstmt.setInt(3, end);
 		ResultSet rs = pstmt.executeQuery();
 		
 		while (rs.next()) {
