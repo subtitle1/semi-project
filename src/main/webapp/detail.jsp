@@ -422,6 +422,10 @@
 		function goCart() {
 			var form = document.getElementById("product-form");
 			form.setAttribute("action", "/semi-project/mypage/add.jsp");
+			if(<%=loginUserInfo == null %>) {
+				alert('장바구니 담기는 로그인 후 사용가능합니다.');
+				return;
+			}
 			form.submit();
 			alert('상품이 장바구니에 담겼습니다.');
 		}

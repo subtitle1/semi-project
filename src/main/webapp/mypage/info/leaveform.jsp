@@ -48,14 +48,18 @@
 		<div class="col-2 p-0 aside">
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
-				<li class=""><a href="../main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">마이페이지</a></li>
+				<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
+			</ul>
+			<span class="aside-title d-block mt-4">개인정보</span>
+			<ul class="nav flex-column p-0">
 				<li class=""><a href="pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
 				<li class=""><a href="pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
+				<li class=""><a href="leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
+			</ul>
+			<span class="aside-title d-block mt-4">쇼핑수첩</span>
+			<ul class="nav flex-column p-0">
 				<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
 				<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
-				<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
-			</ul>
-			<ul class="nav flex-column p-0">
 				<li class=""><a href="../shopping-note/my-review.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">나의 상품후기</a></li>
 				<li class=""><a href="../shopping-note/my-qna.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">상품 Q&A</a></li>
 			</ul>
@@ -73,7 +77,7 @@
 						<span class="member-info">멤버십 회원 가입일 <span class="member-number"><%=member.getRegisteredDate() %></span></span> 
 					</div>
 					<div class="col-4 p-0 right-box">
-						<span class="text-center"><img src="" alt="" />포인트</span>
+						<span class="text-center"><i class="icon-point"></i>포인트</span>
 						<span class="point"><%=member.getPct() %><span class="unit">p</span></span>
 					</div>
 				</div>

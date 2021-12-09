@@ -1,3 +1,4 @@
+
 <%@page import="vo.Pagination"%>
 <%@page import="dao.QnaDao"%>
 <%@page import="dto.QnADetailDto"%>
@@ -52,20 +53,20 @@
 			<div class="col-2 p-0 aside">
 				<span class="aside-title">마이 페이지</span>
 				<ul class="nav flex-column p-0">
-					<li class=""><a	href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">마이페이지</a></li>
+					<li class=""><a href="../main.jsp" class="nav-link p-0">마이페이지</a></li>
+				</ul>
+				<span class="aside-title d-block mt-4">개인정보</span>
+				<ul class="nav flex-column p-0">
 					<li class=""><a href="../info/pwd-confirm2.jsp" class="nav-link p-0">개인정보 수정</a></li>
 					<li class=""><a href="../info/pwd-confirm.jsp" class="nav-link p-0">비밀번호 변경</a></li>
-					<li class=""><a	href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
-					<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
 					<li class=""><a href="../info/leaveform.jsp" class="nav-link p-0">회원 탈퇴</a></li>
 				</ul>
+				<span class="aside-title d-block mt-4">쇼핑수첩</span>
 				<ul class="nav flex-column p-0">
-					<li class=""><a
-						href="../shopping-note/my-review.jsp?memberNo=<%=member.getNo() %>"
-						class="nav-link p-0">나의 상품후기</a></li>
-					<li class=""><a
-						href="../shopping-note/my-qna.jsp?memberNo=<%=member.getNo()%>"
-						class="nav-link p-0">상품 Q&A</a></li>
+					<li class=""><a href="../claim/claim-order-main.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">주문현황 조회</a></li>
+					<li class=""><a href="../claim/cancel-main.jsp" class="nav-link p-0">주문 취소</a></li>
+					<li class=""><a href="my-review.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">나의 상품후기</a></li>
+					<li class=""><a href="my-qna.jsp?memberNo=<%=member.getNo() %>" class="nav-link p-0">상품 Q&A</a></li>
 				</ul>
 			</div>
 			<!-- //aside 끝 -->
@@ -85,8 +86,8 @@
 								class="member-number"><%=member.getRegisteredDate()%></span></span>
 						</div>
 						<div class="col-4 p-0 right-box">
-							<span class="text-center"><img src="" alt="" />포인트</span> <span
-								class="point"><%=member.getPct()%><span class="unit">p</span></span>
+							<span class="text-center"><i class="icon-point"></i>포인트</span>
+							<span class="point"><%=member.getPct()%><span class="unit">p</span></span>
 						</div>
 					</div>
 				</div>
@@ -110,8 +111,8 @@
 <%
 	} else {
 %>
-							<div class="col mt-2 mb-3">
-								<span style="margin-left: 5px;">총 <strong><%=totalRecords%></strong>건의
+							<div class="col mt-2">
+								<span style="margin-left: 5px;">총 <%=totalRecords%>건의
 									상담내역이 있습니다.
 								</span>
 							</div>
@@ -124,13 +125,11 @@
 	%>
 									<div class="accordion-item">
 										<div class="row ps-2 pe-2 pt-3 pb-3">
-
 											<div class="col-1">
 												<img class="order-img me-2" src="../../resources/images/products/<%=detail.getPhoto()%>">
 											</div>
 											<div class="col-3" style="position:relative;">
 												<div style="position:absolute; top:50%; transform:translateY(-50%); left:40px;">
-
 													<span><strong>상품명</strong></span><br>
 													<span><%=detail.getProductName()%></span>
 												</div>
@@ -157,12 +156,17 @@
 				}
 			%>
 											<div class="col mt-3 text-end">
-												<h2 class="accordion-header" id="faq-heading-<%=detail.getQnANo()%>">
-													<button class="accordion-button collapsed" type="button"data-bs-toggle="collapse" data-bs-target="#faq-content-<%=detail.getQnANo()%>"></button>
+												<h2 class="accordion-header"
+													id="faq-heading-<%=detail.getQnANo()%>">
+													<button class="accordion-button collapsed" type="button"
+														data-bs-toggle="collapse"
+														data-bs-target="#faq-content-<%=detail.getQnANo()%>">
+													</button>
 												</h2>
 											</div>
 										</div>
-										<div id="faq-content-<%=detail.getQnANo()%>" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+										<div id="faq-content-<%=detail.getQnANo()%>"
+											class="accordion-collapse collapse" data-bs-parent="#faqlist">
 											<div class="accordion-body">
 												<strong>Q. </strong><%=detail.getQuestionContent()%>
 											</div>
@@ -181,7 +185,7 @@
 											</div>
 										</div>
 									</div>
-
+<%
 		} // for문 끝
 %>
 								</div>
@@ -192,7 +196,7 @@
 %>
 					</div> <!-- inquiry-box -->
 			</div> <!-- orderList -->
-			<div class="row mt-3 mb-3">
+			<div class="row mb-3">
 				<div class="col-6 offset-3">
 					<nav>
 						<ul class="pagination justify-content-center">
@@ -222,4 +226,5 @@
 <%@ include file="/common/footer.jsp" %>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
