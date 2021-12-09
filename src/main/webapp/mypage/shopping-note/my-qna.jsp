@@ -116,7 +116,7 @@
 								</span>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row mt-3">
 							<div>
 								<div class="accordion accordion-flush" id="faqlist" style="border-top:1px solid #d5d5d5; border-bottom:1px solid #d5d5d5;">
 	<%
@@ -124,19 +124,21 @@
 	%>
 									<div class="accordion-item">
 										<div class="row ps-2 pe-2 pt-3 pb-3">
-											<div class="col-2">
+
+											<div class="col-1">
 												<img class="order-img me-2" src="../../resources/images/products/<%=detail.getPhoto()%>">
 											</div>
 											<div class="col-3" style="position:relative;">
-												<div style="position:absolute; top:50%; transform:translateY(-50%);">
+												<div style="position:absolute; top:50%; transform:translateY(-50%); left:40px;">
+
 													<span><strong>상품명</strong></span><br>
 													<span><%=detail.getProductName()%></span>
 												</div>
 											</div>
-											<div class="col mt-4 text-end">
+											<div class="col-3 mt-4 text-center">
 												<span><%=detail.getTitle()%></span>
 											</div>
-											<div class="col mt-4 text-end">
+											<div class="col mt-4 text-center">
 												<span style="font-weight: bold;"><%=detail.getQuestionDate()%></span>
 											</div>
 			<%
@@ -179,7 +181,7 @@
 											</div>
 										</div>
 									</div>
-<%		
+
 		} // for문 끝
 %>
 								</div>

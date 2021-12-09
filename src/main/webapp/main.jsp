@@ -153,6 +153,8 @@ for(Product product : newProductList){
         },
         autoplay: {
       	  delay: 3000,
+      	  disableOnInteraction:false,
+          pauseOnMouseEnter:true,
       	},
         loop:true
       });

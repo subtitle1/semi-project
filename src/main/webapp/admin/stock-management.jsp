@@ -227,7 +227,8 @@ function plus(id) {
  
 function save(no) {
 	var amount = Number(document.getElementById("stock-"+no).value);
-	location.href="save.jsp?no=" + no + "&amount=" + amount + "&page=<%=pageNo%>&option=<%=option%>&keyword=<%=keyword%>";
+	location.href="save.jsp?no=" + no + "&amount=" + amount 
+			+ "&page=<%=pageNo%>&option=<%=option%>&keyword=<%=keyword%>";
 }
 
 

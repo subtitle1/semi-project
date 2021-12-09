@@ -68,13 +68,13 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col page-title">
+		<div class="col page-title p-0">
 			<h1>마이페이지</h1>
 		</div>
 	</div>
 	<div class="row mypage">
 		<!-- aside 시작 -->
-		<div class="col-2 aside">
+		<div class="col-2 aside p-0">
 			<span class="aside-title">마이 페이지</span>
 			<ul class="nav flex-column p-0">
 				<li class=""><a href="#" class="nav-link p-0">마이페이지</a></li>
