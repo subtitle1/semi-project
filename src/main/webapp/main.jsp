@@ -13,7 +13,7 @@
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
    <link rel="stylesheet" href="resources/css/style.css" />
-   <title></title>
+   <title>ABC마트 온라인몰</title>
 </head>
 <style>
 h1{font-family:'Montserrat', Noto Sans KR; font-weight:550; color:black;}

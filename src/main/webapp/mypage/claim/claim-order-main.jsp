@@ -28,16 +28,8 @@
 	DecimalFormat price = new DecimalFormat("###,###");
 	
 	Member member = memberDao.selectMemberByNo(memberNo);
-	String claimCancel = request.getParameter("claimCancel");
 	
 	
-	if ("canceled".equals(claimCancel)) {
-%>
-	<script type="text/javascript">
-		alert("주문이 취소되었습니다.");
-	</script>
-<%
-	}
 %>
 
 <div class="container">    

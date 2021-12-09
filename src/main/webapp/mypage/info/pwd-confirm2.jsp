@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
     <link rel="stylesheet" href="/semi-project/resources/css/style.css" />
-    <title>회원 탈퇴</title>
+    <title>개인정보 수정</title>
 </head>
 <body>
 <%@ include file="/common/navbar.jsp" %>

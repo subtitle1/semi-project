@@ -373,13 +373,13 @@ public class OrderDao {
 
 
 		String sql = "select * "
-				+ "from (select row_number() over (order by order_no desc) rn, order_no, order_status, "
+				+ "from (select row_number() over (order by canceled_date desc) rn, order_no, order_status, "
 				+ "      order_date, order_total_price, cancel_reason, canceled_date "
 				+ "      from tb_orders "
 				+ "      where cancel_status = 'Y' "
 				+ "      and member_no = ?) "
 				+ "where rn >= ? and rn <= ? "
-				+ "order by order_no desc ";
+				+ "order by canceled_date desc ";
 		
 		List<Order> canceledOrders = new ArrayList<>();
 		

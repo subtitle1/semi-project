@@ -163,10 +163,10 @@
 		if (orderDetail.getDisPrice() > 0) {
 	%>						
 							<div class="col mt-3">
-								<div class="text-center">
+								<div class="text-end">
 									<span  style="text-decoration:line-through;"><%=price.format(orderDetail.getPrice()) %>원</span>
 								</div>
-								<div class="text-center">
+								<div class="text-end">
 									<span style="color: red; font-weight: bold; font-size: 17px;"><%=price.format(orderDetail.getDisPrice()) %>원</span>
 								</div>
 							</div>
