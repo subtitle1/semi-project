@@ -19,6 +19,10 @@
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
 	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" >
 	 <link rel="stylesheet" href="../resources/css/style.css" />
+	 <style>
+	 .link {color: black;}
+	 </style>
+	 
 	 <title>ABC마트 관리자페이지</title>
 	</head>
 	
@@ -102,13 +106,14 @@ ReviewDao reviewDao =ReviewDao.getInstance();
 List<ReviewDetailDto> reviewList = reviewDao.getReviewListByMemberNo(1, 3, no);
 QnaDao qnADao =QnaDao.getInstance();
 List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
+
 %>
 
 		
 		
 		<div class="row">
 			<div class="col-6">
-         <h6>최근 작성한 REVIEW</h6>
+         <h6>최근 작성한 REVIEW <a href="review-list.jsp?page=1&option=id&keyword=<%=member.getId() %>" class="link"><strong>더보기</strong></a>	</h6>
          <table class="table table-hover align-middle mb-5" style="table-layout:fixed; border-top: 2px solid #000; border-bottom: 1px solid #000" >
                <tbody>
 <%
@@ -145,7 +150,7 @@ List<QnADetailDto> qnAList = qnADao.selectQnAListByMemberNo(1, 3, no);
 %>
          </div>
 			<div class="col-6">
-			<h6>최근 작성한 QnA</h6>
+			<h6>최근 작성한 QnA <a href="qna-list.jsp?page=1&option=id&keyword=<%=member.getId() %>" class="link"><strong>더보기</strong></a></h6>
 			  <table class="table table-hover align-middle mb-5" style="table-layout:fixed; border-top: 2px solid #000; border-bottom: 1px solid #000" >
 					<tbody>
 <%
